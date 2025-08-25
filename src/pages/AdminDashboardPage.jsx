@@ -6,6 +6,7 @@ import AdminSubjectManagementPage from "@/pages/admin/AdminSubjectManagementPage
 import AdminQuestionManagementPage from "@/pages/admin/AdminQuestionManagementPage";
 import AdminResponseViewerPage from "@/pages/admin/AdminResponseViewerPage";
 import AdminLeaderboardPage from "@/pages/admin/AdminLeaderboardPage";
+import AdminConcernsPage from "@/pages/admin/AdminConcernsPage";
 import OldAdminDashboardPage from "@/pages/admin/OldAdminDashboardPage"; // Renamed original dashboard
 import { motion } from "framer-motion";
 
@@ -34,12 +35,7 @@ const AdminDashboardPage = ({
           <Route
             path="concerns"
             element={
-              <OldAdminDashboardPage
-                concerns={concerns}
-                updateConcernStatus={updateConcernStatus}
-                loading={loading}
-                fetchConcerns={fetchConcerns}
-              />
+              <AdminConcernsPage />
             }
           />
           {/* Add other admin routes here */}

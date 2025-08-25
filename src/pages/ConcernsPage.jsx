@@ -55,6 +55,13 @@ const ConcernsPage = () => {
           concern_replies(*)
         `);
 
+      // Only filter by is_hidden if the column exists
+      try {
+        query = query.eq("is_hidden", false);
+      } catch (error) {
+        console.warn("is_hidden column may not exist yet:", error);
+      }
+
       // Apply sorting
       switch (sortBy) {
         case "newest":
