@@ -1,306 +1,246 @@
-import React, { useState, useEffect, useCallback } from "react";
+
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Search, BookOpen } from "lucide-react";
-import QuizModal from "@/components/admin/QuizModal";
-import DeleteQuizDialog from "@/components/admin/DeleteQuizDialog";
-import SubjectCardItem from "@/components/admin/SubjectCardItem";
+import { Plus, Edit, Trash2, BookOpen, RefreshCw, Loader2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const AdminSubjectManagementPage = () => {
   const [subjects, setSubjects] = useState([]);
-  const [quizzesBySubject, setQuizzesBySubject] = useState({});
   const [loading, setLoading] = useState(true);
-  const [actionLoading, setActionLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingSubject, setEditingSubject] = useState(null);
+  const [formData, setFormData] = useState({
+    subject_name: "",
+    description: ""
+  });
   const { toast } = useToast();
 
-  const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
-  const [currentSubjectForModal, setCurrentSubjectForModal] = useState(null);
-  const [editingQuizDetails, setEditingQuizDetails] = useState(null);
-
-  const [quizToDeleteDetails, setQuizToDeleteDetails] = useState(null);
-  const [isDeleteDialogValid, setIsDeleteDialogValid] = useState(false);
-
-  const fetchSubjectsAndQuizzes = useCallback(async () => {
+  const fetchSubjects = async () => {
     setLoading(true);
     try {
-      const { data: quizData, error } = await supabase
+      const { data, error } = await supabase
         .from("quizzes")
-        .select("subject_id, subject_name, quiz_title, id")
-        .order("subject_name", { ascending: true })
-        .order("quiz_title", { ascending: true });
+        .select("subject_name")
+        .order("subject_name");
 
       if (error) throw error;
 
-      const subjectMap = new Map();
-      const quizzesGrouped = {};
-
-      quizData.forEach((q) => {
-        if (q.subject_name && !subjectMap.has(q.subject_name)) {
-          subjectMap.set(q.subject_name, {
-            id: q.subject_id || q.subject_name,
-            name: q.subject_name,
-            quizCount: 0,
-          });
-        }
-
-        if (q.subject_name && !quizzesGrouped[q.subject_name]) {
-          quizzesGrouped[q.subject_name] = [];
-        }
-
-        if (
-          q.subject_name &&
-          q.quiz_title &&
-          !quizzesGrouped[q.subject_name].find(
-            (qz) => qz.title === q.quiz_title,
-          )
-        ) {
-          quizzesGrouped[q.subject_name].push({
-            title: q.quiz_title,
-            questionCount: 0,
-          });
-        }
-      });
-
-      quizData.forEach((q) => {
-        if (q.subject_name && q.quiz_title && subjectMap.has(q.subject_name)) {
-          const quizEntry = quizzesGrouped[q.subject_name]?.find(
-            (qz) => qz.title === q.quiz_title,
-          );
-          if (quizEntry) {
-            quizEntry.questionCount = (quizEntry.questionCount || 0) + 1;
-          }
-        }
-      });
-
-      Object.entries(quizzesGrouped).forEach(
-        ([subjectName, subjectQuizzes]) => {
-          if (subjectMap.has(subjectName)) {
-            subjectMap.get(subjectName).quizCount = subjectQuizzes.length;
-          }
-        },
-      );
-
-      setSubjects(Array.from(subjectMap.values()));
-      setQuizzesBySubject(quizzesGrouped);
-    } catch (fetchError) {
-      console.error("Error fetching subjects and quizzes:", fetchError);
+      // Get unique subjects
+      const uniqueSubjects = [...new Set(data.map(item => item.subject_name))];
+      setSubjects(uniqueSubjects.map(name => ({ subject_name: name, description: "" })));
+    } catch (error) {
+      console.error("Error fetching subjects:", error);
       toast({
         title: "Error",
-        description:
-          "Could not load subjects or quizzes. " + fetchError.message,
+        description: "Failed to fetch subjects: " + error.message,
         variant: "destructive",
       });
-      setSubjects([]);
-      setQuizzesBySubject({});
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  };
 
   useEffect(() => {
-    fetchSubjectsAndQuizzes();
-  }, [fetchSubjectsAndQuizzes]);
+    fetchSubjects();
+  }, []);
 
-  const openNewQuizModal = (subject) => {
-    setCurrentSubjectForModal(subject);
-    setEditingQuizDetails(null);
-    setIsQuizModalOpen(true);
-  };
-
-  const openEditQuizModal = (subject, quiz) => {
-    setCurrentSubjectForModal(subject);
-    setEditingQuizDetails({
-      subjectName: subject.name,
-      oldTitle: quiz.title,
-      title: quiz.title,
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // This would typically involve creating a subjects table
+    toast({
+      title: "Feature Coming Soon",
+      description: "Subject management functionality will be implemented with a dedicated subjects table.",
     });
-    setIsQuizModalOpen(true);
+    setIsDialogOpen(false);
+    resetForm();
   };
 
-  const openDeleteQuizDialog = (subject, quiz) => {
-    setQuizToDeleteDetails({
-      subjectName: subject.name,
-      quizTitle: quiz.title,
+  const resetForm = () => {
+    setFormData({ subject_name: "", description: "" });
+    setEditingSubject(null);
+  };
+
+  const handleEdit = (subject) => {
+    setEditingSubject(subject);
+    setFormData(subject);
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = async (subjectName) => {
+    toast({
+      title: "Feature Coming Soon",
+      description: "Subject deletion will be implemented with proper cascade handling.",
     });
-    setIsDeleteDialogValid(true);
   };
-
-  const handleSaveQuiz = async (subject, oldTitle, newTitle) => {
-    setActionLoading(true);
-    try {
-      if (oldTitle) {
-        const { error: updateError } = await supabase
-          .from("quizzes")
-          .update({ quiz_title: newTitle })
-          .match({ subject_name: subject.name, quiz_title: oldTitle });
-        if (updateError) throw updateError;
-
-        const { error: updateResponsesError } = await supabase
-          .from("quiz_responses")
-          .update({ quiz_title: newTitle })
-          .match({ subject_name: subject.name, quiz_title: oldTitle });
-        if (updateResponsesError)
-          console.warn(
-            "Could not update quiz_title in quiz_responses:",
-            updateResponsesError.message,
-          );
-
-        toast({
-          title: "Quiz Title Updated",
-          description: `Quiz "${oldTitle}" renamed to "${newTitle}".`,
-        });
-      } else {
-        toast({
-          title: "Quiz Placeholder Ready",
-          description: `You can now add questions to "${newTitle}" under ${subject.name}. A quiz is formally created when its first question is added.`,
-        });
-      }
-      fetchSubjectsAndQuizzes();
-    } catch (saveError) {
-      console.error("Error saving quiz:", saveError);
-      toast({
-        title: "Error",
-        description: "Could not save quiz information. " + saveError.message,
-        variant: "destructive",
-      });
-    } finally {
-      setActionLoading(false);
-      setIsQuizModalOpen(false);
-      setEditingQuizDetails(null);
-      setCurrentSubjectForModal(null);
-    }
-  };
-
-  const handleDeleteQuizConfirm = async () => {
-    if (!quizToDeleteDetails) return;
-    setActionLoading(true);
-    try {
-      const { error: questionsError } = await supabase
-        .from("quizzes")
-        .delete()
-        .match({
-          subject_name: quizToDeleteDetails.subjectName,
-          quiz_title: quizToDeleteDetails.quizTitle,
-        });
-      if (questionsError) throw questionsError;
-
-      const { error: responsesError } = await supabase
-        .from("quiz_responses")
-        .delete()
-        .match({
-          subject_name: quizToDeleteDetails.subjectName,
-          quiz_title: quizToDeleteDetails.quizTitle,
-        });
-      if (responsesError)
-        console.warn(
-          "Could not delete responses for quiz:",
-          responsesError.message,
-        );
-
-      toast({
-        title: "Quiz Deleted",
-        description: `Quiz "${quizToDeleteDetails.quizTitle}" and its associated data deleted.`,
-      });
-      fetchSubjectsAndQuizzes();
-    } catch (deleteError) {
-      console.error("Error deleting quiz:", deleteError);
-      toast({
-        title: "Error",
-        description: "Could not delete quiz. " + deleteError.message,
-        variant: "destructive",
-      });
-    } finally {
-      setActionLoading(false);
-      setQuizToDeleteDetails(null);
-      setIsDeleteDialogValid(false);
-    }
-  };
-
-  const filteredSubjects = subjects.filter((subject) =>
-    subject.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="p-6 space-y-6"
+      className="p-6"
     >
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <h1 className="text-3xl font-bold text-foreground">
-          Subject & Quiz Management
-        </h1>
-        <div className="relative w-full sm:w-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Search subjects..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 w-full sm:w-64"
-          />
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="flex justify-between items-center mb-6"
+      >
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Subject Management</h1>
+          <p className="text-muted-foreground">Manage academic subjects and their quizzes</p>
         </div>
-      </div>
+        <div className="flex gap-2">
+          <Button onClick={fetchSubjects} variant="outline" disabled={loading}>
+            <RefreshCw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+            Refresh
+          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Subject
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  {editingSubject ? "Edit Subject" : "Add New Subject"}
+                </DialogTitle>
+                <DialogDescription>
+                  {editingSubject 
+                    ? "Update the subject information below." 
+                    : "Enter the details for the new subject."}
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleSubmit}>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="subject_name">Subject Name</Label>
+                    <Input
+                      id="subject_name"
+                      value={formData.subject_name}
+                      onChange={(e) => setFormData({...formData, subject_name: e.target.value})}
+                      placeholder="e.g., Mathematics, Computer Science"
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="description">Description</Label>
+                    <Input
+                      id="description"
+                      value={formData.description}
+                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      placeholder="Brief description of the subject"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">
+                    {editingSubject ? "Update" : "Create"} Subject
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </motion.div>
 
       {loading ? (
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center h-60">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
-      ) : filteredSubjects.length === 0 ? (
-        <div className="text-center text-muted-foreground py-10">
-          <BookOpen className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
-          <p>
-            {subjects.length === 0
-              ? "No subjects available yet."
-              : "No subjects found matching your search."}
-          </p>
-          <p className="text-sm">
-            You can add questions to create new subjects and quizzes in the
-            "Question Management" section.
-          </p>
-        </div>
       ) : (
-        <div className="space-y-8">
-          {filteredSubjects.map((subject) => (
-            <SubjectCardItem
-              key={subject.id || subject.name}
-              subject={subject}
-              quizzes={quizzesBySubject[subject.name] || []}
-              onNewQuiz={openNewQuizModal}
-              onEditQuiz={openEditQuizModal}
-              onDeleteQuiz={openDeleteQuizDialog}
-            />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {subjects.map((subject, index) => (
+            <motion.div
+              key={subject.subject_name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="h-5 w-5" />
+                    {subject.subject_name}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    {subject.description || "No description available"}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(subject)}
+                    >
+                      <Edit className="h-4 w-4 mr-1" />
+                      Edit
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="outline" size="sm" className="text-red-600">
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          Delete
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This will delete the subject "{subject.subject_name}" and all associated quizzes.
+                            This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(subject.subject_name)}
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
       )}
-
-      <QuizModal
-        isOpen={isQuizModalOpen}
-        onClose={() => {
-          setIsQuizModalOpen(false);
-          setCurrentSubjectForModal(null);
-          setEditingQuizDetails(null);
-        }}
-        subject={currentSubjectForModal}
-        quiz={editingQuizDetails}
-        onSave={handleSaveQuiz}
-        loading={actionLoading}
-      />
-
-      <DeleteQuizDialog
-        isOpen={isDeleteDialogValid}
-        onClose={() => {
-          setQuizToDeleteDetails(null);
-          setIsDeleteDialogValid(false);
-        }}
-        quizToDelete={quizToDeleteDetails}
-        onDelete={handleDeleteQuizConfirm}
-        loading={actionLoading}
-      />
     </motion.div>
   );
 };

@@ -1,376 +1,231 @@
-import React, { useState, useEffect, useCallback } from "react";
+
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Trophy, BarChartHorizontalBig, Download } from "lucide-react";
-import Papa from "papaparse";
+import { Trophy, Medal, Award, RefreshCw, Loader2, TrendingUp } from "lucide-react";
 
 const AdminLeaderboardPage = () => {
-  const [subjects, setSubjects] = useState([]);
-  const [quizzes, setQuizzes] = useState([]);
-  const [leaderboardData, setLeaderboardData] = useState([]);
-
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const [selectedQuizTitle, setSelectedQuizTitle] = useState("");
-
-  const [loadingSubjects, setLoadingSubjects] = useState(true);
-  const [loadingQuizzes, setLoadingQuizzes] = useState(false);
-  const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
-  const [averageScore, setAverageScore] = useState(0);
-
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalStudents: 0,
+    totalQuizzes: 0,
+    averageScore: 0,
+  });
   const { toast } = useToast();
 
-  const fetchSubjects = useCallback(async () => {
-    setLoadingSubjects(true);
-    const { data, error } = await supabase
-      .from("quiz_responses")
-      .select("subject_name")
-      .distinctOn("subject_name");
-    if (error) {
+  const fetchLeaderboardData = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("quiz_responses")
+        .select("*");
+
+      if (error) throw error;
+
+      // Process data to create leaderboard
+      const studentStats = {};
+      
+      data.forEach(response => {
+        const studentName = response.student_name;
+        if (!studentStats[studentName]) {
+          studentStats[studentName] = {
+            name: studentName,
+            totalQuizzes: 0,
+            totalScore: 0,
+            totalPossible: 0,
+            averageScore: 0,
+            subjects: new Set(),
+          };
+        }
+        
+        studentStats[studentName].totalQuizzes += 1;
+        studentStats[studentName].totalScore += response.score;
+        studentStats[studentName].totalPossible += response.total_questions;
+        studentStats[studentName].subjects.add(response.subject_name);
+      });
+
+      // Calculate averages and sort
+      const leaderboardData = Object.values(studentStats)
+        .map(student => ({
+          ...student,
+          averageScore: student.totalPossible > 0 
+            ? Math.round((student.totalScore / student.totalPossible) * 100) 
+            : 0,
+          subjectCount: student.subjects.size,
+        }))
+        .sort((a, b) => b.averageScore - a.averageScore);
+
+      setLeaderboard(leaderboardData);
+
+      // Calculate overall stats
+      const totalStudents = leaderboardData.length;
+      const totalQuizzes = data.length;
+      const averageScore = totalStudents > 0 
+        ? Math.round(leaderboardData.reduce((sum, student) => sum + student.averageScore, 0) / totalStudents)
+        : 0;
+
+      setStats({ totalStudents, totalQuizzes, averageScore });
+    } catch (error) {
+      console.error("Error fetching leaderboard data:", error);
       toast({
-        title: "Error fetching subjects",
-        description: error.message,
+        title: "Error",
+        description: "Failed to fetch leaderboard data: " + error.message,
         variant: "destructive",
       });
-      setSubjects([]);
-    } else {
-      setSubjects(data.map((s) => s.subject_name).filter(Boolean) || []);
+    } finally {
+      setLoading(false);
     }
-    setLoadingSubjects(false);
-  }, [toast]);
-
-  const fetchQuizzesForSubject = useCallback(
-    async (subjectName) => {
-      if (!subjectName) {
-        setQuizzes([]);
-        return;
-      }
-      setLoadingQuizzes(true);
-      const { data, error } = await supabase
-        .from("quiz_responses")
-        .select("quiz_title")
-        .eq("subject_name", subjectName)
-        .distinctOn("quiz_title");
-
-      if (error) {
-        toast({
-          title: "Error fetching quizzes",
-          description: error.message,
-          variant: "destructive",
-        });
-        setQuizzes([]);
-      } else {
-        setQuizzes(data.map((q) => q.quiz_title).filter(Boolean) || []);
-      }
-      setLoadingQuizzes(false);
-    },
-    [toast],
-  );
-
-  const fetchLeaderboard = useCallback(
-    async (subjectName, quizTitle) => {
-      if (!subjectName || !quizTitle) {
-        setLeaderboardData([]);
-        setAverageScore(0);
-        return;
-      }
-      setLoadingLeaderboard(true);
-      const { data, error } = await supabase
-        .from("quiz_responses")
-        .select("name, roll_number, score, total_questions, timestamp")
-        .eq("subject_name", subjectName)
-        .eq("quiz_title", quizTitle)
-        .order("score", { ascending: false })
-        .order("timestamp", { ascending: true });
-
-      if (error) {
-        toast({
-          title: "Error fetching leaderboard",
-          description: error.message,
-          variant: "destructive",
-        });
-        setLeaderboardData([]);
-        setAverageScore(0);
-      } else {
-        const rankedData = data.map((item, index) => ({
-          ...item,
-          rank: index + 1,
-        }));
-        setLeaderboardData(rankedData);
-
-        if (data.length > 0) {
-          const totalScoreSum = data.reduce((sum, item) => sum + item.score, 0);
-          const totalPossibleScoreSum = data.reduce(
-            (sum, item) => sum + item.total_questions,
-            0,
-          );
-          const avg =
-            totalPossibleScoreSum > 0
-              ? (totalScoreSum / totalPossibleScoreSum) * 100
-              : 0;
-          setAverageScore(avg);
-        } else {
-          setAverageScore(0);
-        }
-      }
-      setLoadingLeaderboard(false);
-    },
-    [toast],
-  );
+  };
 
   useEffect(() => {
-    fetchSubjects();
-  }, [fetchSubjects]);
+    fetchLeaderboardData();
+  }, []);
 
-  useEffect(() => {
-    if (selectedSubject) {
-      fetchQuizzesForSubject(selectedSubject);
-      setSelectedQuizTitle("");
-      setLeaderboardData([]);
-      setAverageScore(0);
-    } else {
-      setQuizzes([]);
-      setLeaderboardData([]);
-      setAverageScore(0);
-      setSelectedQuizTitle("");
+  const getRankIcon = (index) => {
+    switch (index) {
+      case 0:
+        return <Trophy className="h-6 w-6 text-yellow-500" />;
+      case 1:
+        return <Medal className="h-6 w-6 text-gray-400" />;
+      case 2:
+        return <Award className="h-6 w-6 text-amber-600" />;
+      default:
+        return <span className="text-lg font-bold text-muted-foreground">#{index + 1}</span>;
     }
-  }, [selectedSubject, fetchQuizzesForSubject]);
+  };
 
-  useEffect(() => {
-    if (selectedSubject && selectedQuizTitle) {
-      fetchLeaderboard(selectedSubject, selectedQuizTitle);
-    } else {
-      setLeaderboardData([]);
-      setAverageScore(0);
-    }
-  }, [selectedSubject, selectedQuizTitle, fetchLeaderboard]);
-
-  const handleExportLeaderboard = () => {
-    if (leaderboardData.length === 0) {
-      toast({ title: "No data to export", variant: "warning" });
-      return;
-    }
-    const csvData = Papa.unparse(
-      leaderboardData.map((r) => ({
-        Rank: r.rank,
-        Name: r.name,
-        RollNo: r.roll_number,
-        Score: r.score,
-        TotalQuestions: r.total_questions,
-        SubmittedAt: new Date(r.timestamp).toLocaleString(),
-      })),
-    );
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.setAttribute(
-      "download",
-      `leaderboard_${selectedSubject}_${selectedQuizTitle}.csv`,
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    toast({
-      title: "Leaderboard Exported",
-      description: "Leaderboard data downloaded.",
-    });
+  const getScoreColor = (score) => {
+    if (score >= 90) return "text-green-600";
+    if (score >= 80) return "text-blue-600";
+    if (score >= 70) return "text-yellow-600";
+    if (score >= 60) return "text-orange-600";
+    return "text-red-600";
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="p-6 space-y-6"
+      className="p-6"
     >
-      <h1 className="text-3xl font-bold text-foreground">Quiz Leaderboards</h1>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="flex justify-between items-center mb-6"
+      >
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Leaderboard</h1>
+          <p className="text-muted-foreground">Student performance rankings and statistics</p>
+        </div>
+        <Button onClick={fetchLeaderboardData} variant="outline" disabled={loading}>
+          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          Refresh
+        </Button>
+      </motion.div>
 
-      <Card className="shadow-lg bg-card/80 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle>Select Quiz</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <div>
-            <Label htmlFor="subjectSelectLeaderboard">Subject</Label>
-            <Select
-              value={selectedSubject}
-              onValueChange={setSelectedSubject}
-              disabled={loadingSubjects}
-            >
-              <SelectTrigger id="subjectSelectLeaderboard">
-                <SelectValue
-                  placeholder={
-                    loadingSubjects
-                      ? "Loading..."
-                      : subjects.length > 0
-                        ? "Select Subject"
-                        : "No Subjects with Responses"
-                  }
-                />
-              </SelectTrigger>
-              <SelectContent>
-                {subjects.length > 0 ? (
-                  subjects.map((s) => (
-                    <SelectItem key={s} value={s}>
-                      {s}
-                    </SelectItem>
-                  ))
-                ) : (
-                  <SelectItem value="" disabled>
-                    No subjects with responses
-                  </SelectItem>
-                )}
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="quizSelectLeaderboard">Quiz</Label>
-            <Select
-              value={selectedQuizTitle}
-              onValueChange={setSelectedQuizTitle}
-              disabled={!selectedSubject || loadingQuizzes}
-            >
-              <SelectTrigger id="quizSelectLeaderboard">
-                <SelectValue
-                  placeholder={
-                    !selectedSubject
-                      ? "Select Subject First"
-                      : loadingQuizzes
-                        ? "Loading..."
-                        : quizzes.length > 0
-                          ? "Select Quiz"
-                          : "No Quizzes with Responses"
-                  }
-                />
-              </SelectTrigger>
-              <SelectContent>
-                {quizzes.length > 0 ? (
-                  quizzes.map((qTitle) => (
-                    <SelectItem key={qTitle} value={qTitle}>
-                      {qTitle}
-                    </SelectItem>
-                  ))
-                ) : (
-                  <SelectItem value="" disabled>
-                    No quizzes with responses
-                  </SelectItem>
-                )}
-              </SelectContent>
-            </Select>
-          </div>
-          <Button
-            onClick={handleExportLeaderboard}
-            variant="outline"
-            disabled={leaderboardData.length === 0 || loadingLeaderboard}
-          >
-            <Download className="mr-2 h-4 w-4" /> Export Leaderboard
-          </Button>
-        </CardContent>
-      </Card>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Students</p>
+                <p className="text-2xl font-bold">{stats.totalStudents}</p>
+              </div>
+              <Trophy className="h-8 w-8 text-blue-500" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Quiz Attempts</p>
+                <p className="text-2xl font-bold">{stats.totalQuizzes}</p>
+              </div>
+              <TrendingUp className="h-8 w-8 text-green-500" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Average Score</p>
+                <p className="text-2xl font-bold">{stats.averageScore}%</p>
+              </div>
+              <Award className="h-8 w-8 text-purple-500" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-      {selectedSubject && selectedQuizTitle && (
-        <Card className="shadow-lg bg-card/80 backdrop-blur-sm">
+      {loading ? (
+        <div className="flex justify-center items-center h-60">
+          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        </div>
+      ) : (
+        <Card>
           <CardHeader>
-            <CardTitle className="flex justify-between items-center">
-              Leaderboard: {selectedQuizTitle} ({selectedSubject})
-              {averageScore > 0 && (
-                <span className="text-sm font-normal text-muted-foreground">
-                  Avg. Score: {averageScore.toFixed(2)}%
-                </span>
-              )}
-            </CardTitle>
-            <CardDescription>
-              Top 21 students ranked by score and submission time.
-            </CardDescription>
+            <CardTitle>Student Rankings</CardTitle>
           </CardHeader>
           <CardContent>
-            {loadingLeaderboard ? (
-              <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            {leaderboard.length > 0 ? (
+              <div className="space-y-4">
+                {leaderboard.map((student, index) => (
+                  <motion.div
+                    key={student.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className={`flex items-center justify-between p-4 rounded-lg border ${
+                      index < 3 ? 'bg-gradient-to-r from-primary/5 to-primary/10' : 'bg-muted/30'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center justify-center w-12 h-12">
+                        {getRankIcon(index)}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-lg">{student.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {student.totalQuizzes} quiz{student.totalQuizzes !== 1 ? 'es' : ''} • {student.subjectCount} subject{student.subjectCount !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className={`text-2xl font-bold ${getScoreColor(student.averageScore)}`}>
+                        {student.averageScore}%
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {student.totalScore}/{student.totalPossible} points
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            ) : leaderboardData.length === 0 ? (
-              <p className="text-center text-muted-foreground py-10">
-                No submissions yet for this quiz.
-              </p>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[50px]">Rank</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Roll No</TableHead>
-                      <TableHead>Score</TableHead>
-                      <TableHead>Submitted At</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {leaderboardData.slice(0, 21).map((item) => (
-                      <TableRow
-                        key={item.roll_number + item.timestamp}
-                        className={
-                          item.rank === 1
-                            ? "bg-yellow-500/10 dark:bg-yellow-400/10"
-                            : ""
-                        }
-                      >
-                        <TableCell className="font-bold">
-                          {item.rank === 1 && (
-                            <Trophy className="inline mr-1 h-4 w-4 text-yellow-500" />
-                          )}
-                          {item.rank}
-                        </TableCell>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.roll_number}</TableCell>
-                        <TableCell>
-                          {item.score} / {item.total_questions}
-                        </TableCell>
-                        <TableCell>
-                          {new Date(item.timestamp).toLocaleString()}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+              <motion.div
+                className="text-center text-muted-foreground py-12"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Trophy className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
+                <p className="text-lg">No student data available</p>
+                <p className="text-sm">Rankings will appear once students start taking quizzes</p>
+              </motion.div>
             )}
           </CardContent>
         </Card>
       )}
-      {(!selectedSubject || !selectedQuizTitle) &&
-        !loadingSubjects &&
-        !loadingQuizzes && (
-          <Card className="shadow-lg bg-card/80 backdrop-blur-sm">
-            <CardContent className="py-10 text-center text-muted-foreground">
-              <BarChartHorizontalBig className="mx-auto h-12 w-12 mb-4 text-gray-400" />
-              Please select a subject and a quiz to view the leaderboard.
-            </CardContent>
-          </Card>
-        )}
     </motion.div>
   );
 };

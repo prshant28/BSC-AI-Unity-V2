@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Papa from "papaparse";
 import { supabase } from "@/lib/supabaseClient";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
+import { Search, RefreshCw, Loader2, User, Calendar, Award } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -12,315 +14,186 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
-import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Search, Download, Eye, Users } from "lucide-react";
-import ResponseDetailModal from "@/components/admin/ResponseDetailModal";
 
 const AdminResponseViewerPage = () => {
   const [responses, setResponses] = useState([]);
-  const [allQuestionsMap, setAllQuestionsMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterSubject, setFilterSubject] = useState("");
-  const [filterQuiz, setFilterQuiz] = useState("");
-
-  const [subjectsForFilter, setSubjectsForFilter] = useState([]);
-  const [quizzesForFilter, setQuizzesForFilter] = useState([]);
-
-  const [selectedResponse, setSelectedResponse] = useState(null);
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-
+  const [subjectFilter, setSubjectFilter] = useState("All");
+  const [subjects, setSubjects] = useState([]);
   const { toast } = useToast();
 
-  const fetchAllQuestions = useCallback(async () => {
-    const { data, error } = await supabase.from("quizzes").select("*");
-    if (error) {
-      toast({
-        title: "Error fetching questions map",
-        description: error.message,
-        variant: "destructive",
-      });
-      return {};
-    }
-    return data.reduce((acc, q) => {
-      acc[q.id] = q;
-      return acc;
-    }, {});
-  }, [toast]);
-
-  const fetchFilterOptionsAndResponses = useCallback(async () => {
+  const fetchResponses = async () => {
     setLoading(true);
     try {
-      const { data: distinctSubjects, error: subjectError } = await supabase
-        .from("quiz_responses")
-        .select("subject_name")
-        .distinctOn("subject_name");
-      if (subjectError) throw subjectError;
-      setSubjectsForFilter(
-        distinctSubjects.map((s) => s.subject_name).filter(Boolean) || [],
-      );
-
-      const { data: responsesData, error: responsesError } = await supabase
+      const { data, error } = await supabase
         .from("quiz_responses")
         .select("*")
         .order("timestamp", { ascending: false });
-      if (responsesError) throw responsesError;
-      setResponses(responsesData || []);
+
+      if (error) throw error;
+
+      setResponses(data || []);
+
+      // Get unique subjects for filter
+      const uniqueSubjects = [...new Set(data.map(r => r.subject_name))];
+      setSubjects(uniqueSubjects);
     } catch (error) {
+      console.error("Error fetching responses:", error);
       toast({
-        title: "Error fetching response data",
-        description: error.message,
+        title: "Error",
+        description: "Failed to fetch quiz responses: " + error.message,
         variant: "destructive",
       });
-      setResponses([]);
     } finally {
       setLoading(false);
     }
-  }, [toast]);
-
-  useEffect(() => {
-    const init = async () => {
-      const qMap = await fetchAllQuestions();
-      setAllQuestionsMap(qMap);
-      await fetchFilterOptionsAndResponses();
-    };
-    init();
-  }, [fetchAllQuestions, fetchFilterOptionsAndResponses]);
-
-  useEffect(() => {
-    const fetchQuizzesForSubjectFilter = async () => {
-      if (!filterSubject) {
-        setQuizzesForFilter([]);
-        setFilterQuiz("");
-        return;
-      }
-      const { data, error } = await supabase
-        .from("quiz_responses")
-        .select("quiz_title")
-        .eq("subject_name", filterSubject)
-        .distinctOn("quiz_title");
-
-      if (error) {
-        toast({
-          title: "Error fetching quizzes for filter",
-          description: error.message,
-          variant: "destructive",
-        });
-        setQuizzesForFilter([]);
-      } else {
-        setQuizzesForFilter(
-          data.map((q) => q.quiz_title).filter(Boolean) || [],
-        );
-      }
-    };
-    fetchQuizzesForSubjectFilter();
-  }, [filterSubject, toast]);
-
-  const filteredResponses = responses.filter((res) => {
-    const searchTermLower = searchTerm.toLowerCase();
-    const nameMatch =
-      res.name && res.name.toLowerCase().includes(searchTermLower);
-    const rollMatch =
-      res.roll_number &&
-      res.roll_number.toLowerCase().includes(searchTermLower);
-    const subjectMatch = filterSubject
-      ? res.subject_name === filterSubject
-      : true;
-    const quizMatch = filterQuiz ? res.quiz_title === filterQuiz : true;
-    return (nameMatch || rollMatch) && subjectMatch && quizMatch;
-  });
-
-  const handleExportCSV = () => {
-    if (filteredResponses.length === 0) {
-      toast({ title: "No data to export", variant: "warning" });
-      return;
-    }
-    const csvData = Papa.unparse(
-      filteredResponses.map((r) => ({
-        Name: r.name,
-        RollNo: r.roll_number,
-        Subject: r.subject_name,
-        QuizTitle: r.quiz_title || "N/A",
-        Score: r.score,
-        TotalQuestions: r.total_questions,
-        SubmittedAt: new Date(r.timestamp).toLocaleString(),
-        ResponsesJSON: JSON.stringify(r.responses),
-      })),
-    );
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.setAttribute(
-      "download",
-      `quiz_responses_${new Date().toISOString().split("T")[0]}.csv`,
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    toast({
-      title: "CSV Exported",
-      description: "Student responses downloaded.",
-    });
   };
 
-  const openDetailModal = (response) => {
-    setSelectedResponse(response);
-    setIsDetailModalOpen(true);
+  useEffect(() => {
+    fetchResponses();
+  }, []);
+
+  const filteredResponses = responses.filter((response) => {
+    const matchesSearch = 
+      response.student_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      response.quiz_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      response.subject_name?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesSubject = subjectFilter === "All" || response.subject_name === subjectFilter;
+    
+    return matchesSearch && matchesSubject;
+  });
+
+  const getScoreColor = (score, total) => {
+    const percentage = (score / total) * 100;
+    if (percentage >= 80) return "text-green-600";
+    if (percentage >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="p-6 space-y-6"
+      className="p-6"
     >
-      <h1 className="text-3xl font-bold text-foreground">
-        Student Quiz Responses
-      </h1>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="flex justify-between items-center mb-6"
+      >
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Student Responses</h1>
+          <p className="text-muted-foreground">View and analyze student quiz performance</p>
+        </div>
+        <Button onClick={fetchResponses} variant="outline" disabled={loading}>
+          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          Refresh
+        </Button>
+      </motion.div>
 
-      <Card className="shadow-lg bg-card/80 backdrop-blur-sm">
+      {/* Filters */}
+      <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Filters & Export</CardTitle>
+          <CardTitle>Filter Responses</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-            <div className="md:col-span-1">
-              <Label htmlFor="searchTermRv">Search Name/Roll No</Label>
-              <Input
-                id="searchTermRv"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+        <CardContent>
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by student name, quiz title, or subject..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
-            <div>
-              <Label htmlFor="subjectFilterRv">Filter by Subject</Label>
-              <Select value={filterSubject} onValueChange={setFilterSubject}>
-                <SelectTrigger id="subjectFilterRv">
-                  <SelectValue placeholder="All Subjects" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">All Subjects</SelectItem>
-                  {subjectsForFilter.map((s) => (
-                    <SelectItem key={s} value={s}>
-                      {s}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="quizFilterRv">Filter by Quiz</Label>
-              <Select
-                value={filterQuiz}
-                onValueChange={setFilterQuiz}
-                disabled={!filterSubject || quizzesForFilter.length === 0}
-              >
-                <SelectTrigger id="quizFilterRv">
-                  <SelectValue
-                    placeholder={
-                      !filterSubject
-                        ? "Select Subject First"
-                        : quizzesForFilter.length === 0
-                          ? "No Quizzes"
-                          : "All Quizzes"
-                    }
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">All Quizzes</SelectItem>
-                  {quizzesForFilter.map((q) => (
-                    <SelectItem key={q} value={q}>
-                      {q}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <Button
-              onClick={handleExportCSV}
-              variant="outline"
-              className="w-full md:w-auto"
-              disabled={filteredResponses.length === 0}
-            >
-              <Download className="mr-2 h-4 w-4" /> Export CSV
-            </Button>
+            <Select value={subjectFilter} onValueChange={setSubjectFilter}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Filter by subject" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Subjects</SelectItem>
+                {subjects.map((subject) => (
+                  <SelectItem key={subject} value={subject}>
+                    {subject}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
 
       {loading ? (
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center h-60">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
-      ) : filteredResponses.length === 0 ? (
-        <Card className="shadow-lg bg-card/80 backdrop-blur-sm text-center py-10">
-          <Users className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
-          <p className="text-muted-foreground">
-            No responses found matching your criteria.
-          </p>
-        </Card>
       ) : (
-        <Card className="shadow-lg bg-card/80 backdrop-blur-sm">
-          <CardContent className="pt-6 overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Roll No</TableHead>
-                  <TableHead>Subject</TableHead>
-                  <TableHead>Quiz</TableHead>
-                  <TableHead>Score</TableHead>
-                  <TableHead>Submitted At</TableHead>
-                  <TableHead className="text-right">Details</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredResponses.map((res) => (
-                  <TableRow key={res.id}>
-                    <TableCell>{res.name}</TableCell>
-                    <TableCell>{res.roll_number}</TableCell>
-                    <TableCell>{res.subject_name}</TableCell>
-                    <TableCell>{res.quiz_title || "N/A"}</TableCell>
-                    <TableCell>
-                      {res.score} / {res.total_questions}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(res.timestamp).toLocaleString()}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => openDetailModal(res)}
-                      >
-                        <Eye className="h-4 w-4 text-blue-500" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+        <div className="space-y-4">
+          {filteredResponses.length > 0 ? (
+            filteredResponses.map((response, index) => (
+              <motion.div
+                key={response.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+              >
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <User className="h-4 w-4 text-primary" />
+                          <h3 className="font-semibold text-lg">{response.student_name}</h3>
+                        </div>
+                        <p className="text-muted-foreground mb-1">
+                          <strong>Quiz:</strong> {response.quiz_title}
+                        </p>
+                        <p className="text-muted-foreground mb-1">
+                          <strong>Subject:</strong> {response.subject_name}
+                        </p>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Calendar className="h-4 w-4" />
+                          {new Date(response.timestamp).toLocaleString()}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Award className="h-5 w-5 text-primary" />
+                          <span className={`text-2xl font-bold ${getScoreColor(response.score, response.total_questions)}`}>
+                            {response.score}/{response.total_questions}
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {Math.round((response.score / response.total_questions) * 100)}% Score
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div
+              className="text-center text-muted-foreground py-12 border border-dashed rounded-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <User className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
+              <p className="text-lg">No quiz responses found</p>
+              <p className="text-sm">Responses will appear here once students start taking quizzes</p>
+            </motion.div>
+          )}
+        </div>
       )}
-
-      <ResponseDetailModal
-        isOpen={isDetailModalOpen}
-        onClose={() => setIsDetailModalOpen(false)}
-        response={selectedResponse}
-        allQuestions={allQuestionsMap}
-      />
     </motion.div>
   );
 };

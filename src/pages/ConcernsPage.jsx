@@ -54,7 +54,8 @@ const ConcernsPage = () => {
         .select(`
           *,
           concern_replies(*)
-        `);
+        `)
+        .eq('is_hidden', false);
 
       // Apply sorting
       switch (sortBy) {

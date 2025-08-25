@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
@@ -31,7 +30,27 @@ import {
   User,
   Heart,
   MessageSquare,
+  Trash2,
+  EyeOff,
+  MoreVertical,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const ConcernCard = ({ concern, onUpdate }) => {
   const [replyText, setReplyText] = useState("");
@@ -72,7 +91,7 @@ const ConcernCard = ({ concern, onUpdate }) => {
 
       setVotes(updates);
       setUserVote(voteType);
-      
+
       toast({
         title: "Vote Recorded",
         description: `Your vote has been recorded successfully.`,
@@ -109,9 +128,9 @@ const ConcernCard = ({ concern, onUpdate }) => {
       setReplies([...replies, newReply]);
       setReplyText("");
       setIsReplyDialogOpen(false);
-      
+
       if (onUpdate) onUpdate();
-      
+
       toast({
         title: "Reply Added",
         description: "Your reply has been posted successfully.",
@@ -126,6 +145,61 @@ const ConcernCard = ({ concern, onUpdate }) => {
       setLoading(false);
     }
   };
+
+  const handleDelete = async () => {
+    try {
+      const { error } = await supabase
+        .from('concerns')
+        .delete()
+        .eq('id', concern.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Concern Deleted",
+        description: "The concern has been permanently deleted.",
+      });
+
+      if (onUpdate) onUpdate();
+    } catch (error) {
+      console.error('Error deleting concern:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete concern: " + error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleHide = async () => {
+    try {
+      const { error } = await supabase
+        .from('concerns')
+        .update({
+          is_hidden: true,
+          hidden_at: new Date().toISOString(),
+          hidden_by: 'Admin'
+        })
+        .eq('id', concern.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Concern Hidden",
+        description: "The concern has been hidden from public view.",
+      });
+
+      if (onUpdate) onUpdate();
+    } catch (error) {
+      console.error('Error hiding concern:', error);
+      toast({
+        title: "Error",
+        description: "Failed to hide concern: " + error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
 
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
@@ -164,7 +238,7 @@ const ConcernCard = ({ concern, onUpdate }) => {
             <CardTitle className="text-lg font-semibold text-foreground line-clamp-2 flex-1">
               {concern.title}
             </CardTitle>
-            <div className="flex flex-col gap-1 items-end">
+            <div className="flex items-center gap-2">
               <span
                 className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
                   concern.status
@@ -180,6 +254,41 @@ const ConcernCard = ({ concern, onUpdate }) => {
                 <Tag className="w-3 h-3 inline mr-1" />
                 {concern.category || "General"}
               </span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-6 w-6">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handleHide} className="cursor-pointer">
+                    <EyeOff className="w-4 h-4 mr-2" />
+                    Hide Concern
+                  </DropdownMenuItem>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem className="cursor-pointer text-red-600 focus:bg-red-600/10 focus:text-red-600">
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete Concern
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently delete the concern and remove it from our servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </CardHeader>
