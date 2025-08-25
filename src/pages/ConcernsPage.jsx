@@ -53,9 +53,7 @@ const ConcernsPage = () => {
         .select(`
           *,
           concern_replies(*)
-        `)
-        // .eq('is_hidden', false) // This line is commented out due to the error
-        ;
+        `);
 
       // Apply sorting
       switch (sortBy) {
