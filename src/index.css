@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* Light mode background - White */
+    --foreground: 224 71.4% 4.1%; /* Light mode text - Dark Blue/Almost Black */
+    
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    
+    --primary: 221 83% 53%; /* Indigo 500/600 */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
+    
+    --secondary: 215 28% 17%; /* Slate 800 */
+    --secondary-foreground: 0 0% 98%; /* Almost white text on secondary */
+    
+    --muted: 215 20% 65%; /* Slate 400/500 */
+    --muted-foreground: 215 28% 27%; /* Slate 700 for muted text */
+    
+    --accent: 210 40% 96.1%; /* Light Slate/Blue for accents */
+    --accent-foreground: 221 83% 43%; /* Darker Indigo for accent text */
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 215 20% 90%; /* Lighter Slate for borders */
+    --input: 215 20% 85%; /* Slightly darker Slate for input backgrounds */
+    --ring: 221 83% 53%; /* Primary color for focus rings */
+    
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 24% 10%; /* Dark mode background - Very Dark Blue/Almost Black */
+    --foreground: 210 40% 98%; /* Dark mode text - Light Gray/Almost White */
+
+    --card: 224 20% 13%; /* Slightly lighter dark blue for cards */
+    --card-foreground: 210 40% 98%;
+    --popover: 224 24% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 221 75% 65%; /* Lighter Indigo for dark mode */
+    --primary-foreground: 224 24% 5%; /* Darker text on primary in dark mode */
+    
+    --secondary: 215 20% 25%; /* Lighter Slate for dark mode secondary */
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 20% 35%; /* Darker Slate for muted in dark mode */
+    --muted-foreground: 210 40% 75%; /* Lighter muted text in dark mode */
+
+    --accent: 215 20% 20%; /* Dark accent */
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 215 20% 25%; /* Darker border */
+    --input: 215 20% 30%; /* Darker input */
+    --ring: 221 75% 65%; /* Lighter Indigo for rings in dark mode */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+  }
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-400 dark:to-indigo-300;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background) / 0.5);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.7);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
