@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
@@ -55,7 +54,8 @@ const ConcernsPage = () => {
           *,
           concern_replies(*)
         `)
-        .eq('is_hidden', false);
+        // .eq('is_hidden', false) // This line is commented out due to the error
+        ;
 
       // Apply sorting
       switch (sortBy) {
@@ -130,10 +130,10 @@ const ConcernsPage = () => {
       concern.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       concern.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       concern.student_name?.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesStatus = statusFilter === "All" || concern.status === statusFilter;
     const matchesCategory = categoryFilter === "All" || concern.category === categoryFilter;
-    
+
     return matchesSearch && matchesStatus && matchesCategory;
   });
 

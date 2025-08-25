@@ -2,96 +2,21 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
+  Activity,
   Users,
-  HelpCircle,
-  BarChartBig,
-  ListChecks,
-  Sigma,
-  BookCopy,
-  Percent,
+  BookOpen,
+  FileText,
+  MessageSquare,
   TrendingUp,
-  AlertTriangle,
+  Award,
+  BarChart3,
   CheckCircle,
   Clock,
-  MessageSquare,
-  ThumbsUp,
-  Activity,
+  AlertCircle,
 } from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  AreaChart,
-  Area,
-} from "recharts";
-import { Loader2 } from "lucide-react";
-
-const StatCard = ({ title, value, icon, description, isLoading, trend, color = "primary" }) => {
-  const IconComponent = icon;
-  const colorClasses = {
-    primary: "text-primary",
-    green: "text-green-600",
-    blue: "text-blue-600",
-    orange: "text-orange-600",
-    red: "text-red-600",
-    purple: "text-purple-600",
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ scale: 1.02 }}
-    >
-      <Card className="shadow-lg hover:shadow-xl transition-all duration-300 bg-card/80 backdrop-blur-sm border-l-4 border-l-primary">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
-            {title}
-          </CardTitle>
-          <IconComponent className={`h-5 w-5 ${colorClasses[color]}`} />
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          ) : (
-            <div className="space-y-1">
-              <div className="text-3xl font-bold text-foreground">{value}</div>
-              {trend && (
-                <div className={`flex items-center text-xs ${trend.positive ? 'text-green-600' : 'text-red-600'}`}>
-                  <TrendingUp className="w-3 h-3 mr-1" />
-                  {trend.value}% from last week
-                </div>
-              )}
-              {description && !isLoading && (
-                <p className="text-xs text-muted-foreground pt-1">{description}</p>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-};
 
 const AdminOverviewPage = () => {
   const [stats, setStats] = useState({
@@ -210,29 +135,42 @@ const AdminOverviewPage = () => {
           attempts: s.totalAttempts,
         }));
 
-        // Top quizzes by attempts
-        const quizAttemptsCount = responsesData.reduce((acc, curr) => {
-          const quizKey = `${curr.subject_name} - ${curr.quiz_title || "General"}`;
-          acc[quizKey] = (acc[quizKey] || 0) + 1;
+        // Top performing quizzes
+        const quizPerformance = responsesData.reduce((acc, curr) => {
+          const quizKey = `${curr.subject_name} - ${curr.quiz_title}`;
+          if (!acc[quizKey]) {
+            acc[quizKey] = { name: quizKey, totalScore: 0, totalAttempts: 0, totalPossible: 0 };
+          }
+          acc[quizKey].totalScore += curr.score;
+          acc[quizKey].totalAttempts += 1;
+          acc[quizKey].totalPossible += curr.total_questions;
           return acc;
         }, {});
 
-        const sortedTopQuizzes = Object.entries(quizAttemptsCount)
-          .map(([name, attempts]) => ({ name, attempts }))
-          .sort((a, b) => b.attempts - a.attempts)
+        const sortedTopQuizzes = Object.values(quizPerformance)
+          .map((q) => ({
+            name: q.name,
+            averageScore: q.totalPossible > 0 
+              ? parseFloat(((q.totalScore / q.totalPossible) * 100).toFixed(2)) 
+              : 0,
+            attempts: q.totalAttempts,
+          }))
+          .sort((a, b) => b.averageScore - a.averageScore)
           .slice(0, 5);
 
         // Concerns by category
-        const concernsByCategory = concernsData.reduce((acc, concern) => {
-          const category = concern.category || 'General';
+        const concernsCategoryData = concernsData.reduce((acc, curr) => {
+          const category = curr.category || 'general';
           acc[category] = (acc[category] || 0) + 1;
           return acc;
         }, {});
 
-        const concernsCategoryData = Object.entries(concernsByCategory)
-          .map(([name, value]) => ({ name, value }));
+        const concernsCategoryChart = Object.entries(concernsCategoryData).map(([name, value]) => ({
+          name,
+          value,
+        }));
 
-        // Weekly activity (last 7 days)
+        // Weekly activity data
         const last7Days = Array.from({ length: 7 }, (_, i) => {
           const date = new Date();
           date.setDate(date.getDate() - i);
@@ -257,7 +195,7 @@ const AdminOverviewPage = () => {
         setChartData({
           scoreDistribution: finalScoreDist,
           topQuizzes: sortedTopQuizzes,
-          concernsByCategory: concernsCategoryData,
+          concernsByCategory: concernsCategoryChart,
           subjectPerformance: finalScoreDist,
           weeklyActivity,
         });
@@ -288,228 +226,144 @@ const AdminOverviewPage = () => {
         </Button>
       </div>
 
-      {/* Main Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <StatCard
-          title="Total Subjects"
-          value={stats.totalSubjects}
-          icon={BookCopy}
-          isLoading={loadingStats}
-          description="Unique subjects with quizzes"
-          color="blue"
-        />
-        <StatCard
-          title="Total Quizzes"
-          value={stats.totalQuizzes}
-          icon={ListChecks}
-          isLoading={loadingStats}
-          description="Distinct quizzes created"
-          color="green"
-        />
-        <StatCard
-          title="Total Questions"
-          value={stats.totalQuestions}
-          icon={HelpCircle}
-          isLoading={loadingStats}
-          description="Across all subjects"
-          color="purple"
-        />
-        <StatCard
-          title="Quiz Attempts"
-          value={stats.totalAttempts}
-          icon={Users}
-          isLoading={loadingStats}
-          description="Student responses recorded"
-          color="orange"
-        />
-        <StatCard
-          title="Average Score"
-          value={stats.averageScore}
-          icon={Percent}
-          isLoading={loadingStats}
-          description="Overall performance"
-          color="primary"
-        />
-      </div>
-
-      {/* Secondary Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
-        <StatCard
-          title="Active Students"
-          value={stats.activeStudents}
-          icon={Users}
-          isLoading={loadingStats}
-          description="Unique participants"
-          color="green"
-        />
-        <StatCard
-          title="Total Concerns"
-          value={stats.totalConcerns}
-          icon={AlertTriangle}
-          isLoading={loadingStats}
-          description="Student concerns raised"
-          color="orange"
-        />
-        <StatCard
-          title="Resolved Issues"
-          value={stats.resolvedConcerns}
-          icon={CheckCircle}
-          isLoading={loadingStats}
-          description="Successfully addressed"
-          color="green"
-        />
-        <StatCard
-          title="Total Replies"
-          value={stats.totalReplies}
-          icon={MessageSquare}
-          isLoading={loadingStats}
-          description="Admin responses"
-          color="blue"
-        />
-        <StatCard
-          title="Community Votes"
-          value={stats.totalVotes}
-          icon={ThumbsUp}
-          isLoading={loadingStats}
-          description="Helpful ratings"
-          color="purple"
-        />
-      </div>
-
-      {/* Charts Grid */}
-      <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
-        {/* Weekly Activity */}
-        <Card className="shadow-lg hover:shadow-xl transition-shadow bg-card/80 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Weekly Activity</CardTitle>
-            <CardDescription>Quiz attempts and concerns over the last 7 days</CardDescription>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Subjects</CardTitle>
+            <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            {loadingCharts ? (
-              <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={chartData.weeklyActivity}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Area 
-                    type="monotone" 
-                    dataKey="quizAttempts" 
-                    stackId="1" 
-                    stroke="#8884d8" 
-                    fill="#8884d8" 
-                    name="Quiz Attempts"
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="concerns" 
-                    stackId="1" 
-                    stroke="#82ca9d" 
-                    fill="#82ca9d" 
-                    name="New Concerns"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            )}
+            <div className="text-2xl font-bold">{loadingStats ? "..." : stats.totalSubjects}</div>
           </CardContent>
         </Card>
 
-        {/* Top Quizzes */}
-        <Card className="shadow-lg hover:shadow-xl transition-shadow bg-card/80 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Top Attempted Quizzes</CardTitle>
-            <CardDescription>Most popular quizzes by student participation</CardDescription>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Quizzes</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            {loadingCharts ? (
-              <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              </div>
-            ) : chartData.topQuizzes.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={chartData.topQuizzes} layout="vertical" margin={{ right: 30 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" />
-                  <YAxis dataKey="name" type="category" width={150} interval={0} tick={{ fontSize: 12 }} />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="attempts" fill="#8884d8" name="Attempts" />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <p className="text-muted-foreground text-center py-10">No quiz data available yet.</p>
-            )}
+            <div className="text-2xl font-bold">{loadingStats ? "..." : stats.totalQuizzes}</div>
           </CardContent>
         </Card>
 
-        {/* Subject Performance */}
-        <Card className="shadow-lg hover:shadow-xl transition-shadow bg-card/80 backdrop-blur-sm">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Questions</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{loadingStats ? "..." : stats.totalQuestions}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Quiz Attempts</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{loadingStats ? "..." : stats.totalAttempts}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Average Score</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{loadingStats ? "..." : stats.averageScore}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Students</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{loadingStats ? "..." : stats.activeStudents}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Concerns</CardTitle>
+            <AlertCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{loadingStats ? "..." : stats.totalConcerns}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Resolved Concerns</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{loadingStats ? "..." : stats.resolvedConcerns}</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
           <CardHeader>
             <CardTitle>Subject Performance</CardTitle>
-            <CardDescription>Average scores and participation by subject</CardDescription>
           </CardHeader>
           <CardContent>
             {loadingCharts ? (
-              <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              <div className="h-48 flex items-center justify-center">
+                <Clock className="h-8 w-8 animate-spin" />
               </div>
-            ) : chartData.subjectPerformance.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={chartData.subjectPerformance}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="averageScore" stroke="#8884d8" name="Avg Score %" />
-                  <Line type="monotone" dataKey="attempts" stroke="#82ca9d" name="Total Attempts" />
-                </LineChart>
-              </ResponsiveContainer>
             ) : (
-              <p className="text-muted-foreground text-center py-10">No performance data available yet.</p>
+              <div className="space-y-4">
+                {chartData.scoreDistribution.map((subject, index) => (
+                  <div key={subject.name} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{subject.name}</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-32 bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-blue-600 h-2 rounded-full"
+                          style={{ width: `${subject.averageScore}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm text-muted-foreground">
+                        {subject.averageScore}%
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Concerns by Category */}
-        <Card className="shadow-lg hover:shadow-xl transition-shadow bg-card/80 backdrop-blur-sm">
+        <Card>
           <CardHeader>
-            <CardTitle>Concerns Distribution</CardTitle>
-            <CardDescription>Breakdown of concerns by category</CardDescription>
+            <CardTitle>Weekly Activity</CardTitle>
           </CardHeader>
           <CardContent>
             {loadingCharts ? (
-              <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              <div className="h-48 flex items-center justify-center">
+                <Clock className="h-8 w-8 animate-spin" />
               </div>
-            ) : chartData.concernsByCategory.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={chartData.concernsByCategory}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {chartData.concernsByCategory.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
             ) : (
-              <p className="text-muted-foreground text-center py-10">No concerns data available yet.</p>
+              <div className="space-y-4">
+                {chartData.weeklyActivity.map((day) => (
+                  <div key={day.date} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{day.date}</span>
+                    <div className="flex gap-4 text-sm">
+                      <span>Quizzes: {day.quizAttempts}</span>
+                      <span>Concerns: {day.concerns}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </CardContent>
         </Card>
