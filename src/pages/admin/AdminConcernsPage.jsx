@@ -172,15 +172,22 @@ const AdminConcernsPage = () => {
 
     setActionLoading(true);
     try {
-      // First delete all replies associated with the concern
-      const { error: repliesError } = await supabase
-        .from('concern_replies')
+      // Update local state immediately to prevent blank page
+      setConcerns(prevConcerns => 
+        prevConcerns.filter(concern => concern.id !== concernToDelete.id)
+      );
+
+      // First delete all votes associated with the concern
+      await supabase
+        .from('concern_votes')
         .delete()
         .eq('concern_id', concernToDelete.id);
 
-      if (repliesError) {
-        console.warn('Error deleting replies:', repliesError);
-      }
+      // Delete all replies associated with the concern
+      await supabase
+        .from('concern_replies')
+        .delete()
+        .eq('concern_id', concernToDelete.id);
 
       // Then delete the concern
       const { error } = await supabase
@@ -188,12 +195,13 @@ const AdminConcernsPage = () => {
         .delete()
         .eq('id', concernToDelete.id);
 
-      if (error) throw error;
-
-      // Update local state immediately to prevent blank page
-      setConcerns(prevConcerns => 
-        prevConcerns.filter(concern => concern.id !== concernToDelete.id)
-      );
+      if (error) {
+        // If deletion fails, restore the concern in local state
+        setConcerns(prevConcerns => [...prevConcerns, concernToDelete].sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        ));
+        throw error;
+      }
 
       setIsDeleteDialogOpen(false);
       setConcernToDelete(null);
@@ -202,11 +210,6 @@ const AdminConcernsPage = () => {
         title: "Concern Deleted",
         description: "The concern has been permanently deleted.",
       });
-
-      // Refresh data in background
-      setTimeout(() => {
-        fetchConcerns();
-      }, 100);
 
     } catch (error) {
       console.error('Error deleting concern:', error);

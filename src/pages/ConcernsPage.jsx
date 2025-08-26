@@ -67,9 +67,10 @@ const ConcernsPage = () => {
 
       // Only filter by is_hidden if the column exists
       try {
-        query = query.eq("is_hidden", false);
+        query = query.or("is_hidden.is.null,is_hidden.eq.false");
       } catch (error) {
         console.warn("is_hidden column may not exist yet:", error);
+        // Continue without the filter if column doesn't exist
       }
 
       // Apply sorting

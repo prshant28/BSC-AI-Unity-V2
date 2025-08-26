@@ -57,30 +57,71 @@ const AdminOverviewPage = () => {
       setLoadingCharts(true);
 
       try {
-        // Fetch quiz data
-        const { data: quizzesData, error: quizzesError } = await supabase
-          .from("quizzes")
-          .select("subject_name, quiz_title, id, views");
+        // Fetch basic concerns statistics
+        const { data: concernsData, error: concernsError } = await supabase
+          .from("concerns")
+          .select("status, created_at, category, helpful_votes, not_helpful_votes, resolved_at");
 
-        if (quizzesError) throw quizzesError;
+        if (concernsError) throw concernsError;
+
+        // Fetch quiz data with error handling
+        let quizzesData = [];
+        try {
+          const { data, error } = await supabase
+            .from("quizzes")
+            .select("subject_name, quiz_title, id, views");
+
+          if (!error) {
+            quizzesData = data || [];
+          }
+        } catch (err) {
+          console.warn("Views column may not exist, fetching without it:", err);
+          const { data } = await supabase
+            .from("quizzes")
+            .select("subject_name, quiz_title, id");
+          quizzesData = (data || []).map(quiz => ({ ...quiz, views: 0 }));
+        }
 
         const uniqueSubjects = new Set(quizzesData.map((q) => q.subject_name));
         const uniqueQuizzes = new Set(quizzesData.map((q) => `${q.subject_name}-${q.quiz_title}`));
         const totalViews = quizzesData.reduce((sum, q) => sum + (q.views || 0), 0);
 
-        // Fetch responses data
+        // Fetch quiz responses
         const { data: responsesData, error: responsesError } = await supabase
           .from("quiz_responses")
-          .select("subject_name, score, total_questions, timestamp, quiz_title, name");
+          .select("timestamp, score, quiz_title, subject_name, name");
 
         if (responsesError) throw responsesError;
 
-        // Fetch concerns data
-        const { data: concernsData, error: concernsError } = await supabase
-          .from("concerns")
-          .select("*, helpful_votes, not_helpful_votes, status, category, created_at, resolved_at");
+        // Fetch questions data with error handling
+        let questionsData = [];
+        try {
+          const { data, error } = await supabase
+            .from("quiz_questions")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-        if (concernsError) throw concernsError;
+          if (!error) {
+            questionsData = data || [];
+          }
+        } catch (err) {
+          console.warn("quiz_questions table may not exist:", err);
+        }
+
+        // Fetch subjects with error handling
+        let subjectsData = [];
+        try {
+          const { data, error } = await supabase
+            .from("subjects")
+            .select("*")
+            .order("subject_name", { ascending: true });
+
+          if (!error) {
+            subjectsData = data || [];
+          }
+        } catch (err) {
+          console.warn("subjects table may not exist:", err);
+        }
 
         // Fetch replies data
         const { data: repliesData, error: repliesError } = await supabase
@@ -123,7 +164,7 @@ const AdminOverviewPage = () => {
         setStats({
           totalSubjects: uniqueSubjects.size,
           totalQuizzes: uniqueQuizzes.size,
-          totalQuestions: quizzesData.length,
+          totalQuestions: questionsData.length, // Using questionsData length as total questions
           totalAttempts: responsesData.length,
           averageScore: `${averageScore}%`,
           totalConcerns: concernsData.length,
@@ -353,8 +394,18 @@ const AdminOverviewPage = () => {
             const newScore = payload.new.score || 0;
             const newTotalQuestions = payload.new.total_questions || 0;
             const currentTotalAttempts = prevStats.totalAttempts;
-            const currentTotalScoreSum = parseFloat(prevStats.averageScore) * currentTotalAttempts / 100; // Approximate current sum
-            const currentTotalPossibleScoreSum = parseFloat(prevStats.averageScore) * currentTotalAttempts / 100; // Approximate current possible sum
+            // Approximate current sum and possible sum for average calculation
+            let currentTotalScoreSum = 0;
+            let currentTotalPossibleScoreSum = 0;
+
+            if (prevStats.averageScore && prevStats.averageScore.endsWith('%')) {
+              const avg = parseFloat(prevStats.averageScore);
+              if (!isNaN(avg) && currentTotalAttempts > 0) {
+                currentTotalScoreSum = (avg / 100) * currentTotalAttempts * (prevStats.totalQuestions > 0 ? (prevStats.totalQuestions / currentTotalAttempts) : 1); // Approximation
+                currentTotalPossibleScoreSum = currentTotalAttempts * (prevStats.totalQuestions > 0 ? (prevStats.totalQuestions / currentTotalAttempts) : 1); // Approximation
+              }
+            }
+
 
             const updatedTotalAttempts = currentTotalAttempts + 1;
             const updatedTotalScoreSum = currentTotalScoreSum + newScore;
