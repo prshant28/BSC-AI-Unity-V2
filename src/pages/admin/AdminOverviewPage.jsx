@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription
 } from "@/components/ui/card";
 import {
   Users,
@@ -38,13 +37,13 @@ const AdminOverviewPage = () => {
     responseRate: 0,
     averageResolutionTime: 0
   });
-  
+
   const [chartData, setChartData] = useState({
     concernsByCategory: [],
     concernsByStatus: [],
     weeklyTrends: []
   });
-  
+
   const [recentConcerns, setRecentConcerns] = useState([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -203,10 +202,10 @@ const AdminOverviewPage = () => {
               <div className="w-20 text-sm font-medium">{item.name}</div>
               <div className="flex-1 relative">
                 <div className="h-6 bg-muted rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-primary rounded-full transition-all duration-500"
-                    style={{ 
-                      width: `${Math.max((item.value / Math.max(...data.map(d => d.value))) * 100, 5)}%` 
+                    style={{
+                      width: `${Math.max((item.value / Math.max(...data.map(d => d.value))) * 100, 5)}%`
                     }}
                   />
                 </div>
@@ -232,7 +231,7 @@ const AdminOverviewPage = () => {
           {data.map((item, index) => (
             <div key={index} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div 
+                <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: item.color }}
                 />
@@ -285,31 +284,31 @@ const AdminOverviewPage = () => {
         transition={{ duration: 0.6, delay: 0.1 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
       >
-        <StatCard 
-          title="Total Concerns" 
-          value={stats.totalConcerns} 
-          icon={MessageSquare} 
+        <StatCard
+          title="Total Concerns"
+          value={stats.totalConcerns}
+          icon={MessageSquare}
           color="blue"
           trend={5}
         />
-        <StatCard 
-          title="Resolved" 
-          value={stats.resolvedConcerns} 
-          icon={CheckCircle} 
+        <StatCard
+          title="Resolved"
+          value={stats.resolvedConcerns}
+          icon={CheckCircle}
           color="green"
           trend={12}
         />
-        <StatCard 
-          title="In Progress" 
-          value={stats.inProgressConcerns} 
-          icon={Clock} 
+        <StatCard
+          title="In Progress"
+          value={stats.inProgressConcerns}
+          icon={Clock}
           color="yellow"
           trend={-3}
         />
-        <StatCard 
-          title="Pending" 
-          value={stats.pendingConcerns} 
-          icon={AlertTriangle} 
+        <StatCard
+          title="Pending"
+          value={stats.pendingConcerns}
+          icon={AlertTriangle}
           color="red"
           trend={-8}
         />
@@ -322,12 +321,12 @@ const AdminOverviewPage = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
-        <SimpleBarChart 
-          data={chartData.concernsByCategory} 
+        <SimpleBarChart
+          data={chartData.concernsByCategory}
           title="Concerns by Category"
         />
-        <SimpleDonutChart 
-          data={chartData.concernsByStatus} 
+        <SimpleDonutChart
+          data={chartData.concernsByStatus}
           title="Status Distribution"
         />
       </motion.div>
@@ -358,8 +357,8 @@ const AdminOverviewPage = () => {
                         By {concern.student_name || 'Anonymous'} • {new Date(concern.created_at).toLocaleDateString()}
                       </p>
                       <span className={`inline-block px-2 py-1 text-xs rounded-full mt-2 ${
-                        concern.status?.toLowerCase() === 'resolved' 
-                          ? 'bg-green-100 text-green-600' 
+                        concern.status?.toLowerCase() === 'resolved'
+                          ? 'bg-green-100 text-green-600'
                           : concern.status?.toLowerCase() === 'in progress'
                           ? 'bg-yellow-100 text-yellow-600'
                           : 'bg-red-100 text-red-600'

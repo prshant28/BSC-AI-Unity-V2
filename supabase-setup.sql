@@ -30,6 +30,28 @@ CREATE TABLE IF NOT EXISTS concern_votes (
     UNIQUE(concern_id, user_identifier)
 );
 
+-- Add missing columns to existing tables
+ALTER TABLE concern_votes ADD COLUMN IF NOT EXISTS user_session VARCHAR(255);
+ALTER TABLE concern_replies ADD COLUMN IF NOT EXISTS author VARCHAR(255);
+ALTER TABLE quizzes ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0;
+
+-- Create missing tables if they don't exist
+CREATE TABLE IF NOT EXISTS subjects (
+    id SERIAL PRIMARY KEY,
+    subject_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS quiz_questions (
+    id SERIAL PRIMARY KEY,
+    quiz_id INTEGER REFERENCES quizzes(id) ON DELETE CASCADE,
+    question_text TEXT NOT NULL,
+    options JSONB,
+    correct_answer VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Create Analytics Table for tracking system usage
 CREATE TABLE IF NOT EXISTS analytics_events (
     id SERIAL PRIMARY KEY,
