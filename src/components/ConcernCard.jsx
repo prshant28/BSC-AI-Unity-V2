@@ -54,51 +54,40 @@ const ConcernCard = ({ concern, onUpdate }) => {
   const { toast } = useToast();
 
   const handleVote = async (voteType) => {
-    const userIdentifier = localStorage.getItem('userIdentifier') || 
-      `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-    if (!localStorage.getItem('userIdentifier')) {
-      localStorage.setItem('userIdentifier', userIdentifier);
-    }
+    if (!concern.id) return;
 
     try {
       // Check if user already voted
+      const sessionId = localStorage.getItem('userSession') || 'anonymous_' + Date.now();
+      localStorage.setItem('userSession', sessionId);
+
       const { data: existingVote } = await supabase
         .from('concern_votes')
         .select('*')
         .eq('concern_id', concern.id)
-        .eq('user_identifier', userIdentifier)
+        .eq('user_session', sessionId)
         .single();
 
       if (existingVote) {
         toast({
           title: "Already Voted",
           description: "You have already voted on this concern.",
-          variant: "warning",
+          variant: "destructive",
         });
         return;
       }
 
-      // Insert vote
-      const { error: voteError } = await supabase
+      const { error } = await supabase
         .from('concern_votes')
         .insert({
           concern_id: concern.id,
-          user_identifier: userIdentifier,
-          vote_type: voteType
+          vote_type: voteType,
+          user_session: sessionId
         });
 
-      if (voteError) {
-        console.warn('Vote table may not exist yet:', voteError);
-        toast({
-          title: "Feature Coming Soon",
-          description: "Voting feature will be available after database setup.",
-          variant: "warning",
-        });
-        return;
-      }
+      if (error) throw error;
 
-      // Update concern vote counts (only if columns exist)
+      // Update concern vote counts
       const updateField = voteType === 'helpful' ? 'helpful_votes' : 'not_helpful_votes';
       const { error: updateError } = await supabase
         .from('concerns')
@@ -107,23 +96,19 @@ const ConcernCard = ({ concern, onUpdate }) => {
         })
         .eq('id', concern.id);
 
-      if (updateError) {
-        console.warn('Vote count columns may not exist yet:', updateError);
-      }
+      if (updateError) throw updateError;
 
       toast({
         title: "Vote Recorded",
-        description: `Thank you for your ${voteType === 'helpful' ? 'helpful' : 'not helpful'} vote!`,
+        description: "Thank you for your feedback!",
       });
 
-      // Refresh the concern data
       if (onUpdate) onUpdate();
-
     } catch (error) {
       console.error('Error voting:', error);
       toast({
         title: "Error",
-        description: "Failed to record your vote. Please try again.",
+        description: "Failed to record vote: " + error.message,
         variant: "destructive",
       });
     }

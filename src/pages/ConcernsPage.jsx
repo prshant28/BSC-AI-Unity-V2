@@ -34,9 +34,19 @@ const ConcernsPage = () => {
   const [concerns, setConcerns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
+  const [dateFilter, setDateFilter] = useState("all");
+
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
   const [stats, setStats] = useState({
     total: 0,
     resolved: 0,
@@ -54,6 +64,13 @@ const ConcernsPage = () => {
           *,
           concern_replies(*)
         `);
+
+      // Only filter by is_hidden if the column exists
+      try {
+        query = query.eq("is_hidden", false);
+      } catch (error) {
+        console.warn("is_hidden column may not exist yet:", error);
+      }
 
       // Apply sorting
       switch (sortBy) {
