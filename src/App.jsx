@@ -71,23 +71,6 @@ function App() {
 
   useEffect(() => {
     fetchConcerns();
-
-    // Set up real-time subscription
-    const subscription = supabase
-      .channel('concerns-changes')
-      .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
-        table: 'concerns' 
-      }, (payload) => {
-        console.log('Real-time update:', payload);
-        fetchConcerns(); // Refetch data when changes occur
-      })
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
   }, [fetchConcerns]);
 
   const addConcern = async (newConcernData) => {

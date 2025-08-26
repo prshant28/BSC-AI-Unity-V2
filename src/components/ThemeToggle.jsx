@@ -1,8 +1,14 @@
-import React from "react";
-import { Moon, Sun, Monitor } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useTheme } from "@/contexts/ThemeProvider";
+
+import React from 'react';
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeProvider';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function ThemeToggle() {
   const { setTheme } = useTheme();
@@ -30,3 +36,4 @@ export function ThemeToggle() {
     </DropdownMenu>
   );
 }
+  
