@@ -69,23 +69,11 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-slate-200 dark:border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex flex-col md:flex-row items-center gap-4">
-            <p className="text-xs text-center md:text-left">
-              &copy; {currentYear} BScAI Unity. All rights reserved. Student-managed platform.
-              <br />
-              Hosted at <a href="http://bscaiunity.space" target="_blank" rel="noopener noreferrer" className="hover:text-primary underline">bscaiunity.space</a>. Not officially affiliated with IIT Jodhpur or Futurense.
-            </p>
-            <div className="flex items-center gap-4 mt-4 md:mt-0">
-              <a href="https://www.buymeacoffee.com/prshant.dev" target="_blank" rel="noopener noreferrer">
-                <img 
-                  src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" 
-                  alt="Buy Me A Coffee" 
-                  style={{height: '40px', width: '145px'}}
-                  className="hover:opacity-80 transition-opacity"
-                />
-              </a>
-            </div>
-          </div>
+          <p className="text-xs text-center md:text-left">
+            &copy; {currentYear} BScAI Unity. All rights reserved. Student-managed platform.
+            <br />
+            Hosted at <a href="http://bscaiunity.space" target="_blank" rel="noopener noreferrer" className="hover:text-primary underline">bscaiunity.space</a>. Not officially affiliated with IIT Jodhpur or Futurense.
+          </p>
           {SOCIAL_LINKS.length > 0 && (
             <div className="flex space-x-3 mt-4 md:mt-0">
               {SOCIAL_LINKS.map(social => (

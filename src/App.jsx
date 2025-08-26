@@ -21,6 +21,7 @@ import KnowYourRightsPage from "@/pages/KnowYourRightsPage";
 import AdminDashboardPage from "@/pages/AdminDashboardPage"; // This is now the Admin Layout/Router Outlet
 import Semester1QuizzesPage from "@/pages/Semester1QuizzesPage";
 import QuizInterfacePage from "@/pages/QuizInterfacePage";
+import Chatbot from "@/components/Chatbot";
 import { useToast } from "@/components/ui/use-toast";
 import { AlertTriangle, CheckCircle } from "lucide-react";
 import FeaturesPage from "@/pages/FeaturesPage"; // Assuming FeaturesPage is in this path
@@ -295,21 +296,8 @@ function App() {
           </Route>
         </Routes>
       </Router>
-      {/* Add the new Chatbot script */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-        (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="6l-1eEJgtXC-WIjNGzNvg";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
-      `,
-        }}
-      />
-      {/* Add the Buy Me A Coffee button */}
-      <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: '1000' }}>
-        <a href="https://www.buymeacoffee.com/prshant.dev" target="_blank" rel="noopener noreferrer">
-          <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style={{ height: '60px', width: '217px' }} />
-        </a>
-      </div>
-      <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="prshant.dev" data-color="#5F7FFF" data-emoji="☕" data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00"></script>
+      <Chatbot />
+      <Toaster />
     </ThemeProvider>
   );
 }
