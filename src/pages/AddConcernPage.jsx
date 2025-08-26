@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ const AddConcernPage = ({ addConcern }) => {
 
   const [formData, setFormData] = useState({
     name: '', // Will be 'author' in the database
+    email: '', // New email field
     title: '',
     message: '',
     concern_type: '', // This matches the database column name
@@ -43,6 +45,12 @@ const AddConcernPage = ({ addConcern }) => {
     if (!formData.message.trim()) newErrors.message = 'Detailed message is required.';
     if (formData.message.trim().length < 20) newErrors.message = 'Message must be at least 20 characters.';
     if (!formData.concern_type) newErrors.concern_type = 'Please select a concern type.';
+    
+    // Email validation (optional but if provided, must be valid)
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = 'Please enter a valid email address.';
+    }
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -55,6 +63,7 @@ const AddConcernPage = ({ addConcern }) => {
     setIsSubmitting(true);
     const newConcernData = {
       author: formData.name.trim() || 'Anonymous',
+      email: formData.email.trim() || null, // Include email field
       title: formData.title.trim(),
       message: formData.message.trim(),
       concern_type: formData.concern_type, // Matches DB
@@ -64,7 +73,7 @@ const AddConcernPage = ({ addConcern }) => {
     const result = await addConcern(newConcernData); 
 
     if (result) { 
-      setFormData({ name: '', title: '', message: '', concern_type: '' });
+      setFormData({ name: '', email: '', title: '', message: '', concern_type: '' });
       navigate('/concerns');
     }
     setIsSubmitting(false);
@@ -76,10 +85,10 @@ const AddConcernPage = ({ addConcern }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="container mx-auto py-12 px-4 md:px-6"
+      className="container mx-auto py-8 sm:py-12 px-4 md:px-6"
     >
       <motion.h1 
-        className="text-4xl md:text-5xl font-extrabold text-center mb-6 gradient-text"
+        className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 sm:mb-6 gradient-text"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -87,7 +96,7 @@ const AddConcernPage = ({ addConcern }) => {
         Add Your Concern
       </motion.h1>
       <motion.p 
-        className="text-lg text-muted-foreground text-center max-w-2xl mx-auto mb-10"
+        className="text-base sm:text-lg text-muted-foreground text-center max-w-2xl mx-auto mb-8 sm:mb-10 px-2"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
@@ -97,23 +106,42 @@ const AddConcernPage = ({ addConcern }) => {
 
       <motion.form 
         onSubmit={handleSubmit}
-        className="max-w-2xl mx-auto p-6 md:p-8 bg-card/50 backdrop-blur-sm border border-border rounded-xl shadow-xl space-y-6"
+        className="max-w-2xl mx-auto p-4 sm:p-6 md:p-8 bg-card/50 backdrop-blur-sm border border-border rounded-xl shadow-xl space-y-4 sm:space-y-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div>
-          <Label htmlFor="name" className="text-sm font-medium text-foreground">Your Name (Optional)</Label>
-          <Input 
-            type="text" 
-            id="name" 
-            name="name" 
-            value={formData.name} 
-            onChange={handleChange} 
-            placeholder="Enter your name or leave blank for anonymous" 
-            className="mt-1" 
-            disabled={isSubmitting}
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div>
+            <Label htmlFor="name" className="text-sm font-medium text-foreground">Your Name (Optional)</Label>
+            <Input 
+              type="text" 
+              id="name" 
+              name="name" 
+              value={formData.name} 
+              onChange={handleChange} 
+              placeholder="Enter your name or leave blank for anonymous" 
+              className="mt-1" 
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="email" className="text-sm font-medium text-foreground">Email Address (Optional)</Label>
+            <Input 
+              type="email" 
+              id="email" 
+              name="email" 
+              value={formData.email} 
+              onChange={handleChange} 
+              placeholder="Enter your email for responses (optional)" 
+              className={`mt-1 ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "email-error" : undefined}
+              disabled={isSubmitting}
+            />
+            {errors.email && <p id="email-error" className="text-xs text-red-600 mt-1">{errors.email}</p>}
+          </div>
         </div>
 
         <div>
@@ -168,8 +196,13 @@ const AddConcernPage = ({ addConcern }) => {
         <div className="pt-2">
           <Button type="submit" size="lg" className="w-full group bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-600/90 text-primary-foreground" disabled={isSubmitting}>
             {isSubmitting ? 'Submitting...' : 'Submit Concern'}
-            {!isSubmitting && <Send className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />}
+            {!isSubmitting && <Send className="ml-2 h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-x-1" />}
           </Button>
+        </div>
+
+        <div className="text-xs sm:text-sm text-muted-foreground text-center pt-2">
+          <p className="mb-2">Your concern will be reviewed by our admin team. If you provided an email, you'll receive updates about your submission.</p>
+          <p>All submissions are handled confidentially and with care.</p>
         </div>
       </motion.form>
     </motion.div>

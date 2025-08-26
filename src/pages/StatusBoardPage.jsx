@@ -114,7 +114,7 @@ const StatusBoardPage = ({ concerns, loading }) => {
                 <CardTitle>Concerns by Status</CardTitle>
                 <CardDescription>Distribution of concerns based on their current resolution status.</CardDescription>
               </CardHeader>
-              <CardContent className="h-[350px] md:h-[400px]">
+              <CardContent className="h-[300px] sm:h-[350px] md:h-[400px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -122,10 +122,10 @@ const StatusBoardPage = ({ concerns, loading }) => {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      outerRadius={120}
+                      outerRadius="70%"
                       fill="#8884d8"
                       dataKey="value"
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) => window.innerWidth > 640 ? `${name}: ${(percent * 100).toFixed(0)}%` : `${(percent * 100).toFixed(0)}%`}
                     >
                       {pieData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[entry.name] || '#888888'} />
@@ -149,12 +149,12 @@ const StatusBoardPage = ({ concerns, loading }) => {
                 <CardTitle>Concerns by Type</CardTitle>
                 <CardDescription>Number of concerns raised for each category.</CardDescription>
               </CardHeader>
-              <CardContent className="h-[350px] md:h-[400px]">
+              <CardContent className="h-[300px] sm:h-[350px] md:h-[400px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={typeCounts} layout="vertical" margin={{ right: 30, left: 20, bottom: 5 }}>
+                  <BarChart data={typeCounts} layout="vertical" margin={{ right: 10, left: 10, bottom: 5, top: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.3}/>
                     <XAxis type="number" />
-                    <YAxis dataKey="name" type="category" width={100} interval={0} />
+                    <YAxis dataKey="name" type="category" width={80} interval={0} fontSize={12} />
                     <Tooltip />
                     <Legend />
                     <Bar dataKey="value" fill="hsl(var(--primary))" barSize={20} />

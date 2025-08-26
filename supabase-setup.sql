@@ -1,4 +1,3 @@
-
 -- Enhanced Concerns Table (update existing)
 ALTER TABLE concerns 
 ADD COLUMN IF NOT EXISTS helpful_votes INTEGER DEFAULT 0,
