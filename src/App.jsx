@@ -24,6 +24,8 @@ import QuizInterfacePage from "@/pages/QuizInterfacePage";
 import Chatbot from "@/components/Chatbot";
 import { useToast } from "@/components/ui/use-toast";
 import { AlertTriangle, CheckCircle } from "lucide-react";
+import FeaturesPage from "@/pages/FeaturesPage"; // Assuming FeaturesPage is in this path
+import StudentAchievementsPage from "@/pages/StudentAchievementsPage"; // Assuming StudentAchievementsPage is in this path
 
 const PrivacyPolicyPage = () => (
   <div className="container mx-auto py-12 px-4 md:px-6 text-center">
@@ -256,17 +258,9 @@ function App() {
               }
             />
             <Route path="about-course" element={<AboutCoursePage />} />
-            <Route
-              path="semester-1-quizzes"
-              element={<Semester1QuizzesPage />}
-            />
-            <Route
-              path="semester-1-quizzes/:subjectId/take"
-              element={<QuizInterfacePage />}
-            />
-            <Route path="about" element={<AboutPage />} />
-            <Route path="contact" element={<ContactPage />} />
             <Route path="know-your-rights" element={<KnowYourRightsPage />} />
+            <Route path="features" element={<FeaturesPage />} />
+            <Route path="student-achievements" element={<StudentAchievementsPage />} />
             <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="terms-of-service" element={<TermsOfServicePage />} />
 

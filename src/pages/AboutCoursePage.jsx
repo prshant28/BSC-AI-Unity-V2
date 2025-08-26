@@ -208,7 +208,7 @@ const AboutCoursePage = () => {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            Note: These points reflect student-observed challenges. This platform, BScAI Unity, aims to constructively address these by consolidating student voices and fostering open dialogue.
+            Note: These points reflect student-observed challenges in the B.Sc. Applied AI & Data Science program. This platform, BScAI Unity, aims to constructively address these by consolidating student voices and fostering open dialogue between students, faculty, and administration.
           </motion.p>
       </section>
     </motion.div>

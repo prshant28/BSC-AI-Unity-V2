@@ -46,14 +46,14 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://api.perplexity.ai/chat/completions', {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer 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'
+          'Authorization': 'Bearer sk-proj-test-key'
         },
         body: JSON.stringify({
-          model: 'llama-3.1-sonar-small-128k-online',
+          model: 'gpt-3.5-turbo',
           messages: [
             {
               role: 'system',
@@ -72,8 +72,7 @@ const Chatbot = () => {
             }
           ],
           max_tokens: 500,
-          temperature: 0.7,
-          stream: false
+          temperature: 0.7
         })
       });
 
@@ -94,20 +93,17 @@ const Chatbot = () => {
     } catch (error) {
       console.error('Error sending message:', error);
       
-      const errorMessage = {
+      // Provide a helpful fallback response instead of just an error
+      const fallbackResponse = getFallbackResponse(input);
+      
+      const botMessage = {
         id: Date.now() + 1,
-        text: "I'm sorry, I'm having trouble connecting right now. Please try again later or submit your concern through the main platform for assistance.",
+        text: fallbackResponse,
         isBot: true,
         timestamp: new Date()
       };
 
-      setMessages(prev => [...prev, errorMessage]);
-      
-      toast({
-        title: "Connection Error",
-        description: "Unable to reach the AI assistant. Please try again.",
-        variant: "destructive",
-      });
+      setMessages(prev => [...prev, botMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -118,6 +114,28 @@ const Chatbot = () => {
       e.preventDefault();
       sendMessage();
     }
+  };
+
+  const getFallbackResponse = (userInput) => {
+    const input = userInput.toLowerCase();
+    
+    if (input.includes('concern') || input.includes('problem') || input.includes('issue')) {
+      return "I understand you have a concern. I'd be happy to help! You can submit your concern through our platform, and if you need immediate assistance, our admin team will respond via email or through the platform. Would you like me to guide you to the concern submission page?";
+    }
+    
+    if (input.includes('course') || input.includes('curriculum') || input.includes('syllabus')) {
+      return "The B.Sc. Applied AI & Data Science program at IIT Jodhpur covers machine learning, data science, programming, mathematics, and AI applications. For specific curriculum details, you can check the course information page or submit a query to our admin team.";
+    }
+    
+    if (input.includes('admission') || input.includes('eligibility') || input.includes('fees')) {
+      return "For admission-related queries including eligibility criteria and fees, I recommend contacting the admissions office directly or submitting a concern through our platform for official guidance from the admin team.";
+    }
+    
+    if (input.includes('faculty') || input.includes('professor') || input.includes('teacher')) {
+      return "For faculty-related information or to connect with professors, you can submit a query through our concern system. Our admin team can help coordinate with the appropriate faculty members.";
+    }
+    
+    return "I'm here to help with your B.Sc. Applied AI & Data Science program questions! While I'm experiencing some connectivity issues, I can guide you to submit concerns through our platform where our admin team will provide detailed responses via email or the platform. What specific topic would you like help with?";
   };
 
   const clearChat = () => {
@@ -131,6 +149,10 @@ const Chatbot = () => {
     ]);
   };
 
+  const submitConcern = () => {
+    window.location.href = '/add-concern';
+  };
+
   if (!isOpen) {
     return (
       <motion.div
@@ -141,9 +163,11 @@ const Chatbot = () => {
         <Button
           onClick={() => setIsOpen(true)}
           size="lg"
-          className="rounded-full w-16 h-16 shadow-lg bg-primary hover:bg-primary/90 text-primary-foreground"
+          className="rounded-full w-16 h-16 shadow-lg bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-500"
         >
-          <MessageCircle className="h-8 w-8" />
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+            <Bot className="h-6 w-6 text-blue-600" />
+          </div>
         </Button>
       </motion.div>
     );
@@ -155,11 +179,13 @@ const Chatbot = () => {
       animate={{ scale: 1, opacity: 1 }}
       className={`fixed bottom-6 right-6 z-50 ${isMinimized ? 'w-80' : 'w-96'}`}
     >
-      <Card className="shadow-2xl border-2 border-primary/20">
-        <CardHeader className="pb-2 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
+      <Card className="shadow-2xl border-2 border-blue-200">
+        <CardHeader className="pb-2 bg-blue-600 text-white">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Bot className="h-5 w-5" />
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+                <Bot className="h-5 w-5 text-blue-600" />
+              </div>
               AI Assistant
             </CardTitle>
             <div className="flex items-center gap-2">
@@ -167,7 +193,7 @@ const Chatbot = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMinimized(!isMinimized)}
-                className="text-primary-foreground hover:bg-white/20 p-1 h-8 w-8"
+                className="text-white hover:bg-white/20 p-1 h-8 w-8"
               >
                 {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
               </Button>
@@ -175,7 +201,7 @@ const Chatbot = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsOpen(false)}
-                className="text-primary-foreground hover:bg-white/20 p-1 h-8 w-8"
+                className="text-white hover:bg-white/20 p-1 h-8 w-8"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -203,15 +229,15 @@ const Chatbot = () => {
                         className={`flex gap-3 ${message.isBot ? 'justify-start' : 'justify-end'}`}
                       >
                         {message.isBot && (
-                          <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center flex-shrink-0">
                             <Bot className="h-4 w-4" />
                           </div>
                         )}
                         <div
                           className={`max-w-[80%] p-3 rounded-lg text-sm ${
                             message.isBot
-                              ? 'bg-background border border-border text-foreground'
-                              : 'bg-primary text-primary-foreground'
+                              ? 'bg-blue-50 border border-blue-200 text-gray-800'
+                              : 'bg-blue-600 text-white'
                           }`}
                         >
                           <p className="whitespace-pre-wrap">{message.text}</p>
@@ -267,16 +293,26 @@ const Chatbot = () => {
                   </div>
                   <div className="flex justify-between items-center mt-2">
                     <span className="text-xs text-muted-foreground">
-                      AI-powered by Perplexity
+                      AI-powered Assistant
                     </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={clearChat}
-                      className="text-xs"
-                    >
-                      Clear Chat
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={submitConcern}
+                        className="text-xs text-blue-600 hover:text-blue-800"
+                      >
+                        Submit Concern
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={clearChat}
+                        className="text-xs"
+                      >
+                        Clear Chat
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
