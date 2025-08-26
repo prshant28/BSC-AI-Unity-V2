@@ -57,6 +57,10 @@ const AdminQuestionManagementPage = () => {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedSubjectId, setSelectedSubjectId] = useState("");
   const [selectedQuizTitle, setSelectedQuizTitle] = useState("");
+  const [newSubjectName, setNewSubjectName] = useState("");
+  const [newQuizTitle, setNewQuizTitle] = useState("");
+  const [showCreateSubject, setShowCreateSubject] = useState(false);
+  const [showCreateQuiz, setShowCreateQuiz] = useState(false);
 
   const [loadingSubjects, setLoadingSubjects] = useState(true);
   const [loadingQuizzes, setLoadingQuizzes] = useState(false);
@@ -226,12 +230,108 @@ const AdminQuestionManagementPage = () => {
     setActionLoading(false);
   };
 
+  const handleCreateSubject = async () => {
+    if (!newSubjectName.trim()) {
+      toast({
+        title: "Subject name required",
+        description: "Please enter a valid subject name.",
+        variant: "warning",
+      });
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      // Create a dummy quiz entry to establish the subject
+      const { error } = await supabase.from("quizzes").insert([{
+        subject_name: newSubjectName.trim(),
+        subject_id: newSubjectName.trim().toLowerCase().replace(/\s+/g, '_'),
+        quiz_title: "Default Quiz",
+        question_text: "This is a placeholder question that will be replaced.",
+        options: { A: "Option A", B: "Option B", C: "Option C", D: "Option D" },
+        correct_option: "A"
+      }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Subject Created",
+        description: `Subject "${newSubjectName}" has been created successfully.`,
+      });
+
+      setNewSubjectName("");
+      setShowCreateSubject(false);
+      fetchSubjects();
+    } catch (error) {
+      toast({
+        title: "Error creating subject",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleCreateQuiz = async () => {
+    if (!newQuizTitle.trim()) {
+      toast({
+        title: "Quiz title required",
+        description: "Please enter a valid quiz title.",
+        variant: "warning",
+      });
+      return;
+    }
+
+    if (!selectedSubject) {
+      toast({
+        title: "Select subject first",
+        description: "Please select a subject before creating a quiz.",
+        variant: "warning",
+      });
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      // Create a dummy question to establish the quiz
+      const { error } = await supabase.from("quizzes").insert([{
+        subject_name: selectedSubject,
+        subject_id: selectedSubjectId,
+        quiz_title: newQuizTitle.trim(),
+        question_text: "This is a placeholder question that will be replaced.",
+        options: { A: "Option A", B: "Option B", C: "Option C", D: "Option D" },
+        correct_option: "A"
+      }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Quiz Created",
+        description: `Quiz "${newQuizTitle}" has been created successfully.`,
+      });
+
+      setNewQuizTitle("");
+      setShowCreateQuiz(false);
+      setSelectedQuizTitle(newQuizTitle.trim());
+      fetchQuizzesForSubject(selectedSubject);
+    } catch (error) {
+      toast({
+        title: "Error creating quiz",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const openNewQuestionModal = () => {
     if (!selectedSubject || !selectedQuizTitle) {
       toast({
         title: "Select Subject & Quiz",
         description:
-          "Please select a subject and quiz first. If the quiz doesn't exist, adding a question will create it.",
+          "Please select a subject and quiz first, or create new ones using the buttons below.",
         variant: "warning",
       });
       return;
@@ -267,6 +367,37 @@ const AdminQuestionManagementPage = () => {
     }
     setQuestionToDelete(null);
     setActionLoading(false);
+  };
+
+  const handleDeleteAllQuestions = async () => {
+    if (!selectedSubject || !selectedQuizTitle) return;
+    
+    setActionLoading(true);
+    try {
+      const { error } = await supabase
+        .from("quizzes")
+        .delete()
+        .eq("subject_name", selectedSubject)
+        .eq("quiz_title", selectedQuizTitle);
+
+      if (error) throw error;
+
+      toast({
+        title: "All Questions Deleted",
+        description: `All questions in "${selectedQuizTitle}" have been deleted.`,
+      });
+
+      setQuestions([]);
+      fetchQuizzesForSubject(selectedSubject);
+    } catch (error) {
+      toast({
+        title: "Error deleting questions",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   const handleFileUpload = (event) => {
@@ -383,72 +514,151 @@ const AdminQuestionManagementPage = () => {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <div>
-              <Label htmlFor="subjectSelectQm">Subject</Label>
-              <Select
-                value={selectedSubject}
-                onValueChange={setSelectedSubject}
-                disabled={loadingSubjects}
-              >
-                <SelectTrigger id="subjectSelectQm">
-                  <SelectValue
-                    placeholder={
-                      loadingSubjects
-                        ? "Loading subjects..."
-                        : subjects.length > 0
-                          ? "Select Subject"
-                          : "No Subjects Available"
-                    }
+              <div className="flex items-center justify-between mb-2">
+                <Label htmlFor="subjectSelectQm">Subject</Label>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowCreateSubject(!showCreateSubject)}
+                  className="text-xs"
+                >
+                  <PlusCircle className="mr-1 h-3 w-3" />
+                  New Subject
+                </Button>
+              </div>
+              {showCreateSubject ? (
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Subject name..."
+                    value={newSubjectName}
+                    onChange={(e) => setNewSubjectName(e.target.value)}
+                    className="flex-1"
                   />
-                </SelectTrigger>
-                <SelectContent>
-                  {subjects.length > 0 ? (
-                    subjects.map((s) => (
-                      <SelectItem key={s.id || s.name} value={s.name}>
-                        {s.name}
+                  <Button
+                    size="sm"
+                    onClick={handleCreateSubject}
+                    disabled={actionLoading || !newSubjectName.trim()}
+                  >
+                    Create
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setShowCreateSubject(false);
+                      setNewSubjectName("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <Select
+                  value={selectedSubject}
+                  onValueChange={setSelectedSubject}
+                  disabled={loadingSubjects}
+                >
+                  <SelectTrigger id="subjectSelectQm">
+                    <SelectValue
+                      placeholder={
+                        loadingSubjects
+                          ? "Loading subjects..."
+                          : subjects.length > 0
+                            ? "Select Subject"
+                            : "No Subjects Available"
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {subjects.length > 0 ? (
+                      subjects.map((s) => (
+                        <SelectItem key={s.id || s.name} value={s.name}>
+                          {s.name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="no_subjects" disabled>
+                        No subjects found
                       </SelectItem>
-                    ))
-                  ) : (
-                    <SelectItem value="" disabled>
-                      No subjects found
-                    </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
             <div>
-              <Label htmlFor="quizSelectQm">Quiz</Label>
-              <Select
-                value={selectedQuizTitle}
-                onValueChange={setSelectedQuizTitle}
-                disabled={!selectedSubject || loadingQuizzes}
-              >
-                <SelectTrigger id="quizSelectQm">
-                  <SelectValue
-                    placeholder={
-                      !selectedSubject
-                        ? "Select Subject First"
-                        : loadingQuizzes
-                          ? "Loading quizzes..."
-                          : quizzes.length > 0
-                            ? "Select Quiz"
-                            : "No Quizzes Available"
-                    }
+              <div className="flex items-center justify-between mb-2">
+                <Label htmlFor="quizSelectQm">Quiz</Label>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowCreateQuiz(!showCreateQuiz)}
+                  disabled={!selectedSubject}
+                  className="text-xs"
+                >
+                  <PlusCircle className="mr-1 h-3 w-3" />
+                  New Quiz
+                </Button>
+              </div>
+              {showCreateQuiz ? (
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Quiz title..."
+                    value={newQuizTitle}
+                    onChange={(e) => setNewQuizTitle(e.target.value)}
+                    className="flex-1"
                   />
-                </SelectTrigger>
-                <SelectContent>
-                  {quizzes.length > 0 ? (
-                    quizzes.map((qTitle) => (
-                      <SelectItem key={qTitle} value={qTitle}>
-                        {qTitle}
+                  <Button
+                    size="sm"
+                    onClick={handleCreateQuiz}
+                    disabled={actionLoading || !newQuizTitle.trim() || !selectedSubject}
+                  >
+                    Create
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setShowCreateQuiz(false);
+                      setNewQuizTitle("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <Select
+                  value={selectedQuizTitle}
+                  onValueChange={setSelectedQuizTitle}
+                  disabled={!selectedSubject || loadingQuizzes}
+                >
+                  <SelectTrigger id="quizSelectQm">
+                    <SelectValue
+                      placeholder={
+                        !selectedSubject
+                          ? "Select Subject First"
+                          : loadingQuizzes
+                            ? "Loading quizzes..."
+                            : quizzes.length > 0
+                              ? "Select Quiz"
+                              : "No Quizzes Available"
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {quizzes.length > 0 ? (
+                      quizzes.map((qTitle) => (
+                        <SelectItem key={qTitle} value={qTitle}>
+                          {qTitle}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="no_quizzes" disabled>
+                        No quizzes for this subject
                       </SelectItem>
-                    ))
-                  ) : (
-                    <SelectItem value="" disabled>
-                      No quizzes for this subject
-                    </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
             <div className="flex flex-col sm:flex-row gap-2 items-end">
               <Button
@@ -484,6 +694,40 @@ const AdminQuestionManagementPage = () => {
               />
             </div>
           </div>
+          {questions.length > 0 && (
+            <div className="flex justify-end">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" size="sm">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete All Questions
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete all questions?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will permanently delete all {questions.length} questions in "{selectedQuizTitle}". This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDeleteAllQuestions}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      disabled={actionLoading}
+                    >
+                      {actionLoading ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        "Delete All Questions"
+                      )}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          )}
         </CardContent>
       </Card>
 

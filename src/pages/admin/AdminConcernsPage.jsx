@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
@@ -503,7 +502,7 @@ const AdminConcernsPage = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-4">{concern.description || concern.message}</p>
-                  
+
                   {concern.replies && concern.replies.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="font-medium">Replies ({concern.replies.length})</h4>
