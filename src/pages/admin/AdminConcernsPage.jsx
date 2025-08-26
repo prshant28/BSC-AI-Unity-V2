@@ -172,6 +172,17 @@ const AdminConcernsPage = () => {
 
     setActionLoading(true);
     try {
+      // First delete all replies associated with the concern
+      const { error: repliesError } = await supabase
+        .from('concern_replies')
+        .delete()
+        .eq('concern_id', concernToDelete.id);
+
+      if (repliesError) {
+        console.warn('Error deleting replies:', repliesError);
+      }
+
+      // Then delete the concern
       const { error } = await supabase
         .from('concerns')
         .delete()
@@ -179,14 +190,24 @@ const AdminConcernsPage = () => {
 
       if (error) throw error;
 
+      // Update local state immediately to prevent blank page
+      setConcerns(prevConcerns => 
+        prevConcerns.filter(concern => concern.id !== concernToDelete.id)
+      );
+
       setIsDeleteDialogOpen(false);
       setConcernToDelete(null);
-      fetchConcerns();
 
       toast({
         title: "Concern Deleted",
         description: "The concern has been permanently deleted.",
       });
+
+      // Refresh data in background
+      setTimeout(() => {
+        fetchConcerns();
+      }, 100);
+
     } catch (error) {
       console.error('Error deleting concern:', error);
       toast({
