@@ -5,7 +5,9 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
+import { supabase } from "@/lib/supabaseClient";
 import Layout from "@/components/Layout";
 import HomePage from "@/pages/HomePage";
 import ConcernsPage from "@/pages/ConcernsPage";
@@ -19,7 +21,7 @@ import KnowYourRightsPage from "@/pages/KnowYourRightsPage";
 import AdminDashboardPage from "@/pages/AdminDashboardPage"; // This is now the Admin Layout/Router Outlet
 import Semester1QuizzesPage from "@/pages/Semester1QuizzesPage";
 import QuizInterfacePage from "@/pages/QuizInterfacePage";
-import { supabase } from "@/lib/supabaseClient";
+import Chatbot from "@/components/Chatbot";
 import { useToast } from "@/components/ui/use-toast";
 import { AlertTriangle, CheckCircle } from "lucide-react";
 
@@ -300,6 +302,8 @@ function App() {
           </Route>
         </Routes>
       </Router>
+      <Chatbot />
+      <Toaster />
     </ThemeProvider>
   );
 }

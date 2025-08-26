@@ -353,7 +353,7 @@ const ConcernsPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <ConcernCard concern={concern} onUpdate={fetchConcerns} />
+                  <ConcernCard concern={concern} onUpdate={fetchConcerns} isAdmin={false} />
                 </motion.div>
               ))}
             </motion.div>
