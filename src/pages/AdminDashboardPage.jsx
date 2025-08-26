@@ -26,7 +26,7 @@ const AdminDashboardPage = ({
         transition={{ duration: 0.3 }}
       >
         <Routes>
-          <Route index element={<Navigate to="overview" replace />} />
+          <Route index element={<Navigate to="/admin/dashboard/overview" replace />} />
           <Route path="overview" element={<AdminOverviewPage />} />
           <Route path="subjects" element={<AdminSubjectManagementPage />} />
           <Route path="questions" element={<AdminQuestionManagementPage />} />
@@ -39,7 +39,7 @@ const AdminDashboardPage = ({
             }
           />
           {/* Add other admin routes here */}
-          <Route path="*" element={<Navigate to="overview" replace />} />
+          <Route path="*" element={<Navigate to="/admin/dashboard/overview" replace />} />
         </Routes>
       </motion.main>
     </div>
