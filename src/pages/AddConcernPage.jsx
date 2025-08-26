@@ -60,9 +60,9 @@ const AddConcernPage = ({ addConcern }) => {
       concern_type: formData.concern_type, // Matches DB
       status: CONCERN_STATUSES.NEW,
     };
-    
+
     const result = await addConcern(newConcernData); 
-    
+
     if (result) { 
       setFormData({ name: '', title: '', message: '', concern_type: '' });
       navigate('/concerns');
