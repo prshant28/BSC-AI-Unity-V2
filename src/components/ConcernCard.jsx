@@ -135,6 +135,17 @@ const ConcernCard = ({ concern, onUpdate, isAdmin = false }) => {
     if (!isAdmin) return;
 
     try {
+      // First delete all replies associated with the concern
+      const { error: repliesError } = await supabase
+        .from('concern_replies')
+        .delete()
+        .eq('concern_id', concern.id);
+
+      if (repliesError) {
+        console.warn('Error deleting replies:', repliesError);
+      }
+
+      // Then delete the concern
       const { error } = await supabase
         .from('concerns')
         .delete()
@@ -147,7 +158,9 @@ const ConcernCard = ({ concern, onUpdate, isAdmin = false }) => {
         description: "The concern has been permanently deleted.",
       });
 
-      if (onUpdate) onUpdate();
+      if (onUpdate) {
+        await onUpdate();
+      }
     } catch (error) {
       console.error('Error deleting concern:', error);
       toast({

@@ -172,17 +172,25 @@ const AdminConcernsPage = () => {
 
     setActionLoading(true);
     try {
-      // First delete all votes associated with the concern
-      await supabase
-        .from('concern_votes')
-        .delete()
-        .eq('concern_id', concernToDelete.id);
+      // First delete all votes associated with the concern (if table exists)
+      try {
+        await supabase
+          .from('concern_votes')
+          .delete()
+          .eq('concern_id', concernToDelete.id);
+      } catch (error) {
+        console.warn('concern_votes table may not exist:', error);
+      }
 
       // Delete all replies associated with the concern
-      await supabase
+      const { error: repliesError } = await supabase
         .from('concern_replies')
         .delete()
         .eq('concern_id', concernToDelete.id);
+
+      if (repliesError) {
+        console.warn('Error deleting replies:', repliesError);
+      }
 
       // Then delete the concern
       const { error } = await supabase
@@ -192,7 +200,7 @@ const AdminConcernsPage = () => {
 
       if (error) throw error;
 
-      // Only update local state after successful deletion
+      // Update local state after successful deletion
       setConcerns(prevConcerns => 
         prevConcerns.filter(concern => concern.id !== concernToDelete.id)
       );
@@ -204,6 +212,9 @@ const AdminConcernsPage = () => {
         title: "Concern Deleted",
         description: "The concern has been permanently deleted.",
       });
+
+      // Refresh the concerns list to ensure consistency
+      await fetchConcerns();
 
     } catch (error) {
       console.error('Error deleting concern:', error);

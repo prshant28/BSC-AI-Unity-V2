@@ -86,8 +86,7 @@ const PerplexityPromoPage = () => {
     {
       icon: <Globe className="h-8 w-8 text-green-400" />,
       title: "Real-time Information",
-      description:
-        "Get the latest information with real-time web search capabilities",
+      description: "Get the latest information with real-time web search capabilities",
     },
     {
       icon: <BookOpen className="h-8 w-8 text-orange-400" />,
@@ -132,9 +131,15 @@ const PerplexityPromoPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 pt-16">
+      {/* Fixed Notice Bar with Scrolling Animation */}
+      <div className="fixed top-0 left-0 w-full bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white py-3 z-50 shadow-lg overflow-hidden">
+        <div className="whitespace-nowrap">
+          <div className="inline-block animate-marquee text-lg font-bold">
+            🎓 BSCAI Unity Campus Partner - Perplexity AI Free Pro Plan Available! Contact us at info@bscaiunity.space for instant access! 🚀
+          </div>
+        </div>
+      </div>
 
       {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -390,7 +395,7 @@ const PerplexityPromoPage = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center mb-16"
+          className="mb-16"
         >
           <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl p-12 border border-purple-500/30 max-w-4xl mx-auto">
             <div className="text-6xl mb-6">🎯</div>
