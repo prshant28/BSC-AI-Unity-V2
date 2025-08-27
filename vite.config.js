@@ -1,6 +1,6 @@
-import path from 'node:path';
-import react from '@vitejs/plugin-react';
-import { createLogger, defineConfig } from 'vite';
+import path from "node:path";
+import react from "@vitejs/plugin-react";
+import { createLogger, defineConfig } from "vite";
 
 const configHorizonsViteErrorHandler = `
 const observer = new MutationObserver((mutations) => {
@@ -134,34 +134,34 @@ window.fetch = function(...args) {
 `;
 
 const addTransformIndexHtml = {
-	name: 'add-transform-index-html',
+	name: "add-transform-index-html",
 	transformIndexHtml(html) {
 		return {
 			html,
 			tags: [
 				{
-					tag: 'script',
-					attrs: { type: 'module' },
+					tag: "script",
+					attrs: { type: "module" },
 					children: configHorizonsRuntimeErrorHandler,
-					injectTo: 'head',
+					injectTo: "head",
 				},
 				{
-					tag: 'script',
-					attrs: { type: 'module' },
+					tag: "script",
+					attrs: { type: "module" },
 					children: configHorizonsViteErrorHandler,
-					injectTo: 'head',
+					injectTo: "head",
 				},
 				{
-					tag: 'script',
-					attrs: {type: 'module'},
+					tag: "script",
+					attrs: { type: "module" },
 					children: configHorizonsConsoleErrroHandler,
-					injectTo: 'head',
+					injectTo: "head",
 				},
 				{
-					tag: 'script',
-					attrs: { type: 'module' },
+					tag: "script",
+					attrs: { type: "module" },
 					children: configWindowFetchMonkeyPatch,
-					injectTo: 'head',
+					injectTo: "head",
 				},
 			],
 		};
@@ -170,16 +170,16 @@ const addTransformIndexHtml = {
 
 console.warn = () => {};
 
-const logger = createLogger()
-const loggerError = logger.error
+const logger = createLogger();
+const loggerError = logger.error;
 
 logger.error = (msg, options) => {
-	if (options?.error?.toString().includes('CssSyntaxError: [postcss]')) {
+	if (options?.error?.toString().includes("CssSyntaxError: [postcss]")) {
 		return;
 	}
 
 	loggerError(msg, options);
-}
+};
 
 export default defineConfig({
 	customLogger: logger,
@@ -187,22 +187,22 @@ export default defineConfig({
 	server: {
 		cors: true,
 		headers: {
-			'Cross-Origin-Embedder-Policy': 'credentialless',
+			"Cross-Origin-Embedder-Policy": "credentialless",
 		},
 		allowedHosts: true,
-		host: '0.0.0.0',
-		port: 5000,
+		host: "0.0.0.0",
+		port: 5002,
 		strictPort: false,
 	},
 	preview: {
-		host: '0.0.0.0',
-		port: 5000,
+		host: "0.0.0.0",
+		port: 5002,
 		strictPort: false,
 	},
 	resolve: {
-		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
+		extensions: [".jsx", ".js", ".tsx", ".ts", ".json"],
 		alias: {
-			'@': path.resolve(__dirname, './src'),
+			"@": path.resolve(__dirname, "./src"),
 		},
 	},
 });
