@@ -172,11 +172,6 @@ const AdminConcernsPage = () => {
 
     setActionLoading(true);
     try {
-      // Update local state immediately to prevent blank page
-      setConcerns(prevConcerns => 
-        prevConcerns.filter(concern => concern.id !== concernToDelete.id)
-      );
-
       // First delete all votes associated with the concern
       await supabase
         .from('concern_votes')
@@ -195,13 +190,12 @@ const AdminConcernsPage = () => {
         .delete()
         .eq('id', concernToDelete.id);
 
-      if (error) {
-        // If deletion fails, restore the concern in local state
-        setConcerns(prevConcerns => [...prevConcerns, concernToDelete].sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        ));
-        throw error;
-      }
+      if (error) throw error;
+
+      // Only update local state after successful deletion
+      setConcerns(prevConcerns => 
+        prevConcerns.filter(concern => concern.id !== concernToDelete.id)
+      );
 
       setIsDeleteDialogOpen(false);
       setConcernToDelete(null);

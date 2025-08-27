@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -65,7 +64,7 @@ const Chatbot = () => {
               - Information about the program structure, curriculum, and requirements
               - General support and guidance for students
               - Information about the student community and platform features
-              
+
               Keep responses helpful, concise, and relevant to the academic context. If you don't know something specific about the program, suggest they contact the admin or submit a concern through the platform.`
             },
             {
@@ -97,10 +96,10 @@ const Chatbot = () => {
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
-      
+
       // Provide intelligent fallback responses
       const fallbackResponse = getFallbackResponse(currentInput);
-      
+
       const botMessage = {
         id: Date.now() + 1,
         text: fallbackResponse,
@@ -109,7 +108,7 @@ const Chatbot = () => {
       };
 
       setMessages(prev => [...prev, botMessage]);
-      
+
       // Show toast notification about connection issue
       toast({
         title: "Connection Issue",
@@ -130,31 +129,31 @@ const Chatbot = () => {
 
   const getFallbackResponse = (userInput) => {
     const input = userInput.toLowerCase();
-    
+
     if (input.includes('concern') || input.includes('problem') || input.includes('issue')) {
       return "I understand you have a concern. You can submit your concern through our platform using the 'Add Concern' button. Our admin team will respond via email or through the platform. Would you like me to guide you to the concern submission page?";
     }
-    
+
     if (input.includes('course') || input.includes('curriculum') || input.includes('syllabus')) {
       return "The B.Sc. Applied AI & Data Science program at IIT Jodhpur covers machine learning, data science, programming, mathematics, and AI applications. You can find detailed information on our 'About Course' page. For specific curriculum questions, please submit a concern for official guidance.";
     }
-    
+
     if (input.includes('admission') || input.includes('eligibility') || input.includes('fees')) {
       return "For admission-related queries including eligibility criteria and fees (₹1,09,000 annually + ₹10,000 application fee), I recommend submitting a concern through our platform for official guidance from the admin team.";
     }
-    
+
     if (input.includes('faculty') || input.includes('professor') || input.includes('teacher')) {
       return "For faculty-related information or to connect with professors, you can submit a query through our concern system. Our admin team can help coordinate with the appropriate faculty members.";
     }
-    
+
     if (input.includes('technical') || input.includes('login') || input.includes('platform')) {
       return "For technical issues with the learning platform or login problems, please submit a technical concern through our platform. Include details about the specific issue you're experiencing for faster resolution.";
     }
-    
+
     if (input.includes('hi') || input.includes('hello') || input.includes('hey')) {
       return "Hello! I'm here to help with your B.Sc. Applied AI & Data Science program questions. You can ask about the course, submit concerns, or get general guidance. What would you like to know?";
     }
-    
+
     return "I'm here to help with your B.Sc. Applied AI & Data Science program questions! I can provide information about the course, help you submit concerns, and offer general guidance. You can also submit detailed queries through our concern system where our admin team will provide comprehensive responses. What specific topic would you like help with?";
   };
 
@@ -172,6 +171,53 @@ const Chatbot = () => {
   const submitConcern = () => {
     window.location.href = '/add-concern';
   };
+
+  useEffect(() => {
+    // Generate user session ID
+    const sessionId = localStorage.getItem('userSessionId') || 'student_' + Date.now();
+    localStorage.setItem('userSessionId', sessionId);
+
+    // Generate HMAC for identity verification (in production, this should be done server-side)
+    const generateHMAC = async (userId, secretKey) => {
+      const encoder = new TextEncoder();
+      const key = await crypto.subtle.importKey(
+        'raw',
+        encoder.encode(secretKey),
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['sign']
+      );
+      const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(userId));
+      return Array.from(new Uint8Array(signature))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    };
+
+    // Add chatbot script with identity verification
+    const initChatbot = async () => {
+      const secretKey = 'txl0'; // In production, get this from environment variables
+      const hmac = await generateHMAC(sessionId, secretKey);
+
+      const script = document.createElement('script');
+      script.src = 'https://www.chatbase.co/embed.min.js';
+      script.setAttribute('chatbotId', 'a7jpgyqmt1iix6kkckon1c9wmfzmtxl0');
+      script.setAttribute('domain', 'www.chatbase.co');
+      script.setAttribute('userId', sessionId);
+      script.setAttribute('userHmac', hmac);
+      script.defer = true;
+      document.body.appendChild(script);
+
+      return () => {
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
+    };
+
+    const cleanup = initChatbot();
+    return cleanup;
+  }, []);
+
 
   if (!isOpen) {
     return (
@@ -232,7 +278,7 @@ const Chatbot = () => {
             </div>
           </div>
         </CardHeader>
-        
+
         <AnimatePresence>
           {!isMinimized && (
             <motion.div
@@ -279,7 +325,7 @@ const Chatbot = () => {
                       </motion.div>
                     ))}
                   </AnimatePresence>
-                  
+
                   {isLoading && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -296,7 +342,7 @@ const Chatbot = () => {
                       </div>
                     </motion.div>
                   )}
-                  
+
                   <div ref={messagesEndRef} />
                 </div>
 

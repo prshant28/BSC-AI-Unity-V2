@@ -3,7 +3,7 @@ import HeroSection from '@/components/HeroSection';
 import ConcernCard from '@/components/ConcernCard';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Users, BarChart3, PlusCircle, Lightbulb, Loader2, MessageSquare, CheckCircle, Clock, GraduationCap, Trophy, Target, Zap, Star, Heart } from 'lucide-react';
+import { ArrowRight, BookOpen, Users, BarChart3, PlusCircle, Lightbulb, Loader2, MessageSquare, CheckCircle, Clock, GraduationCap, Trophy, Target, Zap, Star, Heart, Sparkles, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -11,24 +11,24 @@ const HomePage = ({ concerns, loading }) => {
   const latestConcerns = concerns.slice(0, 3);
 
   const quickLinks = [
-    { 
-      title: "About The Course", 
-      href: "/about-course", 
-      icon: <BookOpen className="h-8 w-8 mb-3 text-primary"/>, 
+    {
+      title: "About The Course",
+      href: "/about-course",
+      icon: <BookOpen className="h-8 w-8 mb-3 text-primary"/>,
       description: "Explore details of the B.Sc. Applied AI & DS program at IIT Jodhpur.",
       image: "🎓"
     },
-    { 
-      title: "Our Community", 
-      href: "/about", 
-      icon: <Users className="h-8 w-8 mb-3 text-primary"/>, 
+    {
+      title: "Our Community",
+      href: "/about",
+      icon: <Users className="h-8 w-8 mb-3 text-primary"/>,
       description: "Learn about BScAI Unity, our mission, and our student-led approach.",
       image: "🤝"
     },
-    { 
-      title: "Concern Statistics", 
-      href: "/status-board", 
-      icon: <BarChart3 className="h-8 w-8 mb-3 text-primary"/>, 
+    {
+      title: "Concern Statistics",
+      href: "/status-board",
+      icon: <BarChart3 className="h-8 w-8 mb-3 text-primary"/>,
       description: "View current statistics on concern submissions and resolutions.",
       image: "📊"
     },
@@ -77,6 +77,36 @@ const HomePage = ({ concerns, loading }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
+      {/* Notice Board */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 mb-8"
+      >
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5" />
+              <span className="font-semibold">Important Notice:</span>
+              <span>Want to access Perplexity AI Pro subscription? Get early access to AI-powered Comet Browser!</span>
+            </div>
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="border-white text-white hover:bg-white hover:text-purple-600"
+            >
+              <Link to="/perplexity-promo">
+                Learn More
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Hero Section */}
       <HeroSection />
 
       {/* Stats Section */}
@@ -152,7 +182,7 @@ const HomePage = ({ concerns, loading }) => {
       {/* Latest Concerns Section */}
       <section className="py-16 md:py-24 bg-slate-50 dark:bg-slate-900/50">
         <div className="container mx-auto px-4 md:px-6">
-          <motion.h2 
+          <motion.h2
             className="text-3xl md:text-4xl font-bold text-center mb-4 gradient-text"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -161,7 +191,7 @@ const HomePage = ({ concerns, loading }) => {
           >
             Latest Concerns
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-center text-muted-foreground max-w-xl mx-auto mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -182,7 +212,7 @@ const HomePage = ({ concerns, loading }) => {
               ))}
             </div>
           ) : (
-            <motion.div 
+            <motion.div
               className="text-center text-muted-foreground italic my-12 p-8 border border-dashed rounded-lg bg-background/50"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -199,7 +229,7 @@ const HomePage = ({ concerns, loading }) => {
             </motion.div>
           )}
 
-          <motion.div 
+          <motion.div
             className="text-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -209,7 +239,7 @@ const HomePage = ({ concerns, loading }) => {
             <Button asChild size="lg" variant="outline" className="group border-primary text-primary hover:bg-primary/10 hover:text-primary shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-105">
               <Link to="/concerns">
                 View All Concerns
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
           </motion.div>
@@ -238,18 +268,18 @@ const HomePage = ({ concerns, loading }) => {
                 <p className="text-center text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-6">{programBrief}</p>
                 <div className="text-center">
                   <Button asChild variant="default" className="text-primary-foreground group hover:scale-105 transition-transform">
-                     <Link to="/about-course">
-                        <GraduationCap className="mr-2 h-4 w-4" />
-                        Discover Full Program Details 
-                        <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                     </Link>
+                    <Link to="/about-course">
+                      <GraduationCap className="mr-2 h-4 w-4" />
+                      Discover Full Program Details
+                      <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    </Link>
                   </Button>
                 </div>
               </CardContent>
             </Card>
           </motion.div>
 
-          <motion.h2 
+          <motion.h2
             className="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
