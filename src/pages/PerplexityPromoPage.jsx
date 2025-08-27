@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,11 +44,11 @@ const PerplexityPromoPage = () => {
   // Countdown to September 2, 2025
   useEffect(() => {
     const targetDate = new Date('2025-09-02T00:00:00');
-    
+
     const interval = setInterval(() => {
       const now = new Date();
       const difference = targetDate - now;
-      
+
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -155,7 +154,7 @@ const PerplexityPromoPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
-      
+
       {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(6)].map((_, i) => (
@@ -179,7 +178,7 @@ const PerplexityPromoPage = () => {
           />
         ))}
       </div>
-      
+
       <div className="container mx-auto py-12 px-4 relative z-10">
         {/* Hero Section */}
         <motion.div
@@ -199,7 +198,7 @@ const PerplexityPromoPage = () => {
               Limited Time Offer - 50% OFF
             </Badge>
           </motion.div>
-          
+
           <div className="mb-8">
             <motion.img 
               src="/attached_assets/image_1756284467105.png" 
@@ -209,12 +208,12 @@ const PerplexityPromoPage = () => {
               transition={{ duration: 0.3 }}
             />
           </div>
-          
+
           <Badge className="mb-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 text-lg">
             <Crown className="mr-2 h-5 w-5" />
             Exclusive Early Access Program
           </Badge>
-          
+
           <motion.h1 
             className="text-4xl md:text-7xl font-extrabold text-white mb-6"
             initial={{ scale: 0.8 }}
@@ -226,7 +225,7 @@ const PerplexityPromoPage = () => {
               Perplexity AI Pro
             </span>
           </motion.h1>
-          
+
           <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
             Join thousands of students already using the world's most advanced AI search engine. 
             Plus, get exclusive early access to the revolutionary AI-powered Comet Browser!
@@ -463,7 +462,7 @@ const PerplexityPromoPage = () => {
                   </a>
                 </Button>
               </motion.div>
-              
+
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button 
                   size="lg" 

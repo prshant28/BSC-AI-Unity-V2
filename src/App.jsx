@@ -25,8 +25,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { AlertTriangle, CheckCircle } from "lucide-react";
 import FeaturesPage from "@/pages/FeaturesPage";
 import StudentAchievementsPage from "@/pages/StudentAchievementsPage";
-import AIToolsPage from "./pages/AIToolsPage";
-import PerplexityPromoPage from "./pages/PerplexityPromoPage";
+import AIToolsPage from "@/pages/AIToolsPage";
+import PerplexityPromoPage from "@/pages/PerplexityPromoPage";
 
 
 const PrivacyPolicyPage = () => (
