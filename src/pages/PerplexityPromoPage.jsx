@@ -92,8 +92,7 @@ const PerplexityPromoPage = () => {
     {
       icon: <BookOpen className="h-8 w-8 text-orange-400" />,
       title: "Academic Sources",
-      description:
-        "Access to scholarly articles, research papers, and academic databases",
+      description: "Access to scholarly articles, research papers, and academic databases",
     },
     {
       icon: <Target className="h-8 w-8 text-red-400" />,
@@ -198,7 +197,7 @@ const PerplexityPromoPage = () => {
 
           <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
             I'm officially selected as a Perplexity AI Campus Partner! Claim
-            your free 1-year access (worth $200) using my link. Just use your
+            your free pro plan access. Just use your
             student email ID to get started. Also, get exclusive early access to
             the revolutionary AI-powered Comet Browser!
           </p>
@@ -400,7 +399,7 @@ const PerplexityPromoPage = () => {
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
               Don't miss out on this exclusive opportunity. Grab your free
-              1-year access now and start leveraging the power of AI!
+              pro plan now and start leveraging the power of AI!
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-lg mx-auto">
@@ -447,7 +446,7 @@ const PerplexityPromoPage = () => {
                     >
                       <Gift className="h-6 w-6" />
                     </motion.div>
-                    Claim Your Free Year Now!
+                    Claim Your Free Pro Plan!
                     <motion.div
                       animate={{ x: [0, 5, 0] }}
                       transition={{
@@ -475,40 +474,12 @@ const PerplexityPromoPage = () => {
                 <Button
                   size="lg"
                   variant="outline"
-                  disabled={!isLaunched}
-                  className={`w-full sm:w-auto border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg relative overflow-hidden group ${
-                    !isLaunched ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  className="w-full sm:w-auto border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg relative overflow-hidden group"
                 >
-                  {!isLaunched ? (
-                    <>
-                      <motion.div
-                        animate={{ rotate: [0, 10, -10, 0] }}
-                        transition={{
-                          duration: 3,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        <Lock className="h-6 w-6 mr-3" />
-                      </motion.div>
-                      Download Comet Browser
-                    </>
-                  ) : (
-                    <>
-                      <motion.div
-                        animate={{ y: [0, -5, 0] }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        <Download className="h-6 w-6 mr-3" />
-                      </motion.div>
-                      Download Now
-                    </>
-                  )}
+                  <div className="flex items-center justify-center gap-3">
+                    <Lock className="h-6 w-6 mr-3" />
+                    Download Comet Browser
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[300%] transition-transform duration-700"></div>
                 </Button>
               </motion.div>
@@ -581,8 +552,7 @@ const PerplexityPromoPage = () => {
               <div className="text-6xl mb-6">🎓</div>
               <p className="text-orange-100 text-lg leading-relaxed mb-6">
                 As a Perplexity AI Campus Partner, I'm bringing you this
-                exclusive offer to get free access to Perplexity AI Pro for 1
-                year. This is a limited-time opportunity to experience
+                exclusive offer to get free access to Perplexity AI Pro. This is a limited-time opportunity to experience
                 cutting-edge AI tools that can significantly accelerate your
                 learning and research. Contact me now at info@bscaiunity.space
                 for more details.
@@ -594,7 +564,7 @@ const PerplexityPromoPage = () => {
                 </div>
                 <div className="flex items-center gap-3 text-orange-100">
                   <TrendingUp className="h-6 w-6 text-green-400" />
-                  <span>Free for 1 Year Worth $200</span>
+                  <span>Free Pro Plan</span>
                 </div>
                 <div className="flex items-center gap-3 text-orange-100">
                   <Award className="h-6 w-6 text-purple-400" />

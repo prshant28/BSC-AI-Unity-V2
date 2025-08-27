@@ -75,7 +75,7 @@ const Footer = () => {
               <br />
               Hosted at <a href="http://bscaiunity.space" target="_blank" rel="noopener noreferrer" className="hover:text-primary underline">bscaiunity.space</a>. Not officially affiliated with IIT Jodhpur or Futurense.
             </p>
-            <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 md:mt-0">
               <a href="https://www.buymeacoffee.com/prshant.dev" target="_blank" rel="noopener noreferrer">
                 <img 
                   src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" 
@@ -90,6 +90,19 @@ const Footer = () => {
                   <span>Claim Perplexity Pro Free!</span>
                 </div>
               </a>
+              <div className="relative group">
+                <div className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-4 py-2 rounded-lg opacity-50 cursor-not-allowed flex items-center gap-2 text-sm font-medium shadow-lg">
+                  <span>🔒</span>
+                  <span>Download Comet Browser</span>
+                </div>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
+                  <div className="text-center">
+                    <div className="font-semibold">Coming Soon!</div>
+                    <div className="text-gray-300">First campus access - Contact me at info@bscaiunity.space</div>
+                  </div>
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                </div>
+              </div>
             </div>
           </div>
           {SOCIAL_LINKS.length > 0 && (
