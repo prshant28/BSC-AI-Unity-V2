@@ -84,6 +84,12 @@ const Footer = () => {
                   className="hover:opacity-80 transition-opacity"
                 />
               </a>
+              <a href="https://plex.it/referrals/CZ8FRX5B" target="_blank" rel="noopener noreferrer">
+                <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 flex items-center gap-2 text-sm font-medium shadow-lg hover:shadow-xl transform hover:scale-105">
+                  <span>🎁</span>
+                  <span>Claim Perplexity Pro Free!</span>
+                </div>
+              </a>
             </div>
           </div>
           {SOCIAL_LINKS.length > 0 && (
