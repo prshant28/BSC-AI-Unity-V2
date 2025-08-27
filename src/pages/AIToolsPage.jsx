@@ -28,7 +28,6 @@ import {
   Bookmark,
   Download,
   Award,
-  Lightning,
   Sparkles,
   Flame
 } from 'lucide-react';
@@ -388,7 +387,7 @@ const AIToolsPage = () => {
             } ${viewMode === 'list' ? 'flex flex-row' : ''}`}>
               {tool.featured && (
                 <div className="absolute top-0 right-0 bg-gradient-to-l from-yellow-500 to-orange-500 text-white text-xs px-2 py-1 rounded-bl-md">
-                  <Lightning className="h-3 w-3 inline mr-1" />
+                  <Zap className="h-3 w-3 inline mr-1" />
                   Featured
                 </div>
               )}
