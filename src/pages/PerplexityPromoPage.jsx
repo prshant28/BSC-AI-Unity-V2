@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Star, 
-  Lock, 
-  Download, 
-  ExternalLink, 
-  Clock, 
+import React, { useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Star,
+  Lock,
+  Download,
+  ExternalLink,
+  Clock,
   Zap,
   Shield,
   Sparkles,
@@ -27,23 +27,23 @@ import {
   Timer,
   TrendingUp,
   BookOpen,
-  Flame
-} from 'lucide-react';
+  Flame,
+} from "lucide-react";
 
 const PerplexityPromoPage = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
-    seconds: 0
+    seconds: 0,
   });
   const [scrollY, setScrollY] = useState(0);
   const { scrollYProgress } = useScroll();
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   // Countdown to September 2, 2025
   useEffect(() => {
-    const targetDate = new Date('2025-09-02T00:00:00');
+    const targetDate = new Date("2025-09-02T00:00:00");
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -54,7 +54,7 @@ const PerplexityPromoPage = () => {
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
           minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60)
+          seconds: Math.floor((difference / 1000) % 60),
         });
       }
     }, 1000);
@@ -64,69 +64,73 @@ const PerplexityPromoPage = () => {
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isLaunched = new Date() >= new Date('2025-09-02T00:00:00');
+  const isLaunched = new Date() >= new Date("2025-09-02T00:00:00");
 
   const features = [
     {
       icon: <Infinity className="h-8 w-8 text-blue-400" />,
       title: "Unlimited AI Searches",
-      description: "No daily limits, search as much as you need for your research and studies"
+      description:
+        "No daily limits, search as much as you need for your research and studies",
     },
     {
       icon: <Brain className="h-8 w-8 text-purple-400" />,
       title: "Advanced Reasoning",
-      description: "Access to GPT-4, Claude, and other cutting-edge AI models for complex queries"
+      description:
+        "Access to GPT-4, Claude, and other cutting-edge AI models for complex queries",
     },
     {
       icon: <Globe className="h-8 w-8 text-green-400" />,
       title: "Real-time Information",
-      description: "Get the latest information with real-time web search capabilities"
+      description:
+        "Get the latest information with real-time web search capabilities",
     },
     {
       icon: <BookOpen className="h-8 w-8 text-orange-400" />,
       title: "Academic Sources",
-      description: "Access to scholarly articles, research papers, and academic databases"
+      description:
+        "Access to scholarly articles, research papers, and academic databases",
     },
     {
       icon: <Target className="h-8 w-8 text-red-400" />,
       title: "Precise Citations",
-      description: "Automatically generated citations for your research and papers"
+      description:
+        "Automatically generated citations for your research and papers",
     },
     {
       icon: <Shield className="h-8 w-8 text-cyan-400" />,
       title: "Ad-free Experience",
-      description: "Clean, distraction-free interface for focused learning"
-    }
+      description: "Clean, distraction-free interface for focused learning",
+    },
   ];
 
   const browserFeatures = [
     {
       icon: <Rocket className="h-6 w-6" />,
       title: "AI-Powered Browsing",
-      description: "Smart suggestions and contextual assistance while browsing"
+      description: "Smart suggestions and contextual assistance while browsing",
     },
     {
       icon: <BookOpen className="h-6 w-6" />,
       title: "Built-in Study Tools",
-      description: "Note-taking, highlighting, and research organization features"
+      description:
+        "Note-taking, highlighting, and research organization features",
     },
     {
       icon: <Shield className="h-6 w-6" />,
       title: "Enhanced Privacy",
-      description: "Advanced privacy protection for secure academic research"
+      description: "Advanced privacy protection for secure academic research",
     },
     {
       icon: <Users className="h-6 w-6" />,
       title: "Student-Focused",
-      description: "Designed specifically for academic workflows and learning"
-    }
+      description: "Designed specifically for academic workflows and learning",
+    },
   ];
-
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
@@ -165,31 +169,12 @@ const PerplexityPromoPage = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          {/* Limited Time Offer Banner */}
-          <motion.div
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="mb-6"
-          >
-            <Badge className="mb-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-6 py-3 text-lg">
-              <Timer className="mr-2 h-5 w-5" />
-              Now Free for 1 Year! (Worth $200)
-            </Badge>
-          </motion.div>
-
           <div className="mb-8 space-y-6">
-            <motion.img 
-              src="https://media.discordapp.net/attachments/1403200172187586671/1407283917953830992/campus_strategists_linkedin-22.png?ex=68b016c8&is=68aec548&hm=4886b70dd19435c3c569f4276b1bc807ed9e9fad8633730b4c419be75057d12a&=&format=webp&quality=lossless&width=853&height=445" 
-              alt="Campus Partner Promotion" 
+            <motion.img
+              src="https://media.discordapp.net/attachments/1403200172187586671/1407283917953830992/campus_strategists_linkedin-22.png?ex=68b016c8&is=68aec548&hm=4886b70dd19435c3c569f4276b1bc807ed9e9fad8633730b4c419be75057d12a&=&format=webp&quality=lossless&width=853&height=445"
+              alt="Campus Partner Promotion"
               className="mx-auto max-w-4xl w-full h-auto rounded-3xl shadow-2xl"
               whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-            />
-            <motion.img 
-              src="/attached_assets/campus-partner-image.png" 
-              alt="I'm a Campus Partner!" 
-              className="mx-auto max-w-3xl w-full h-auto rounded-2xl shadow-xl border-4 border-gradient-to-r from-purple-500 to-pink-500"
-              whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             />
           </div>
@@ -199,21 +184,23 @@ const PerplexityPromoPage = () => {
             Exclusive Early Access Program
           </Badge>
 
-          <motion.h1 
+          <motion.h1
             className="text-4xl md:text-7xl font-extrabold text-white mb-6"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            Supercharge Your Learning with{' '}
+            Supercharge Your Learning with{" "}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               Perplexity AI Pro
             </span>
           </motion.h1>
 
           <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
-            I'm officially selected as a Perplexity AI Campus Partner! Claim your free 1-year access (worth $200) using my link. 
-            Just use your student email ID to get started. Also, get exclusive early access to the revolutionary AI-powered Comet Browser!
+            I'm officially selected as a Perplexity AI Campus Partner! Claim
+            your free 1-year access (worth $200) using my link. Just use your
+            student email ID to get started. Also, get exclusive early access to
+            the revolutionary AI-powered Comet Browser!
           </p>
 
           {/* Quick Stats */}
@@ -251,15 +238,34 @@ const PerplexityPromoPage = () => {
                   <Clock className="h-8 w-8 text-purple-400" />
                   🚀 Comet Browser Launch Countdown
                 </CardTitle>
-                <p className="text-center text-blue-200">Be among the first to experience the future of AI-powered browsing!</p>
+                <p className="text-center text-blue-200">
+                  Be among the first to experience the future of AI-powered
+                  browsing!
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-4 gap-6 text-center">
                   {[
-                    { value: timeLeft.days, label: 'Days', color: 'from-purple-600 to-purple-800' },
-                    { value: timeLeft.hours, label: 'Hours', color: 'from-blue-600 to-blue-800' },
-                    { value: timeLeft.minutes, label: 'Minutes', color: 'from-indigo-600 to-indigo-800' },
-                    { value: timeLeft.seconds, label: 'Seconds', color: 'from-pink-600 to-pink-800' }
+                    {
+                      value: timeLeft.days,
+                      label: "Days",
+                      color: "from-purple-600 to-purple-800",
+                    },
+                    {
+                      value: timeLeft.hours,
+                      label: "Hours",
+                      color: "from-blue-600 to-blue-800",
+                    },
+                    {
+                      value: timeLeft.minutes,
+                      label: "Minutes",
+                      color: "from-indigo-600 to-indigo-800",
+                    },
+                    {
+                      value: timeLeft.seconds,
+                      label: "Seconds",
+                      color: "from-pink-600 to-pink-800",
+                    },
                   ].map(({ value, label, color }) => (
                     <motion.div
                       key={label}
@@ -267,7 +273,7 @@ const PerplexityPromoPage = () => {
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <motion.div 
+                      <motion.div
                         className="text-4xl font-bold text-white"
                         key={value}
                         initial={{ scale: 1.2 }}
@@ -276,7 +282,9 @@ const PerplexityPromoPage = () => {
                       >
                         {value}
                       </motion.div>
-                      <div className="text-blue-200 text-sm font-medium">{label}</div>
+                      <div className="text-blue-200 text-sm font-medium">
+                        {label}
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -315,10 +323,14 @@ const PerplexityPromoPage = () => {
                     <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 w-fit">
                       {feature.icon}
                     </div>
-                    <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
+                    <CardTitle className="text-white text-xl">
+                      {feature.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-blue-100 leading-relaxed">{feature.description}</p>
+                    <p className="text-blue-100 leading-relaxed">
+                      {feature.description}
+                    </p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -337,12 +349,16 @@ const PerplexityPromoPage = () => {
             <CardHeader className="text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <Rocket className="h-8 w-8 text-blue-400" />
-                <CardTitle className="text-white text-3xl">Meet Comet Browser</CardTitle>
+                <CardTitle className="text-white text-3xl">
+                  Meet Comet Browser
+                </CardTitle>
                 <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
                   Coming Soon
                 </Badge>
               </div>
-              <p className="text-blue-100 text-lg">The world's first AI-native browser designed for students</p>
+              <p className="text-blue-100 text-lg">
+                The world's first AI-native browser designed for students
+              </p>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-8 mb-8">
@@ -356,8 +372,12 @@ const PerplexityPromoPage = () => {
                       {feature.icon}
                     </div>
                     <div>
-                      <h3 className="text-white font-semibold mb-2">{feature.title}</h3>
-                      <p className="text-blue-100 text-sm">{feature.description}</p>
+                      <h3 className="text-white font-semibold mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-blue-100 text-sm">
+                        {feature.description}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
@@ -365,8 +385,6 @@ const PerplexityPromoPage = () => {
             </CardContent>
           </Card>
         </motion.div>
-
-        
 
         {/* CTA Section - Enhanced */}
         <motion.div
@@ -381,49 +399,62 @@ const PerplexityPromoPage = () => {
               Ready to Transform Your Learning?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Don't miss out on this exclusive opportunity. Grab your free 1-year access now and start leveraging the power of AI!
+              Don't miss out on this exclusive opportunity. Grab your free
+              1-year access now and start leveraging the power of AI!
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-lg mx-auto">
-              <motion.div 
-                whileHover={{ 
+              <motion.div
+                whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(168, 85, 247, 0.4)"
-                }} 
+                  boxShadow: "0 20px 40px rgba(168, 85, 247, 0.4)",
+                }}
                 whileTap={{ scale: 0.95 }}
                 animate={{
                   boxShadow: [
                     "0 0 20px rgba(168, 85, 247, 0.3)",
                     "0 0 40px rgba(236, 72, 153, 0.3)",
-                    "0 0 20px rgba(168, 85, 247, 0.3)"
-                  ]
+                    "0 0 20px rgba(168, 85, 247, 0.3)",
+                  ],
                 }}
                 transition={{
-                  boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                  boxShadow: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  },
                 }}
                 className="rounded-xl"
               >
-                <Button 
+                <Button
                   asChild
-                  size="lg" 
+                  size="lg"
                   className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg shadow-2xl relative overflow-hidden group"
                 >
-                  <a 
-                    href="https://plex.it/referrals/CZ8FRX5B" 
-                    target="_blank" 
+                  <a
+                    href="https://plex.it/referrals/CZ8FRX5B"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-3 relative z-10"
                   >
                     <motion.div
                       animate={{ rotate: [0, 15, -15, 0] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     >
                       <Gift className="h-6 w-6" />
                     </motion.div>
                     Claim Your Free Year Now!
                     <motion.div
                       animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     >
                       <ExternalLink className="h-5 w-5" />
                     </motion.div>
@@ -432,28 +463,32 @@ const PerplexityPromoPage = () => {
                 </Button>
               </motion.div>
 
-              <motion.div 
-                whileHover={{ 
+              <motion.div
+                whileHover={{
                   scale: 1.05,
                   borderColor: "rgb(96, 165, 250)",
-                  boxShadow: "0 0 30px rgba(96, 165, 250, 0.5)"
-                }} 
+                  boxShadow: "0 0 30px rgba(96, 165, 250, 0.5)",
+                }}
                 whileTap={{ scale: 0.95 }}
                 className="rounded-xl"
               >
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   variant="outline"
                   disabled={!isLaunched}
                   className={`w-full sm:w-auto border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg relative overflow-hidden group ${
-                    !isLaunched ? 'opacity-50 cursor-not-allowed' : ''
+                    !isLaunched ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
                   {!isLaunched ? (
                     <>
                       <motion.div
                         animate={{ rotate: [0, 10, -10, 0] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
                       >
                         <Lock className="h-6 w-6 mr-3" />
                       </motion.div>
@@ -463,7 +498,11 @@ const PerplexityPromoPage = () => {
                     <>
                       <motion.div
                         animate={{ y: [0, -5, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
                       >
                         <Download className="h-6 w-6 mr-3" />
                       </motion.div>
@@ -476,21 +515,21 @@ const PerplexityPromoPage = () => {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm text-blue-200">
-              <motion.div 
+              <motion.div
                 className="flex items-center gap-2"
                 whileHover={{ scale: 1.1, color: "rgb(34, 197, 94)" }}
               >
                 <CheckCircle className="h-5 w-5 text-green-400" />
                 <span>Use your student email ID</span>
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="flex items-center gap-2"
                 whileHover={{ scale: 1.1, color: "rgb(96, 165, 250)" }}
               >
                 <Users className="h-5 w-5 text-blue-400" />
                 <span>Join the first cohort</span>
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="flex items-center gap-2"
                 whileHover={{ scale: 1.1, color: "rgb(236, 72, 153)" }}
               >
@@ -515,9 +554,11 @@ const PerplexityPromoPage = () => {
                 <span className="font-bold text-xl">Mark Your Calendar!</span>
               </div>
               <p className="text-yellow-100 text-lg leading-relaxed">
-                Comet Browser will be available for download on{' '}
-                <span className="font-bold text-yellow-300">September 2, 2025</span>. 
-                Be ready to experience the future of AI-powered browsing!
+                Comet Browser will be available for download on{" "}
+                <span className="font-bold text-yellow-300">
+                  September 2, 2025
+                </span>
+                . Be ready to experience the future of AI-powered browsing!
               </p>
             </div>
           </motion.div>
@@ -539,9 +580,12 @@ const PerplexityPromoPage = () => {
             <CardContent className="text-center">
               <div className="text-6xl mb-6">🎓</div>
               <p className="text-orange-100 text-lg leading-relaxed mb-6">
-                As a Perplexity AI Campus Partner, I'm bringing you this exclusive offer to get free access to Perplexity AI Pro for 1 year. 
-                This is a limited-time opportunity to experience cutting-edge AI tools that can significantly accelerate your learning and research. 
-                Contact me now at info@bscaiunity.space for more details.
+                As a Perplexity AI Campus Partner, I'm bringing you this
+                exclusive offer to get free access to Perplexity AI Pro for 1
+                year. This is a limited-time opportunity to experience
+                cutting-edge AI tools that can significantly accelerate your
+                learning and research. Contact me now at info@bscaiunity.space
+                for more details.
               </p>
               <div className="grid md:grid-cols-3 gap-6 mt-8">
                 <div className="flex items-center gap-3 text-orange-100">
