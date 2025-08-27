@@ -195,16 +195,23 @@ const PerplexityPromoPage = () => {
           >
             <Badge className="mb-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-6 py-3 text-lg">
               <Timer className="mr-2 h-5 w-5" />
-              Limited Time Offer - 50% OFF
+              Now Free for 1 Year! (Worth $200)
             </Badge>
           </motion.div>
 
-          <div className="mb-8">
+          <div className="mb-8 space-y-6">
             <motion.img 
               src="/attached_assets/image_1756284467105.png" 
               alt="Campus Partner Promotion" 
               className="mx-auto max-w-4xl w-full h-auto rounded-3xl shadow-2xl"
               whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            />
+            <motion.img 
+              src="/attached_assets/campus-partner-image.png" 
+              alt="I'm a Campus Partner!" 
+              className="mx-auto max-w-3xl w-full h-auto rounded-2xl shadow-xl border-4 border-gradient-to-r from-purple-500 to-pink-500"
+              whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             />
           </div>
@@ -227,8 +234,8 @@ const PerplexityPromoPage = () => {
           </motion.h1>
 
           <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
-            Join thousands of students already using the world's most advanced AI search engine. 
-            Plus, get exclusive early access to the revolutionary AI-powered Comet Browser!
+            I'm officially selected as a Perplexity AI Campus Partner! Claim your free 1-year access (worth $200) using my link. 
+            Just use your student email ID to get started. Also, get exclusive early access to the revolutionary AI-powered Comet Browser!
           </p>
 
           {/* Quick Stats */}
@@ -440,7 +447,7 @@ const PerplexityPromoPage = () => {
               Ready to Transform Your Learning?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Don't miss out on this exclusive opportunity. Join the AI revolution in education today!
+              Don't miss out on this exclusive opportunity. Grab your free 1-year access now and start leveraging the power of AI!
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-lg mx-auto">
@@ -456,8 +463,8 @@ const PerplexityPromoPage = () => {
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-3"
                   >
-                    <Crown className="h-6 w-6" />
-                    Get Perplexity AI Pro
+                    <Gift className="h-6 w-6" />
+                    Claim Your Free Year Now!
                     <ExternalLink className="h-5 w-5" />
                   </a>
                 </Button>
@@ -487,14 +494,18 @@ const PerplexityPromoPage = () => {
               </motion.div>
             </div>
 
-            <div className="flex items-center justify-center gap-6 mt-8 text-sm text-blue-200">
+            <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm text-blue-200">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-green-400" />
-                <span>30-day money-back guarantee</span>
+                <span>Use your student email ID</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-blue-400" />
-                <span>Join 1M+ students</span>
+                <span>Join the first cohort</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-pink-400" />
+                <span>Interactive marketing</span>
               </div>
             </div>
           </div>
@@ -538,22 +549,22 @@ const PerplexityPromoPage = () => {
             <CardContent className="text-center">
               <div className="text-6xl mb-6">🎓</div>
               <p className="text-orange-100 text-lg leading-relaxed mb-6">
-                This is an exclusive advanced marketing campaign designed to provide students with 
-                early access to cutting-edge AI tools. By participating, you'll gain access to premium 
-                AI technologies that can significantly accelerate your learning and research capabilities.
+                As a Perplexity AI Campus Partner, I'm bringing you this exclusive offer to get free access to Perplexity AI Pro for 1 year. 
+                This is a limited-time opportunity to experience cutting-edge AI tools that can significantly accelerate your learning and research. 
+                Contact me now at info@bscaiunity.space for more details.
               </p>
               <div className="grid md:grid-cols-3 gap-6 mt-8">
                 <div className="flex items-center gap-3 text-orange-100">
                   <Trophy className="h-6 w-6 text-yellow-400" />
-                  <span>Exclusive early access benefits</span>
+                  <span>Official Campus Partner Offer</span>
                 </div>
                 <div className="flex items-center gap-3 text-orange-100">
                   <TrendingUp className="h-6 w-6 text-green-400" />
-                  <span>Limited-time pricing advantage</span>
+                  <span>Free for 1 Year Worth $200</span>
                 </div>
                 <div className="flex items-center gap-3 text-orange-100">
                   <Award className="h-6 w-6 text-purple-400" />
-                  <span>Premium tool access</span>
+                  <span>Claim with your student email</span>
                 </div>
               </div>
             </CardContent>

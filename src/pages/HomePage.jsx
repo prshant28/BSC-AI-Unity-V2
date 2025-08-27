@@ -89,7 +89,7 @@ const HomePage = ({ concerns, loading }) => {
             <div className="flex items-center gap-2">
               <Sparkles className="h-5 w-5" />
               <span className="font-semibold">Important Notice:</span>
-              <span>Want to access Perplexity AI Pro subscription? Get early access to AI-powered Comet Browser!</span>
+              <span>🎉 FREE Perplexity AI Pro for 1 Year ($200 value)! Official Campus Partner - No cost, just use student email!</span>
             </div>
             <Button
               asChild
