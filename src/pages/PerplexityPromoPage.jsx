@@ -131,11 +131,11 @@ const PerplexityPromoPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 pt-16">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
       {/* Fixed Notice Bar with Scrolling Animation */}
-      <div className="fixed top-0 left-0 w-full bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white py-3 z-50 shadow-lg overflow-hidden">
+      <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white py-3 shadow-lg overflow-hidden">
         <div className="whitespace-nowrap">
-          <div className="inline-block animate-marquee text-lg font-bold">
+          <div className="inline-block animate-marquee text-sm md:text-lg font-bold">
             🎓 BSCAI Unity Campus Partner - Perplexity AI Free Pro Plan Available! Contact us at info@bscaiunity.space for instant access! 🚀
           </div>
         </div>
@@ -165,19 +165,19 @@ const PerplexityPromoPage = () => {
         ))}
       </div>
 
-      <div className="container mx-auto py-12 px-4 relative z-10">
+      <div className="container mx-auto py-8 md:py-12 px-4 md:px-6 relative z-10">
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
-          <div className="mb-8 space-y-6">
+          <div className="mb-6 md:mb-8 space-y-4 md:space-y-6">
             <motion.img
               src="https://media.discordapp.net/attachments/1403200172187586671/1407283917953830992/campus_strategists_linkedin-22.png?ex=68b016c8&is=68aec548&hm=4886b70dd19435c3c569f4276b1bc807ed9e9fad8633730b4c419be75057d12a&=&format=webp&quality=lossless&width=853&height=445"
               alt="Campus Partner Promotion"
-              className="mx-auto max-w-4xl w-full h-auto rounded-3xl shadow-2xl"
+              className="mx-auto max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl w-full h-auto rounded-xl md:rounded-3xl shadow-2xl"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             />
@@ -189,7 +189,7 @@ const PerplexityPromoPage = () => {
           </Badge>
 
           <motion.h1
-            className="text-4xl md:text-7xl font-extrabold text-white mb-6"
+            className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-4 md:mb-6 px-2"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
@@ -200,7 +200,7 @@ const PerplexityPromoPage = () => {
             </span>
           </motion.h1>
 
-          <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto mb-6 md:mb-8 leading-relaxed px-4">
             I'm officially selected as a Perplexity AI Campus Partner! Claim
             your free pro plan access. Just use your
             student email ID to get started. Also, get exclusive early access to
@@ -208,22 +208,22 @@ const PerplexityPromoPage = () => {
           </p>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-xs sm:max-w-md md:max-w-2xl mx-auto mb-6 md:mb-8 px-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">1M+</div>
-              <div className="text-blue-200 text-sm">Active Users</div>
+              <div className="text-lg md:text-2xl font-bold text-white">1M+</div>
+              <div className="text-blue-200 text-xs md:text-sm">Active Users</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">4.9★</div>
-              <div className="text-blue-200 text-sm">User Rating</div>
+              <div className="text-lg md:text-2xl font-bold text-white">4.9★</div>
+              <div className="text-blue-200 text-xs md:text-sm">User Rating</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">50%</div>
-              <div className="text-blue-200 text-sm">Time Saved</div>
+              <div className="text-lg md:text-2xl font-bold text-white">50%</div>
+              <div className="text-blue-200 text-xs md:text-sm">Time Saved</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">24/7</div>
-              <div className="text-blue-200 text-sm">Availability</div>
+              <div className="text-lg md:text-2xl font-bold text-white">24/7</div>
+              <div className="text-blue-200 text-xs md:text-sm">Availability</div>
             </div>
           </div>
         </motion.div>

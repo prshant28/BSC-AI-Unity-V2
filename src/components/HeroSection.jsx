@@ -45,7 +45,7 @@ const HeroSection = () => {
 
   return (
     <motion.section
-      className="relative pt-28 pb-20 md:pt-40 md:pb-28 bg-gradient-to-br from-background via-indigo-50 dark:via-slate-900 to-slate-100 dark:to-indigo-900/20 overflow-hidden"
+      className="relative pt-8 pb-20 md:pt-20 md:pb-28 bg-gradient-to-br from-background via-indigo-50 dark:via-slate-900 to-slate-100 dark:to-indigo-900/20 overflow-hidden"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

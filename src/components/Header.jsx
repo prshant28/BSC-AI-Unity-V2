@@ -49,7 +49,26 @@ const Header = ({ isAdminAuthenticated }) => {
     : NAV_LINKS;
 
   return (
-    <motion.header
+    <>
+      {/* Playing Notice */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2"
+      >
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-2 text-sm md:text-base w-1/2 mx-auto">
+            <Sparkles className="h-4 w-4 shrink-0" />
+            <span className="font-semibold shrink-0">Important Notice:</span>
+            <span className="truncate">
+              🎉 FREE Perplexity AI Pro! Free Comet Browser Access! Official Campus Partner - No cost, just use student email!
+            </span>
+          </div>
+        </div>
+      </motion.div>
+
+      <motion.header
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         isScrolled
@@ -164,6 +183,7 @@ const Header = ({ isAdminAuthenticated }) => {
         )}
       </AnimatePresence>
     </motion.header>
+    </>
   );
 };
 

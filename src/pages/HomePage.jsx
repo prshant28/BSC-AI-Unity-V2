@@ -99,38 +99,6 @@ const HomePage = ({ concerns, loading }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Notice Board */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 mb-8"
-      >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5" />
-              <span className="font-semibold">Important Notice:</span>
-              <span>
-                🎉 FREE Perplexity AI Pro! Free Comet Browser Access! Official
-                Campus Partner - No cost, just use student email!
-              </span>
-            </div>
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="border-white text-white hover:bg-white hover:text-purple-600"
-            >
-              <Link to="/perplexity-promo">
-                Learn More
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </motion.div>
-
       {/* Hero Section */}
       <HeroSection />
 
