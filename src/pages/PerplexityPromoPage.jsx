@@ -249,7 +249,8 @@ const PerplexityPromoPage = () => {
               <CardHeader>
                 <CardTitle className="text-white text-center flex items-center justify-center gap-2 text-2xl">
                   <Clock className="h-8 w-8 text-purple-400" />
-                  🚀 Comet Browser Launch Countdown
+                  <Rocket className="h-8 w-8 text-blue-400" />
+                  Comet Browser Launch Countdown
                 </CardTitle>
                 <p className="text-center text-blue-200">
                   Be among the first to experience the future of AI-powered
@@ -595,7 +596,7 @@ const PerplexityPromoPage = () => {
             <CardHeader>
               <CardTitle className="text-white text-center flex items-center justify-center gap-3 text-2xl">
                 <Flame className="h-8 w-8 text-orange-400" />
-                🚨 Important Notice - Limited Time Opportunity
+                🔥 Important Notice - Limited Time Opportunity
               </CardTitle>
             </CardHeader>
             <CardContent className="text-center">
