@@ -48,44 +48,32 @@
     }
 
     .dark {
-      --background: 224 24% 10%;
-      /* Dark mode background - Very Dark Blue/Almost Black */
+      --background: 224 24% 8%;
       --foreground: 210 40% 98%;
-      /* Dark mode text - Light Gray/Almost White */
 
       --card: 224 20% 13%;
-      /* Slightly lighter dark blue for cards */
       --card-foreground: 210 40% 98%;
       --popover: 224 24% 10%;
       --popover-foreground: 210 40% 98%;
 
       --primary: 221 75% 65%;
-      /* Lighter Indigo for dark mode */
       --primary-foreground: 224 24% 5%;
-      /* Darker text on primary in dark mode */
 
       --secondary: 215 20% 25%;
-      /* Lighter Slate for dark mode secondary */
       --secondary-foreground: 210 40% 98%;
 
       --muted: 215 20% 35%;
-      /* Darker Slate for muted in dark mode */
       --muted-foreground: 210 40% 75%;
-      /* Lighter muted text in dark mode */
 
       --accent: 215 20% 20%;
-      /* Dark accent */
       --accent-foreground: 210 40% 98%;
 
       --destructive: 0 62.8% 30.6%;
       --destructive-foreground: 0 0% 98%;
 
       --border: 215 20% 25%;
-      /* Darker border */
       --input: 215 20% 30%;
-      /* Darker input */
       --ring: 221 75% 65%;
-      /* Lighter Indigo for rings in dark mode */
     }
   }
 
