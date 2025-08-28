@@ -182,7 +182,7 @@ const PerplexityPromoPage = () => {
           </Badge>
 
           <motion.h1
-            className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-4 md:mb-6 px-2"
+            className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold text-foreground dark:text-white mb-4 md:mb-6 px-2"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
@@ -193,42 +193,37 @@ const PerplexityPromoPage = () => {
             </span>
           </motion.h1>
 
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto mb-6 md:mb-8 leading-relaxed px-4">
-            I'm officially selected as a Perplexity AI Campus Partner! Claim
-            your free pro plan access. Just use your student email ID to get
-            started. Also, get exclusive early access to the revolutionary
-            AI-powered Comet Browser!
-          </p>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground dark:text-blue-100 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto mb-6 md:mb-8 leading-relaxed px-4"></p>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-xs sm:max-w-md md:max-w-2xl mx-auto mb-6 md:mb-8 px-4">
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-white">
+              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
                 1M+
               </div>
-              <div className="text-blue-200 text-xs md:text-sm">
+              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
                 Active Users
               </div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-white">
+              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
                 4.9★
               </div>
-              <div className="text-blue-200 text-xs md:text-sm">
+              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
                 User Rating
               </div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-white">
+              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
                 50%
               </div>
-              <div className="text-blue-200 text-xs md:text-sm">Time Saved</div>
+              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">Time Saved</div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-white">
+              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
                 24/7
               </div>
-              <div className="text-blue-200 text-xs md:text-sm">
+              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
                 Availability
               </div>
             </div>
@@ -245,11 +240,11 @@ const PerplexityPromoPage = () => {
           >
             <Card className="bg-black/40 backdrop-blur-md border-purple-500/30 max-w-3xl mx-auto">
               <CardHeader>
-                <CardTitle className="text-white text-center flex items-center justify-center gap-2 text-2xl">
+                <CardTitle className="text-card-foreground dark:text-white text-center flex items-center justify-center gap-2 text-2xl">
                   <Clock className="h-8 w-8 text-purple-400" />
                   🚀 Comet Browser Launch Countdown
                 </CardTitle>
-                <p className="text-center text-blue-200">
+                <p className="text-center text-muted-foreground dark:text-blue-200">
                   Be among the first to experience the future of AI-powered
                   browsing!
                 </p>
@@ -293,7 +288,7 @@ const PerplexityPromoPage = () => {
                       >
                         {value}
                       </motion.div>
-                      <div className="text-blue-200 text-sm font-medium">
+                      <div className="text-muted-foreground dark:text-blue-200 text-sm font-medium">
                         {label}
                       </div>
                     </motion.div>
@@ -312,10 +307,10 @@ const PerplexityPromoPage = () => {
           className="mb-16"
         >
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground dark:text-white mb-4">
               Why Choose Perplexity AI Pro?
             </h2>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground dark:text-blue-100 max-w-3xl mx-auto">
               Unlock the full potential of AI-powered research and learning
             </p>
           </div>
@@ -334,12 +329,12 @@ const PerplexityPromoPage = () => {
                     <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 w-fit">
                       {feature.icon}
                     </div>
-                    <CardTitle className="text-white text-xl">
+                    <CardTitle className="text-card-foreground dark:text-white text-xl">
                       {feature.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-blue-100 leading-relaxed">
+                    <p className="text-muted-foreground dark:text-blue-100 leading-relaxed">
                       {feature.description}
                     </p>
                   </CardContent>
@@ -360,14 +355,14 @@ const PerplexityPromoPage = () => {
             <CardHeader className="text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <Rocket className="h-8 w-8 text-blue-400" />
-                <CardTitle className="text-white text-3xl">
+                <CardTitle className="text-foreground dark:text-white text-3xl">
                   Meet Comet Browser
                 </CardTitle>
                 <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
                   Coming Soon
                 </Badge>
               </div>
-              <p className="text-blue-100 text-lg">
+              <p className="text-muted-foreground dark:text-blue-100 text-lg">
                 The world's first AI-native browser designed for students
               </p>
             </CardHeader>
@@ -383,10 +378,10 @@ const PerplexityPromoPage = () => {
                       {feature.icon}
                     </div>
                     <div>
-                      <h3 className="text-white font-semibold mb-2">
+                      <h3 className="text-foreground dark:text-white font-semibold mb-2">
                         {feature.title}
                       </h3>
-                      <p className="text-blue-100 text-sm">
+                      <p className="text-muted-foreground dark:text-blue-100 text-sm">
                         {feature.description}
                       </p>
                     </div>
@@ -406,10 +401,10 @@ const PerplexityPromoPage = () => {
         >
           <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl p-12 border border-purple-500/30 max-w-4xl mx-auto">
             <div className="text-6xl mb-6">🎯</div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-6">
               Ready to Transform Your Learning?
             </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground dark:text-blue-100 mb-8 max-w-2xl mx-auto">
               Don't miss out on this exclusive opportunity. Grab your free pro
               plan now and start leveraging the power of AI!
             </p>
@@ -497,7 +492,7 @@ const PerplexityPromoPage = () => {
               </motion.div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm text-blue-200">
+            <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm text-muted-foreground dark:text-blue-200">
               <motion.div
                 className="flex items-center gap-2"
                 whileHover={{ scale: 1.1, color: "rgb(34, 197, 94)" }}
@@ -534,7 +529,9 @@ const PerplexityPromoPage = () => {
             <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-2 border-yellow-500/30 rounded-2xl p-8 max-w-3xl mx-auto text-center">
               <div className="flex items-center justify-center gap-3 text-yellow-200 mb-4">
                 <Calendar className="h-6 w-6" />
-                <span className="font-bold text-xl">Mark Your Calendar!</span>
+                <span className="font-bold text-xl text-foreground dark:text-yellow-300">
+                  Mark Your Calendar!
+                </span>
               </div>
               <p className="text-yellow-100 text-lg leading-relaxed">
                 Comet Browser will be available for download on{" "}

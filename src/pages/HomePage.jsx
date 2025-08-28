@@ -22,6 +22,11 @@ import {
   Heart,
   Sparkles,
   ExternalLink,
+  Brain,
+  Shield,
+  Flame,
+  Rocket,
+  Globe,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -108,7 +113,7 @@ const HomePage = ({ concerns, loading }) => {
           <div className="absolute top-20 left-10 w-72 h-72 bg-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
-        
+
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -140,8 +145,8 @@ const HomePage = ({ concerns, loading }) => {
               transition={{ duration: 0.8 }}
             >
               <div className="relative">
-                <img 
-                  src="https://r2cdn.perplexity.ai/academic/student-referrals.jpg" 
+                <img
+                  src="https://r2cdn.perplexity.ai/academic/student-referrals.jpg"
                   alt="AI-Powered Learning"
                   className="rounded-3xl shadow-2xl w-full h-auto"
                 />
