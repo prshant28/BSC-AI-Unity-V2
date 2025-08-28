@@ -27,6 +27,8 @@ import {
   Rocket,
   Globe,
   Flame,
+  Award,
+  TrendingUp,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,7 +43,7 @@ const HomePage = ({ concerns, loading }) => {
       icon: <BookOpen className="h-8 w-8 mb-3 text-primary" />,
       description:
         "Explore details of the B.Sc. Applied AI & DS program at IIT Jodhpur.",
-      image: "🎓",
+      image: <GraduationCap className="h-16 w-16 text-blue-500" />,
     },
     {
       title: "Our Community",
@@ -49,7 +51,7 @@ const HomePage = ({ concerns, loading }) => {
       icon: <Users className="h-8 w-8 mb-3 text-primary" />,
       description:
         "Learn about BScAI Unity, our mission, and our student-led approach.",
-      image: "🤝",
+      image: <Users className="h-16 w-16 text-green-500" />,
     },
     {
       title: "Concern Statistics",
@@ -57,7 +59,7 @@ const HomePage = ({ concerns, loading }) => {
       icon: <BarChart3 className="h-8 w-8 mb-3 text-primary" />,
       description:
         "View current statistics on concern submissions and resolutions.",
-      image: "📊",
+      image: <TrendingUp className="h-16 w-16 text-purple-500" />,
     },
   ];
 
@@ -67,28 +69,28 @@ const HomePage = ({ concerns, loading }) => {
       description:
         "Easily submit your academic and administrative concerns through our streamlined platform.",
       icon: <MessageSquare className="h-12 w-12 text-blue-500" />,
-      image: "💬",
+      image: <MessageSquare className="h-16 w-16 text-blue-500" />,
     },
     {
       title: "Track Progress",
       description:
         "Monitor the status of your concerns and see real-time updates on resolutions.",
       icon: <CheckCircle className="h-12 w-12 text-green-500" />,
-      image: "✅",
+      image: <CheckCircle className="h-16 w-16 text-green-500" />,
     },
     {
       title: "Quick Resolution",
       description:
         "Our admin team ensures rapid response times and efficient concern resolution.",
       icon: <Clock className="h-12 w-12 text-orange-500" />,
-      image: "⚡",
+      image: <Zap className="h-16 w-16 text-orange-500" />,
     },
     {
       title: "Academic Excellence",
       description:
         "Focus on your studies while we handle the administrative challenges for you.",
       icon: <GraduationCap className="h-12 w-12 text-purple-500" />,
-      image: "🎯",
+      image: <Target className="h-16 w-16 text-purple-500" />,
     },
   ];
 
@@ -212,7 +214,7 @@ const HomePage = ({ concerns, loading }) => {
             </motion.div>
           </div>
 
-          {/* Blink Section with Advanced Features */}
+          {/* Advanced Features Section */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -222,63 +224,62 @@ const HomePage = ({ concerns, loading }) => {
           >
             <Link to="/perplexity-promo" className="block">
               <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 p-1 rounded-3xl cursor-pointer hover:scale-105 transition-transform duration-300">
-                <div className="bg-white dark:bg-gray-900 rounded-3xl p-12"></div>
-              </div>
-            </Link>
-                <div className="text-center mb-12">
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 to-pink-600/10 px-4 py-2 rounded-full border border-purple-300/30 mb-6">
-                    <Flame className="h-5 w-5 text-orange-500" />
-                    <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                      Advanced Platform Features
-                    </span>
+                <div className="bg-white dark:bg-gray-900 rounded-3xl p-12">
+                  <div className="text-center mb-12">
+                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 to-pink-600/10 px-4 py-2 rounded-full border border-purple-300/30 mb-6">
+                      <Flame className="h-5 w-5 text-orange-500" />
+                      <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        Advanced Platform Features
+                      </span>
+                    </div>
+                    <h3 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
+                      Experience the Future of Education
+                    </h3>
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                      Revolutionary tools and features designed to accelerate your learning journey
+                    </p>
                   </div>
-                  <h3 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
-                    Experience the Future of Education
-                  </h3>
-                  <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                    Revolutionary tools and features designed to accelerate your learning journey
-                  </p>
-                </div>
 
-                <div className="grid md:grid-cols-3 gap-8">
-                  {[
-                    {
-                      icon: <Rocket className="h-12 w-12 text-blue-500" />,
-                      title: "AI-Powered Insights",
-                      description: "Get personalized learning recommendations powered by advanced AI algorithms",
-                      image: "🤖"
-                    },
-                    {
-                      icon: <Target className="h-12 w-12 text-green-500" />,
-                      title: "Smart Progress Tracking",
-                      description: "Track your academic progress with intelligent analytics and milestone tracking",
-                      image: "📈"
-                    },
-                    {
-                      icon: <Globe className="h-12 w-12 text-purple-500" />,
-                      title: "Global Community",
-                      description: "Connect with students worldwide and collaborate on cutting-edge AI projects",
-                      image: "🌍"
-                    }
-                  ].map((feature, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      className="text-center group"
-                    >
-                      <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">
-                        {feature.image}
-                      </div>
-                      <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
-                        {feature.icon}
-                      </div>
-                      <h4 className="text-xl font-bold mb-3">{feature.title}</h4>
-                      <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                    </motion.div>
-                  ))}
+                  <div className="grid md:grid-cols-3 gap-8">
+                    {[
+                      {
+                        icon: <Rocket className="h-12 w-12 text-blue-500" />,
+                        title: "AI-Powered Insights",
+                        description: "Get personalized learning recommendations powered by advanced AI algorithms",
+                        image: <Brain className="h-16 w-16 text-blue-500" />
+                      },
+                      {
+                        icon: <Target className="h-12 w-12 text-green-500" />,
+                        title: "Smart Progress Tracking",
+                        description: "Track your academic progress with intelligent analytics and milestone tracking",
+                        image: <TrendingUp className="h-16 w-16 text-green-500" />
+                      },
+                      {
+                        icon: <Globe className="h-12 w-12 text-purple-500" />,
+                        title: "Global Community",
+                        description: "Connect with students worldwide and collaborate on cutting-edge AI projects",
+                        image: <Globe className="h-16 w-16 text-purple-500" />
+                      }
+                    ].map((feature, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                        className="text-center group"
+                      >
+                        <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+                          {feature.image}
+                        </div>
+                        <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
+                          {feature.icon}
+                        </div>
+                        <h4 className="text-xl font-bold mb-3">{feature.title}</h4>
+                        <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </Link>
@@ -345,7 +346,9 @@ const HomePage = ({ concerns, loading }) => {
               >
                 <Card className="h-full text-center p-6 hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/30 group">
                   <CardContent className="space-y-4">
-                    <div className="text-6xl mb-4">{feature.image}</div>
+                    <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
+                      {feature.image}
+                    </div>
                     <div className="group-hover:scale-110 transition-transform duration-300">
                       {feature.icon}
                     </div>
@@ -407,7 +410,9 @@ const HomePage = ({ concerns, loading }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              <div className="text-6xl mb-4">🚀</div>
+              <div className="mb-4">
+                <Rocket className="h-16 w-16 mx-auto text-primary/70" />
+              </div>
               <Lightbulb className="h-10 w-10 mx-auto mb-3 text-primary/70" />
               <p className="text-lg">
                 No concerns posted yet. Be the first to share your thoughts!
@@ -462,7 +467,7 @@ const HomePage = ({ concerns, loading }) => {
               <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 opacity-50"></div>
               <CardHeader className="relative">
                 <CardTitle className="text-2xl md:text-3xl gradient-text text-center flex items-center justify-center gap-3">
-                  <div className="text-4xl">🎓</div>
+                  <GraduationCap className="h-8 w-8 text-primary" />
                   <Lightbulb className="inline-block h-7 w-7" />
                   Quick Program Overview
                 </CardTitle>
@@ -508,7 +513,7 @@ const HomePage = ({ concerns, loading }) => {
               >
                 <Card className="h-full bg-card p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center border border-border hover:border-primary/40 group overflow-hidden relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
                     {link.image}
                   </div>
                   <div className="group-hover:scale-110 transition-transform duration-300 relative z-10">
@@ -546,7 +551,9 @@ const HomePage = ({ concerns, loading }) => {
             viewport={{ once: true }}
             className="max-w-2xl mx-auto"
           >
-            <div className="text-6xl mb-6">🌟</div>
+            <div className="mb-6">
+              <Star className="h-16 w-16 mx-auto text-yellow-400" />
+            </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Ready to Make Your Voice Heard?
             </h2>

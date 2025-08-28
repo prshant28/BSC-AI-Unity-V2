@@ -407,7 +407,9 @@ const PerplexityPromoPage = () => {
           className="mb-16"
         >
           <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl p-12 border border-purple-500/30 max-w-4xl mx-auto">
-            <div className="text-6xl mb-6">🎯</div>
+            <div className="flex items-center justify-center gap-3 text-6xl mb-6">
+              <Target className="h-16 w-16" />
+            </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
               Ready to Transform Your Learning?
             </h2>
@@ -597,7 +599,9 @@ const PerplexityPromoPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-center">
-              <div className="text-6xl mb-6">🎓</div>
+              <div className="flex items-center justify-center gap-3 text-6xl mb-6">
+                <Award className="h-16 w-16" />
+              </div>
               <p className="text-orange-100 text-lg leading-relaxed mb-6">
                 As a Perplexity AI Campus Partner, I'm bringing you this
                 exclusive offer to get free access to Perplexity AI Pro. This is
