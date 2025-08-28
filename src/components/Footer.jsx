@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Sparkles, Linkedin, Twitter, Github, Send, Gift, Lock } from "lucide-react"; // Assuming Send for Telegram
+import { Sparkles, Linkedin, Twitter, Github, Send } from "lucide-react"; // Assuming Send for Telegram
 import { FOOTER_LINKS, SOCIAL_LINKS } from "@/lib/constants";
 
 const Footer = () => {

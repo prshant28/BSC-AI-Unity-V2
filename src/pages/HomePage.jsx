@@ -1,4 +1,3 @@
-
 import React from "react";
 import HeroSection from "@/components/HeroSection";
 import ConcernCard from "@/components/ConcernCard";
@@ -6,237 +5,28 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
-  Users,
-  MessageSquare,
-  TrendingUp,
-  CheckCircle,
-  Star,
-  Lightbulb,
-  Target,
-  Rocket,
-  Shield,
-  Zap,
-  Globe,
-  Award,
   BookOpen,
-  Clock,
-  Calendar,
-  Download,
-  ExternalLink,
-  Sparkles,
-  Heart,
-  Coffee,
-  Code,
-  Database,
-  Server,
-  Smartphone,
-  Laptop,
-  Monitor,
-  Headphones,
-  Camera,
-  Wifi,
-  Battery,
-  Settings,
-  Search,
-  Filter,
-  Sort,
-  Edit,
-  Delete,
-  Save,
-  Share,
-  Print,
-  Upload,
-  Play,
-  Pause,
-  Stop,
-  Forward,
-  Rewind,
-  Volume,
-  Mute,
-  Home,
-  Menu,
-  Close,
-  Plus,
-  Minus,
-  ChevronLeft,
-  ChevronRight,
-  ChevronUp,
-  ChevronDown,
-  ArrowLeft,
-  ArrowUp,
-  ArrowDown,
-  RefreshCw,
-  RotateCcw,
-  RotateCw,
-  Maximize,
-  Minimize,
-  Copy,
-  Cut,
-  Paste,
-  Undo,
-  Redo,
-  Bold,
-  Italic,
-  Underline,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
-  List,
-  Grid,
-  Table,
-  Image,
-  LinkIcon,
-  Unlink,
-  Quote,
-  Code2,
-  Terminal,
-  Bug,
-  Wrench,
-  Hammer,
-  Paintbrush,
-  Palette,
-  Brush,
-  Eraser,
-  Ruler,
-  Scissors,
-  Paperclip,
-  Pin,
-  Flag,
-  Tag,
-  Bookmark,
-  Folder,
-  File,
-  FileText,
-  FilePlus,
-  FileMinus,
-  FileX,
-  FileCheck,
-  FolderPlus,
-  FolderMinus,
-  FolderX,
-  FolderCheck,
-  Archive,
-  Package,
-  Box,
-  Inbox,
-  Outbox,
-  Send,
-  Mail,
-  Phone,
-  Video,
-  Mic,
-  MicOff,
-  Speaker,
-  Voicemail,
-  MessageCircle,
-  MessageSquareMore,
-  Bell,
-  BellOff,
-  Alert,
-  AlertTriangle,
-  AlertCircle,
-  Info,
-  Help,
-  Question,
-  Exclamation,
-  Warning,
-  Error,
-  
-  
-  Sun,
-  Moon,
-  CloudSun,
-  Cloud,
-  CloudRain,
-  CloudSnow,
-  CloudLightning,
-  Umbrella,
-  Thermometer,
-  Wind,
-  Eye,
-  EyeOff,
-  
-  Lock,
-  Unlock,
-  Key,
-  ShieldCheck,
-  ShieldX,
-  ShieldAlert,
-  Fingerprint,
-  Scan,
-  QrCode,
-  Barcode,
-  CreditCard,
-  Wallet,
-  Coins,
-  DollarSign,
-  Euro,
-  Pound,
-  Yen,
-  Bitcoin,
-  TrendingDown,
-  BarChart,
+  Users,
   BarChart3,
-  LineChart,
-  PieChart,
-  Activity,
-  Pulse,
-  Gauge,
-  Timer,
-  Stopwatch,
-  Hourglass,
-  Alarm,
-  AlarmClock,
-  Sunrise,
-  Sunset,
-  Compass,
-  Navigation,
-  Map,
-  MapPin,
-  Locate,
-  Route,
-  Car,
-  Truck,
-  Bus,
-  Train,
-  Plane,
-  Ship,
-  Bike,
-  Walk,
-  Run,
-  Footprints,
-  Paw,
-  Leaf,
-  Tree,
-  Flower,
-  Seedling,
-  Sprout,
-  Cactus,
-  
-  Fire,
-  Flame,
-  Campfire,
-  Candle,
-  Flashlight,
-  Lamp,
-  Bulb,
-  Lightning,
-  Bolt,
-  Flash,
-  Energy,
-  Power,
-  Plug,
-  Cable,
-  Calculator,
-  Medal,
-  Trophy,
-  Crown,
-  Infinity,
-  Brain,
-  GraduationCap,
   PlusCircle,
-  Loader2
+  Lightbulb,
+  Loader2,
+  MessageSquare,
+  CheckCircle,
+  Clock,
+  GraduationCap,
+  Trophy,
+  Target,
+  Zap,
+  Star,
+  Heart,
+  Sparkles,
+  ExternalLink,
+  Brain,
+  Shield,
+  Rocket,
+  Globe,
+  Flame,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -251,7 +41,7 @@ const HomePage = ({ concerns, loading }) => {
       icon: <BookOpen className="h-8 w-8 mb-3 text-primary" />,
       description:
         "Explore details of the B.Sc. Applied AI & DS program at IIT Jodhpur.",
-      image: <GraduationCap className="h-16 w-16 text-blue-500" />,
+      image: "🎓",
     },
     {
       title: "Our Community",
@@ -259,7 +49,7 @@ const HomePage = ({ concerns, loading }) => {
       icon: <Users className="h-8 w-8 mb-3 text-primary" />,
       description:
         "Learn about BScAI Unity, our mission, and our student-led approach.",
-      image: <Users className="h-16 w-16 text-green-500" />,
+      image: "🤝",
     },
     {
       title: "Concern Statistics",
@@ -267,7 +57,7 @@ const HomePage = ({ concerns, loading }) => {
       icon: <BarChart3 className="h-8 w-8 mb-3 text-primary" />,
       description:
         "View current statistics on concern submissions and resolutions.",
-      image: <TrendingUp className="h-16 w-16 text-purple-500" />,
+      image: "📊",
     },
   ];
 
@@ -277,28 +67,28 @@ const HomePage = ({ concerns, loading }) => {
       description:
         "Easily submit your academic and administrative concerns through our streamlined platform.",
       icon: <MessageSquare className="h-12 w-12 text-blue-500" />,
-      image: <MessageSquare className="h-16 w-16 text-blue-500" />,
+      image: "💬",
     },
     {
       title: "Track Progress",
       description:
         "Monitor the status of your concerns and see real-time updates on resolutions.",
       icon: <CheckCircle className="h-12 w-12 text-green-500" />,
-      image: <CheckCircle className="h-16 w-16 text-green-500" />,
+      image: "✅",
     },
     {
       title: "Quick Resolution",
       description:
         "Our admin team ensures rapid response times and efficient concern resolution.",
       icon: <Clock className="h-12 w-12 text-orange-500" />,
-      image: <Zap className="h-16 w-16 text-orange-500" />,
+      image: "⚡",
     },
     {
       title: "Academic Excellence",
       description:
         "Focus on your studies while we handle the administrative challenges for you.",
       icon: <GraduationCap className="h-12 w-12 text-purple-500" />,
-      image: <Target className="h-16 w-16 text-purple-500" />,
+      image: "🎯",
     },
   ];
 
@@ -323,7 +113,7 @@ const HomePage = ({ concerns, loading }) => {
           <div className="absolute top-20 left-10 w-72 h-72 bg-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
-
+        
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -355,8 +145,8 @@ const HomePage = ({ concerns, loading }) => {
               transition={{ duration: 0.8 }}
             >
               <div className="relative">
-                <img
-                  src="https://r2cdn.perplexity.ai/academic/student-referrals.jpg"
+                <img 
+                  src="https://r2cdn.perplexity.ai/academic/student-referrals.jpg" 
                   alt="AI-Powered Learning"
                   className="rounded-3xl shadow-2xl w-full h-auto"
                 />
@@ -422,7 +212,7 @@ const HomePage = ({ concerns, loading }) => {
             </motion.div>
           </div>
 
-          {/* Advanced Features Section */}
+          {/* Blink Section with Advanced Features */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -432,62 +222,63 @@ const HomePage = ({ concerns, loading }) => {
           >
             <Link to="/perplexity-promo" className="block">
               <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 p-1 rounded-3xl cursor-pointer hover:scale-105 transition-transform duration-300">
-                <div className="bg-white dark:bg-gray-900 rounded-3xl p-12">
-                  <div className="text-center mb-12">
-                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 to-pink-600/10 px-4 py-2 rounded-full border border-purple-300/30 mb-6">
-                      <Flame className="h-5 w-5 text-orange-500" />
-                      <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                        Advanced Platform Features
-                      </span>
-                    </div>
-                    <h3 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
-                      Experience the Future of Education
-                    </h3>
-                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                      Revolutionary tools and features designed to accelerate your learning journey
-                    </p>
+                <div className="bg-white dark:bg-gray-900 rounded-3xl p-12"></div>
+              </div>
+            </Link>
+                <div className="text-center mb-12">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 to-pink-600/10 px-4 py-2 rounded-full border border-purple-300/30 mb-6">
+                    <Flame className="h-5 w-5 text-orange-500" />
+                    <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                      Advanced Platform Features
+                    </span>
                   </div>
+                  <h3 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
+                    Experience the Future of Education
+                  </h3>
+                  <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                    Revolutionary tools and features designed to accelerate your learning journey
+                  </p>
+                </div>
 
-                  <div className="grid md:grid-cols-3 gap-8">
-                    {[
-                      {
-                        icon: <Rocket className="h-12 w-12 text-blue-500" />,
-                        title: "AI-Powered Insights",
-                        description: "Get personalized learning recommendations powered by advanced AI algorithms",
-                        image: <Brain className="h-16 w-16 text-blue-500" />
-                      },
-                      {
-                        icon: <Target className="h-12 w-12 text-green-500" />,
-                        title: "Smart Progress Tracking",
-                        description: "Track your academic progress with intelligent analytics and milestone tracking",
-                        image: <TrendingUp className="h-16 w-16 text-green-500" />
-                      },
-                      {
-                        icon: <Globe className="h-12 w-12 text-purple-500" />,
-                        title: "Global Community",
-                        description: "Connect with students worldwide and collaborate on cutting-edge AI projects",
-                        image: <Globe className="h-16 w-16 text-purple-500" />
-                      }
-                    ].map((feature, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: index * 0.1 }}
-                        className="text-center group"
-                      >
-                        <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
-                          {feature.image}
-                        </div>
-                        <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
-                          {feature.icon}
-                        </div>
-                        <h4 className="text-xl font-bold mb-3">{feature.title}</h4>
-                        <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                      </motion.div>
-                    ))}
-                  </div>
+                <div className="grid md:grid-cols-3 gap-8">
+                  {[
+                    {
+                      icon: <Rocket className="h-12 w-12 text-blue-500" />,
+                      title: "AI-Powered Insights",
+                      description: "Get personalized learning recommendations powered by advanced AI algorithms",
+                      image: "🤖"
+                    },
+                    {
+                      icon: <Target className="h-12 w-12 text-green-500" />,
+                      title: "Smart Progress Tracking",
+                      description: "Track your academic progress with intelligent analytics and milestone tracking",
+                      image: "📈"
+                    },
+                    {
+                      icon: <Globe className="h-12 w-12 text-purple-500" />,
+                      title: "Global Community",
+                      description: "Connect with students worldwide and collaborate on cutting-edge AI projects",
+                      image: "🌍"
+                    }
+                  ].map((feature, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      className="text-center group"
+                    >
+                      <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                        {feature.image}
+                      </div>
+                      <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
+                        {feature.icon}
+                      </div>
+                      <h4 className="text-xl font-bold mb-3">{feature.title}</h4>
+                      <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
             </Link>
@@ -554,9 +345,7 @@ const HomePage = ({ concerns, loading }) => {
               >
                 <Card className="h-full text-center p-6 hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/30 group">
                   <CardContent className="space-y-4">
-                    <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {feature.image}
-                    </div>
+                    <div className="text-6xl mb-4">{feature.image}</div>
                     <div className="group-hover:scale-110 transition-transform duration-300">
                       {feature.icon}
                     </div>
@@ -618,9 +407,7 @@ const HomePage = ({ concerns, loading }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              <div className="mb-4">
-                <Rocket className="h-16 w-16 mx-auto text-primary/70" />
-              </div>
+              <div className="text-6xl mb-4">🚀</div>
               <Lightbulb className="h-10 w-10 mx-auto mb-3 text-primary/70" />
               <p className="text-lg">
                 No concerns posted yet. Be the first to share your thoughts!
@@ -675,7 +462,7 @@ const HomePage = ({ concerns, loading }) => {
               <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 opacity-50"></div>
               <CardHeader className="relative">
                 <CardTitle className="text-2xl md:text-3xl gradient-text text-center flex items-center justify-center gap-3">
-                  <GraduationCap className="h-8 w-8 text-primary" />
+                  <div className="text-4xl">🎓</div>
                   <Lightbulb className="inline-block h-7 w-7" />
                   Quick Program Overview
                 </CardTitle>
@@ -721,7 +508,7 @@ const HomePage = ({ concerns, loading }) => {
               >
                 <Card className="h-full bg-card p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center border border-border hover:border-primary/40 group overflow-hidden relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
                     {link.image}
                   </div>
                   <div className="group-hover:scale-110 transition-transform duration-300 relative z-10">
@@ -759,9 +546,7 @@ const HomePage = ({ concerns, loading }) => {
             viewport={{ once: true }}
             className="max-w-2xl mx-auto"
           >
-            <div className="mb-6">
-              <Star className="h-16 w-16 mx-auto text-yellow-400" />
-            </div>
+            <div className="text-6xl mb-6">🌟</div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Ready to Make Your Voice Heard?
             </h2>

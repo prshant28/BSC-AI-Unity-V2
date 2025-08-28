@@ -53,13 +53,16 @@ import {
   VolumeX,
   Volume2,
   Settings,
+  Tools,
   Wrench,
   Hammer,
+  Screwdriver,
   Lightbulb,
   Cloud,
   Download,
   Upload,
   Share,
+  Link,
   Copy,
   Save,
   Folder,
@@ -85,7 +88,10 @@ import {
   Navigation,
   Compass,
   Calendar,
+  ClockIcon,
   Timer,
+  Stopwatch,
+  AlarmClock,
   Bell,
   AlertTriangle,
   CheckCircle,
@@ -111,7 +117,7 @@ import {
   SkipBack,
   SkipForward,
   FastForward,
-  Rewind
+  Rewind,
 } from "lucide-react";
 
 const AIToolsPage = () => {
