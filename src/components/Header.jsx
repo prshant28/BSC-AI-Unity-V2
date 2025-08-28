@@ -50,21 +50,37 @@ const Header = ({ isAdminAuthenticated }) => {
 
   return (
     <>
-      {/* Playing Notice */}
+      {/* Scrolling Notice */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2"
+        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 overflow-hidden"
       >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-2 text-sm md:text-base w-1/2 mx-auto">
-            <Sparkles className="h-4 w-4 shrink-0" />
-            <span className="font-semibold shrink-0">Important Notice:</span>
-            <span className="truncate">
-              🎉 FREE Perplexity AI Pro! Free Comet Browser Access! Official Campus Partner - No cost, just use student email!
-            </span>
-          </div>
+        <div className="relative">
+          <motion.div
+            className="flex items-center gap-6 whitespace-nowrap"
+            animate={{ x: ["100%", "-100%"] }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          >
+            <div className="flex items-center gap-2 text-sm md:text-base">
+              <Sparkles className="h-4 w-4 shrink-0" />
+              <span className="font-semibold">🎉 FREE Perplexity AI Pro!</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm md:text-base">
+              <span className="font-semibold">🚀 Free Comet Browser Access!</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm md:text-base">
+              <span className="font-semibold">🏛️ Official Campus Partner</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm md:text-base">
+              <span className="font-semibold">💯 No cost, just use student email!</span>
+            </div>
+          </motion.div>
         </div>
       </motion.div>
 

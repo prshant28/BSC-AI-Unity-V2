@@ -6,6 +6,7 @@ export const NAV_LINKS = [
   { href: "/add-concern", label: "Add Concern" },
   { href: "/status-board", label: "Status Board" },
   { href: "/about-course", label: "About Course" },
+  { href: "/ai-tools", label: "AI Tools" },
   { href: "/contact", label: "Contact Us" },
   { href: "/perplexity-promo", label: "Promotions" },
   { href: "/admin-login", label: "Admin Login" },

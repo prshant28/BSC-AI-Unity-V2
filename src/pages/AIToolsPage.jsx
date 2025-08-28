@@ -29,7 +29,10 @@ import {
   Download,
   Award,
   Sparkles,
-  Flame
+  Flame,
+  BarChart3,
+  Trophy,
+  Target
 } from 'lucide-react';
 
 const AIToolsPage = () => {
@@ -101,7 +104,47 @@ const AIToolsPage = () => {
     { id: 40, name: 'Socratic by Google', category: 'Study', description: 'AI-powered homework help with visual explanations', rating: 4.4, popularity: 75, link: 'https://socratic.org', free: true, icon: '🔍', tags: ['homework', 'visual', 'explanations'] },
 
     // Continue expanding the database...
-    // [Additional tools would continue here to reach 1000+]
+    // Video & Audio Tools
+    { id: 41, name: 'RunwayML', category: 'Video', description: 'AI-powered video editing and generation tools for creative projects', rating: 4.6, popularity: 78, link: 'https://runwayml.com', free: false, icon: '🎬', tags: ['video editing', 'ai generation', 'creative'] },
+    { id: 42, name: 'Descript', category: 'Video', description: 'All-in-one audio and video editing with AI transcription', rating: 4.5, popularity: 76, link: 'https://descript.com', free: true, icon: '🎙️', tags: ['transcription', 'editing', 'podcasts'] },
+    { id: 43, name: 'Synthesia', category: 'Video', description: 'Create professional AI videos with virtual presenters', rating: 4.4, popularity: 73, link: 'https://synthesia.io', free: false, icon: '🎭', tags: ['ai presenter', 'video creation', 'professional'] },
+    { id: 44, name: 'Murf AI', category: 'Audio', description: 'AI voice generator for voiceovers and narrations', rating: 4.3, popularity: 71, link: 'https://murf.ai', free: true, icon: '🎵', tags: ['voice synthesis', 'narration', 'tts'] },
+    { id: 45, name: 'Loom', category: 'Video', description: 'Screen recording with AI-powered transcription and summaries', rating: 4.6, popularity: 81, link: 'https://loom.com', free: true, icon: '📹', tags: ['screen recording', 'transcription', 'sharing'] },
+
+    // Data Science & Analytics Tools
+    { id: 46, name: 'Jupyter Notebooks', category: 'Data Science', description: 'Interactive computing environment for data analysis and ML', rating: 4.8, popularity: 89, link: 'https://jupyter.org', free: true, icon: '📊', tags: ['python', 'data analysis', 'ml'], featured: true },
+    { id: 47, name: 'Google Colab', category: 'Data Science', description: 'Free cloud-based Jupyter notebooks with GPU access', rating: 4.7, popularity: 87, link: 'https://colab.research.google.com', free: true, icon: '🧮', tags: ['cloud', 'gpu', 'machine learning'] },
+    { id: 48, name: 'Kaggle', category: 'Data Science', description: 'Data science competitions and datasets platform', rating: 4.6, popularity: 85, link: 'https://kaggle.com', free: true, icon: '🏆', tags: ['competitions', 'datasets', 'community'] },
+    { id: 49, name: 'Tableau Public', category: 'Data Science', description: 'Free data visualization and dashboard creation tool', rating: 4.5, popularity: 80, link: 'https://public.tableau.com', free: true, icon: '📈', tags: ['visualization', 'dashboards', 'analytics'] },
+    { id: 50, name: 'Power BI', category: 'Data Science', description: 'Microsoft\'s business intelligence and data visualization tool', rating: 4.4, popularity: 77, link: 'https://powerbi.microsoft.com', free: true, icon: '💼', tags: ['business intelligence', 'microsoft', 'reporting'] },
+
+    // AI/ML Platforms
+    { id: 51, name: 'Hugging Face', category: 'AI/ML', description: 'Open-source ML models and datasets community platform', rating: 4.8, popularity: 88, link: 'https://huggingface.co', free: true, icon: '🤗', tags: ['open source', 'models', 'nlp'], featured: true },
+    { id: 52, name: 'Google AI Studio', category: 'AI/ML', description: 'Build and experiment with Google AI models', rating: 4.6, popularity: 82, link: 'https://aistudio.google.com', free: true, icon: '🧠', tags: ['google', 'ai models', 'experimentation'] },
+    { id: 53, name: 'OpenAI Playground', category: 'AI/ML', description: 'Experiment with OpenAI models and API', rating: 4.7, popularity: 85, link: 'https://platform.openai.com/playground', free: false, icon: '🎮', tags: ['openai', 'gpt', 'api'] },
+    { id: 54, name: 'AutoML', category: 'AI/ML', description: 'Google\'s automated machine learning platform', rating: 4.5, popularity: 78, link: 'https://cloud.google.com/automl', free: false, icon: '🤖', tags: ['automated ml', 'google cloud', 'no-code'] },
+    { id: 55, name: 'IBM Watson', category: 'AI/ML', description: 'Enterprise AI platform with various AI services', rating: 4.3, popularity: 74, link: 'https://www.ibm.com/watson', free: false, icon: '🔵', tags: ['enterprise', 'ai services', 'ibm'] },
+
+    // Career & Job Search Tools
+    { id: 56, name: 'LinkedIn Learning', category: 'Career', description: 'Professional courses and skill development platform', rating: 4.5, popularity: 83, link: 'https://linkedin.com/learning', free: false, icon: '💼', tags: ['professional', 'courses', 'networking'] },
+    { id: 57, name: 'Indeed Career Guide', category: 'Career', description: 'AI-powered career guidance and job search assistance', rating: 4.4, popularity: 79, link: 'https://indeed.com/career-advice', free: true, icon: '🎯', tags: ['job search', 'career advice', 'guidance'] },
+    { id: 58, name: 'Glassdoor', category: 'Career', description: 'Company reviews and salary information platform', rating: 4.3, popularity: 81, link: 'https://glassdoor.com', free: true, icon: '🏢', tags: ['company reviews', 'salaries', 'interviews'] },
+    { id: 59, name: 'AngelList', category: 'Career', description: 'Startup job board and company information', rating: 4.2, popularity: 72, link: 'https://angel.co', free: true, icon: '👼', tags: ['startups', 'equity', 'tech jobs'] },
+    { id: 60, name: 'Coursera Career Services', category: 'Career', description: 'Career support and job placement assistance', rating: 4.4, popularity: 75, link: 'https://coursera.org/career-services', free: false, icon: '🎓', tags: ['career support', 'job placement', 'certificates'] },
+
+    // Collaboration & Project Management
+    { id: 61, name: 'Slack', category: 'Collaboration', description: 'Team communication and collaboration platform', rating: 4.6, popularity: 88, link: 'https://slack.com', free: true, icon: '💬', tags: ['team chat', 'collaboration', 'integrations'] },
+    { id: 62, name: 'Discord', category: 'Collaboration', description: 'Voice and text communication for communities', rating: 4.5, popularity: 86, link: 'https://discord.com', free: true, icon: '🎮', tags: ['voice chat', 'communities', 'gaming'] },
+    { id: 63, name: 'Trello', category: 'Project Management', description: 'Visual project management with Kanban boards', rating: 4.4, popularity: 82, link: 'https://trello.com', free: true, icon: '📋', tags: ['kanban', 'project management', 'visual'] },
+    { id: 64, name: 'Asana', category: 'Project Management', description: 'Team project and task management platform', rating: 4.5, popularity: 80, link: 'https://asana.com', free: true, icon: '✅', tags: ['task management', 'team collaboration', 'tracking'] },
+    { id: 65, name: 'Monday.com', category: 'Project Management', description: 'Work operating system for team collaboration', rating: 4.3, popularity: 77, link: 'https://monday.com', free: false, icon: '📅', tags: ['workflow', 'team management', 'automation'] },
+
+    // Additional popular tools to reach closer to 1000
+    { id: 66, name: 'Luma AI', category: 'Image', description: '3D object and scene capture using AI', rating: 4.4, popularity: 70, link: 'https://lumalabs.ai', free: true, icon: '🎨', tags: ['3d capture', 'ar', 'mobile'] },
+    { id: 67, name: 'Replit AI', category: 'Programming', description: 'AI coding assistant integrated into online IDE', rating: 4.6, popularity: 83, link: 'https://replit.com', free: true, icon: '⚡', tags: ['ide', 'ai assistant', 'collaboration'] },
+    { id: 68, name: 'Codium AI', category: 'Programming', description: 'AI-powered code integrity and testing platform', rating: 4.3, popularity: 69, link: 'https://codium.ai', free: true, icon: '🔬', tags: ['testing', 'code quality', 'automation'] },
+
+    // Continue adding more tools to eventually reach 1000+...
   ];
 
   useEffect(() => {
@@ -148,7 +191,7 @@ const AIToolsPage = () => {
     setFilteredTools(filtered);
   }, [searchTerm, categoryFilter, sortBy, priceFilter]);
 
-  const categories = ['All', 'Writing', 'Math', 'Programming', 'Design', 'Language', 'Study', 'Research', 'Productivity', 'Science', 'Engineering', 'Image', 'Video', 'Music', 'Data Science', 'Note-taking', 'Learning'];
+  const categories = ['All', 'Writing', 'Math', 'Programming', 'Design', 'Language', 'Study', 'Research', 'Productivity', 'Science', 'Engineering', 'Image', 'Video', 'Music', 'Audio', 'Data Science', 'AI/ML', 'Career', 'Collaboration', 'Project Management', 'Note-taking', 'Learning'];
 
   const toggleFavorite = (toolId) => {
     setFavorites(prev => 
@@ -171,6 +214,12 @@ const AIToolsPage = () => {
       'Science': <Brain className="h-4 w-4" />,
       'Video': <Video className="h-4 w-4" />,
       'Music': <Music className="h-4 w-4" />,
+      'Audio': <Music className="h-4 w-4" />,
+      'Data Science': <BarChart3 className="h-4 w-4" />,
+      'AI/ML': <Brain className="h-4 w-4" />,
+      'Career': <Trophy className="h-4 w-4" />,
+      'Collaboration': <Users className="h-4 w-4" />,
+      'Project Management': <Target className="h-4 w-4" />,
       'Learning': <Award className="h-4 w-4" />,
     };
     return icons[category] || <FileText className="h-4 w-4" />;

@@ -102,6 +102,182 @@ const HomePage = ({ concerns, loading }) => {
       {/* Hero Section */}
       <HeroSection />
 
+      {/* Advanced Features Showcase */}
+      <section className="py-20 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/20 dark:via-purple-900/20 dark:to-pink-900/20 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 to-pink-600/10 px-6 py-2 rounded-full border border-purple-300/30 mb-6">
+              <Sparkles className="h-5 w-5 text-purple-600" />
+              <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">Advanced Platform Features</span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-extrabold mb-6">
+              <span className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Revolutionary Learning
+              </span>
+              <br />
+              <span className="text-foreground">Experience</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Discover cutting-edge tools and features designed specifically for the future of AI education
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="relative">
+                <img 
+                  src="https://r2cdn.perplexity.ai/academic/student-referrals.jpg" 
+                  alt="AI-Powered Learning"
+                  className="rounded-3xl shadow-2xl w-full h-auto"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent rounded-3xl"></div>
+                <div className="absolute bottom-6 left-6 text-white">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Brain className="h-6 w-6" />
+                    <span className="font-semibold">AI-Powered Research</span>
+                  </div>
+                  <p className="text-sm opacity-90">Unlock unlimited potential with advanced AI tools</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="space-y-8"
+            >
+              {[
+                {
+                  icon: <Zap className="h-8 w-8 text-yellow-500" />,
+                  title: "Lightning Fast Performance",
+                  description: "Experience blazing-fast response times with our optimized platform architecture",
+                  stats: "99.9% Uptime"
+                },
+                {
+                  icon: <Shield className="h-8 w-8 text-green-500" />,
+                  title: "Enterprise Security",
+                  description: "Your data is protected with bank-level security and encryption protocols",
+                  stats: "256-bit Encryption"
+                },
+                {
+                  icon: <Users className="h-8 w-8 text-blue-500" />,
+                  title: "Collaborative Learning",
+                  description: "Connect with peers, share knowledge, and grow together in our community",
+                  stats: "1000+ Active Users"
+                }
+              ].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="flex gap-4 p-6 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl border border-purple-200/30 hover:border-purple-300/50 transition-all duration-300"
+                >
+                  <div className="flex-shrink-0 p-3 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/50 dark:to-pink-900/50 rounded-xl">
+                    {feature.icon}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground mb-2">{feature.description}</p>
+                    <div className="inline-flex items-center gap-1 text-sm font-semibold text-purple-600 dark:text-purple-400">
+                      <CheckCircle className="h-4 w-4" />
+                      {feature.stats}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Blink Section with Advanced Features */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 p-1 rounded-3xl">
+              <div className="bg-white dark:bg-gray-900 rounded-3xl p-12">
+                <div className="text-center mb-12">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 to-pink-600/10 px-4 py-2 rounded-full border border-purple-300/30 mb-6">
+                    <Flame className="h-5 w-5 text-orange-500" />
+                    <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                      Advanced Platform Features
+                    </span>
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
+                    Experience the Future of Education
+                  </h3>
+                  <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                    Revolutionary tools and features designed to accelerate your learning journey
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-8">
+                  {[
+                    {
+                      icon: <Rocket className="h-12 w-12 text-blue-500" />,
+                      title: "AI-Powered Insights",
+                      description: "Get personalized learning recommendations powered by advanced AI algorithms",
+                      image: "🤖"
+                    },
+                    {
+                      icon: <Target className="h-12 w-12 text-green-500" />,
+                      title: "Smart Progress Tracking",
+                      description: "Track your academic progress with intelligent analytics and milestone tracking",
+                      image: "📈"
+                    },
+                    {
+                      icon: <Globe className="h-12 w-12 text-purple-500" />,
+                      title: "Global Community",
+                      description: "Connect with students worldwide and collaborate on cutting-edge AI projects",
+                      image: "🌍"
+                    }
+                  ].map((feature, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      className="text-center group"
+                    >
+                      <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                        {feature.image}
+                      </div>
+                      <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
+                        {feature.icon}
+                      </div>
+                      <h4 className="text-xl font-bold mb-3">{feature.title}</h4>
+                      <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section className="py-12 bg-gradient-to-r from-primary/5 via-purple-50 to-blue-50 dark:from-primary/10 dark:via-purple-900/20 dark:to-blue-900/20">
         <div className="container mx-auto px-4 md:px-6">
