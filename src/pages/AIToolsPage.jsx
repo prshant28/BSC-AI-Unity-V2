@@ -53,7 +53,6 @@ import {
   VolumeX,
   Volume2,
   Settings,
-  Tools,
   Wrench,
   Hammer,
   Lightbulb,
@@ -61,7 +60,6 @@ import {
   Download,
   Upload,
   Share,
-  Link,
   Copy,
   Save,
   Folder,
@@ -113,7 +111,7 @@ import {
   SkipBack,
   SkipForward,
   FastForward,
-  Rewind,
+  Rewind
 } from "lucide-react";
 
 const AIToolsPage = () => {
