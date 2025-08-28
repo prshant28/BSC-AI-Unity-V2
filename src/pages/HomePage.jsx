@@ -22,11 +22,6 @@ import {
   Heart,
   Sparkles,
   ExternalLink,
-  Brain,
-  Shield,
-  Rocket,
-  Globe,
-  Flame,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -220,11 +215,8 @@ const HomePage = ({ concerns, loading }) => {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <Link to="/perplexity-promo" className="block">
-              <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 p-1 rounded-3xl cursor-pointer hover:scale-105 transition-transform duration-300">
-                <div className="bg-white dark:bg-gray-900 rounded-3xl p-12"></div>
-              </div>
-            </Link>
+            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 p-1 rounded-3xl">
+              <div className="bg-white dark:bg-gray-900 rounded-3xl p-12">
                 <div className="text-center mb-12">
                   <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 to-pink-600/10 px-4 py-2 rounded-full border border-purple-300/30 mb-6">
                     <Flame className="h-5 w-5 text-orange-500" />
@@ -281,7 +273,7 @@ const HomePage = ({ concerns, loading }) => {
                   ))}
                 </div>
               </div>
-            </Link>
+            </div>
           </motion.div>
         </div>
       </section>

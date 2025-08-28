@@ -133,7 +133,7 @@ const PerplexityPromoPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 text-foreground">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
       {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(6)].map((_, i) => (
@@ -182,7 +182,7 @@ const PerplexityPromoPage = () => {
           </Badge>
 
           <motion.h1
-            className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold text-foreground dark:text-white mb-4 md:mb-6 px-2"
+            className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-4 md:mb-6 px-2"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
@@ -193,7 +193,7 @@ const PerplexityPromoPage = () => {
             </span>
           </motion.h1>
 
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground dark:text-blue-100 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto mb-6 md:mb-8 leading-relaxed px-4">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto mb-6 md:mb-8 leading-relaxed px-4">
             I'm officially selected as a Perplexity AI Campus Partner! Claim
             your free pro plan access. Just use your student email ID to get
             started. Also, get exclusive early access to the revolutionary
@@ -203,32 +203,32 @@ const PerplexityPromoPage = () => {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-xs sm:max-w-md md:max-w-2xl mx-auto mb-6 md:mb-8 px-4">
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
+              <div className="text-lg md:text-2xl font-bold text-white">
                 1M+
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
+              <div className="text-blue-200 text-xs md:text-sm">
                 Active Users
               </div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
+              <div className="text-lg md:text-2xl font-bold text-white">
                 4.9★
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
+              <div className="text-blue-200 text-xs md:text-sm">
                 User Rating
               </div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
+              <div className="text-lg md:text-2xl font-bold text-white">
                 50%
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">Time Saved</div>
+              <div className="text-blue-200 text-xs md:text-sm">Time Saved</div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
+              <div className="text-lg md:text-2xl font-bold text-white">
                 24/7
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
+              <div className="text-blue-200 text-xs md:text-sm">
                 Availability
               </div>
             </div>
@@ -414,11 +414,11 @@ const PerplexityPromoPage = () => {
               plan now and start leveraging the power of AI!
             </p>
 
-            <div className="flex flex-col lg:flex-row gap-4 md:gap-6 justify-center items-center max-w-4xl mx-auto">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-lg mx-auto">
               <motion.div
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 25px 50px rgba(168, 85, 247, 0.5)",
+                  boxShadow: "0 20px 40px rgba(168, 85, 247, 0.4)",
                 }}
                 whileTap={{ scale: 0.95 }}
                 animate={{
@@ -435,50 +435,41 @@ const PerplexityPromoPage = () => {
                     ease: "easeInOut",
                   },
                 }}
-                className="rounded-2xl w-full sm:w-auto"
+                className="rounded-xl"
               >
                 <Button
                   asChild
                   size="lg"
-                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 hover:from-purple-700 hover:via-pink-700 hover:to-indigo-700 text-white px-6 md:px-10 py-4 md:py-6 text-base md:text-xl font-bold shadow-2xl relative overflow-hidden group transition-all duration-300 min-h-[60px] md:min-h-[70px]"
+                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg shadow-2xl relative overflow-hidden group"
                 >
                   <a
                     href="https://plex.it/referrals/CZ8FRX5B"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 md:gap-4 relative z-10 w-full"
+                    className="flex items-center justify-center gap-3 relative z-10"
                   >
                     <motion.div
-                      animate={{ 
-                        rotate: [0, 15, -15, 0],
-                        scale: [1, 1.1, 1]
-                      }}
+                      animate={{ rotate: [0, 15, -15, 0] }}
                       transition={{
                         duration: 2,
                         repeat: Infinity,
                         ease: "easeInOut",
                       }}
                     >
-                      <Gift className="h-5 w-5 md:h-7 md:w-7" />
+                      <Gift className="h-6 w-6" />
                     </motion.div>
-                    <span className="text-sm md:text-xl font-bold whitespace-nowrap">
-                      🎯 Claim Your Free Pro Plan!
-                    </span>
+                    Claim Your Free Pro Plan!
                     <motion.div
-                      animate={{ 
-                        x: [0, 8, 0],
-                        rotate: [0, 10, 0]
-                      }}
+                      animate={{ x: [0, 5, 0] }}
                       transition={{
                         duration: 1.5,
                         repeat: Infinity,
                         ease: "easeInOut",
                       }}
                     >
-                      <ExternalLink className="h-4 w-4 md:h-6 md:w-6" />
+                      <ExternalLink className="h-5 w-5" />
                     </motion.div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[400%] transition-transform duration-1000"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[300%] transition-transform duration-700"></div>
                   </a>
                 </Button>
               </motion.div>
@@ -486,41 +477,22 @@ const PerplexityPromoPage = () => {
               <motion.div
                 whileHover={{
                   scale: 1.05,
-                  borderColor: "rgb(59, 130, 246)",
-                  boxShadow: "0 0 40px rgba(59, 130, 246, 0.6)",
+                  borderColor: "rgb(96, 165, 250)",
+                  boxShadow: "0 0 30px rgba(96, 165, 250, 0.5)",
                 }}
                 whileTap={{ scale: 0.95 }}
-                className="rounded-2xl w-full sm:w-auto"
+                className="rounded-xl"
               >
                 <Button
                   size="lg"
                   variant="outline"
-                  disabled={!isLaunched}
-                  className="w-full sm:w-auto border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white px-6 md:px-10 py-4 md:py-6 text-base md:text-xl font-semibold relative overflow-hidden group transition-all duration-300 min-h-[60px] md:min-h-[70px] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg relative overflow-hidden group"
                 >
-                  <div className="flex items-center justify-center gap-2 md:gap-4 relative z-10">
-                    <motion.div
-                      animate={!isLaunched ? { 
-                        rotate: [0, 360],
-                        scale: [1, 1.2, 1]
-                      } : {}}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    >
-                      {isLaunched ? (
-                        <Download className="h-5 w-5 md:h-7 md:w-7" />
-                      ) : (
-                        <Lock className="h-5 w-5 md:h-7 md:w-7" />
-                      )}
-                    </motion.div>
-                    <span className="text-sm md:text-xl font-semibold whitespace-nowrap">
-                      {isLaunched ? "🚀 Download Comet Browser" : "🔒 Coming September 2025"}
-                    </span>
+                  <div className="flex items-center justify-center gap-3">
+                    <Lock className="h-6 w-6 mr-3" />
+                    Download Comet Browser
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[400%] transition-transform duration-1000"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[300%] transition-transform duration-700"></div>
                 </Button>
               </motion.div>
             </div>
