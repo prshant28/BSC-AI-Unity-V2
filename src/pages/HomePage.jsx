@@ -1,3 +1,4 @@
+
 import React from "react";
 import HeroSection from "@/components/HeroSection";
 import ConcernCard from "@/components/ConcernCard";
@@ -85,7 +86,7 @@ import {
   Grid,
   Table,
   Image,
-  Link,
+  LinkIcon,
   Unlink,
   Quote,
   Code2,
@@ -168,7 +169,6 @@ import {
   Lock,
   Unlock,
   Key,
-  Shield as Shield2,
   ShieldCheck,
   ShieldX,
   ShieldAlert,
@@ -186,6 +186,7 @@ import {
   Bitcoin,
   TrendingDown,
   BarChart,
+  BarChart3,
   LineChart,
   PieChart,
   Activity,
@@ -203,7 +204,6 @@ import {
   Map,
   MapPin,
   Locate,
-  Navigation as Navigation2,
   Route,
   Car,
   Truck,
@@ -414,6 +414,9 @@ import {
   Oganesson,
   Infinity,
   Brain,
+  GraduationCap,
+  PlusCircle,
+  Loader2
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
