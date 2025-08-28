@@ -6,8 +6,8 @@ export const NAV_LINKS = [
   { href: "/add-concern", label: "Add Concern" },
   { href: "/status-board", label: "Status Board" },
   { href: "/about-course", label: "About Course" },
-  { href: "/semester-1-quizzes", label: "Semester-1 Quizzes" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact", label: "Contact Us" },
+  { href: "/perplexity-promo", label: "Promotions" },
   { href: "/admin-login", label: "Admin Login" },
 ];
 

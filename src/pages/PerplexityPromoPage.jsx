@@ -86,12 +86,14 @@ const PerplexityPromoPage = () => {
     {
       icon: <Globe className="h-8 w-8 text-green-400" />,
       title: "Real-time Information",
-      description: "Get the latest information with real-time web search capabilities",
+      description:
+        "Get the latest information with real-time web search capabilities",
     },
     {
       icon: <BookOpen className="h-8 w-8 text-orange-400" />,
       title: "Academic Sources",
-      description: "Access to scholarly articles, research papers, and academic databases",
+      description:
+        "Access to scholarly articles, research papers, and academic databases",
     },
     {
       icon: <Target className="h-8 w-8 text-red-400" />,
@@ -132,15 +134,6 @@ const PerplexityPromoPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
-      {/* Fixed Notice Bar with Scrolling Animation */}
-      <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white py-3 shadow-lg overflow-hidden">
-        <div className="whitespace-nowrap">
-          <div className="inline-block animate-marquee text-sm md:text-lg font-bold">
-            🎓 BSCAI Unity Campus Partner - Perplexity AI Free Pro Plan Available! Contact us at info@bscaiunity.space for instant access! 🚀
-          </div>
-        </div>
-      </div>
-
       {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(6)].map((_, i) => (
@@ -202,28 +195,42 @@ const PerplexityPromoPage = () => {
 
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto mb-6 md:mb-8 leading-relaxed px-4">
             I'm officially selected as a Perplexity AI Campus Partner! Claim
-            your free pro plan access. Just use your
-            student email ID to get started. Also, get exclusive early access to
-            the revolutionary AI-powered Comet Browser!
+            your free pro plan access. Just use your student email ID to get
+            started. Also, get exclusive early access to the revolutionary
+            AI-powered Comet Browser!
           </p>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-xs sm:max-w-md md:max-w-2xl mx-auto mb-6 md:mb-8 px-4">
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-white">1M+</div>
-              <div className="text-blue-200 text-xs md:text-sm">Active Users</div>
+              <div className="text-lg md:text-2xl font-bold text-white">
+                1M+
+              </div>
+              <div className="text-blue-200 text-xs md:text-sm">
+                Active Users
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-white">4.9★</div>
-              <div className="text-blue-200 text-xs md:text-sm">User Rating</div>
+              <div className="text-lg md:text-2xl font-bold text-white">
+                4.9★
+              </div>
+              <div className="text-blue-200 text-xs md:text-sm">
+                User Rating
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-white">50%</div>
+              <div className="text-lg md:text-2xl font-bold text-white">
+                50%
+              </div>
               <div className="text-blue-200 text-xs md:text-sm">Time Saved</div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-white">24/7</div>
-              <div className="text-blue-200 text-xs md:text-sm">Availability</div>
+              <div className="text-lg md:text-2xl font-bold text-white">
+                24/7
+              </div>
+              <div className="text-blue-200 text-xs md:text-sm">
+                Availability
+              </div>
             </div>
           </div>
         </motion.div>
@@ -403,8 +410,8 @@ const PerplexityPromoPage = () => {
               Ready to Transform Your Learning?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Don't miss out on this exclusive opportunity. Grab your free
-              pro plan now and start leveraging the power of AI!
+              Don't miss out on this exclusive opportunity. Grab your free pro
+              plan now and start leveraging the power of AI!
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-lg mx-auto">
@@ -557,10 +564,10 @@ const PerplexityPromoPage = () => {
               <div className="text-6xl mb-6">🎓</div>
               <p className="text-orange-100 text-lg leading-relaxed mb-6">
                 As a Perplexity AI Campus Partner, I'm bringing you this
-                exclusive offer to get free access to Perplexity AI Pro. This is a limited-time opportunity to experience
-                cutting-edge AI tools that can significantly accelerate your
-                learning and research. Contact me now at info@bscaiunity.space
-                for more details.
+                exclusive offer to get free access to Perplexity AI Pro. This is
+                a limited-time opportunity to experience cutting-edge AI tools
+                that can significantly accelerate your learning and research.
+                Contact me now at info@bscaiunity.space for more details.
               </p>
               <div className="grid md:grid-cols-3 gap-6 mt-8">
                 <div className="flex items-center gap-3 text-orange-100">
