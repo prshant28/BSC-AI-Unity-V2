@@ -1,0 +1,41 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+2HomePage.jsx:151 Uncaught ReferenceError: Brain is not defined
+    at HomePage (HomePage.jsx:151:22)
+    at renderWithHooks (react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (react-dom.development.js:20103:13)
+    at beginWork (react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback2 (react-dom.development.js:4164:14)
+    at Object.invokeGuardedCallbackDev (react-dom.development.js:4213:16)
+    at invokeGuardedCallback (react-dom.development.js:4277:31)
+    at beginWork$1 (react-dom.development.js:27490:7)
+    at performUnitOfWork (react-dom.development.js:26596:12)
+    at workLoopSync (react-dom.development.js:26505:5)Understand this error
+(index):159 The above error occurred in the <HomePage> component:
+
+    at HomePage (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/src/pages/HomePage.jsx?t=1756378730507:44:21)
+    at RenderedRoute (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/node_modules/.vite/deps/react-router-dom.js?v=463b5fa0:4103:5)
+    at Outlet (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/node_modules/.vite/deps/react-router-dom.js?v=463b5fa0:4510:26)
+    at main
+    at div
+    at Layout (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/src/components/Layout.jsx?t=1756378730507:25:19)
+    at RenderedRoute (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/node_modules/.vite/deps/react-router-dom.js?v=463b5fa0:4103:5)
+    at Routes (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/node_modules/.vite/deps/react-router-dom.js?v=463b5fa0:4574:5)
+    at Router (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/node_modules/.vite/deps/react-router-dom.js?v=463b5fa0:4517:15)
+    at BrowserRouter (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/node_modules/.vite/deps/react-router-dom.js?v=463b5fa0:5266:5)
+    at ThemeProvider (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/src/contexts/ThemeProvider.jsx:24:3)
+    at App (https://a7e24f25-e6d8-4a4f-8f6b-03618101b386-00-vh6n8epdel4g.pike.replit.dev:5173/src/App.jsx?t=1756378730507:83:35)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+console.error @ (index):159Understand this error
+react-dom.development.js:26962 Uncaught ReferenceError: Brain is not defined
+    at HomePage (HomePage.jsx:151:22)
+    at renderWithHooks (react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (react-dom.development.js:20103:13)
+    at beginWork (react-dom.development.js:21626:16)
+    at beginWork$1 (react-dom.development.js:27465:14)
+    at performUnitOfWork (react-dom.development.js:26596:12)
+    at workLoopSync (react-dom.development.js:26505:5)
+    at renderRootSync (react-dom.development.js:26473:7)
+    at recoverFromConcurrentError (react-dom.development.js:25889:20)
+    at performConcurrentWorkOnRoot (react-dom.development.js:25789:22)Understand this error
