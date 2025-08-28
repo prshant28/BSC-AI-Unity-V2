@@ -174,6 +174,25 @@ const PerplexityPromoPage = () => {
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             />
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex justify-center items-center gap-8 flex-wrap"
+            >
+              <img
+                src="https://pplx-res.cloudinary.com/image/upload/t_limit/v1703182233/getty_uploads/1451244772.jpg"
+                alt="Perplexity AI"
+                className="h-16 md:h-20 w-auto rounded-lg shadow-lg"
+              />
+              <div className="text-2xl md:text-3xl font-bold text-purple-600 dark:text-purple-400">+</div>
+              <img
+                src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/Indian_Institute_of_Technology_Jodhpur_Logo.svg/1200px-Indian_Institute_of_Technology_Jodhpur_Logo.svg.png"
+                alt="IIT Jodhpur"
+                className="h-16 md:h-20 w-auto"
+              />
+            </motion.div>
           </div>
 
           <Badge className="mb-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 text-lg">
@@ -399,121 +418,186 @@ const PerplexityPromoPage = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mb-16"
         >
-          <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl p-12 border border-purple-500/30 max-w-4xl mx-auto">
-            <div className="text-6xl mb-6">🎯</div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-6">
-              Ready to Transform Your Learning?
-            </h2>
-            <p className="text-xl text-muted-foreground dark:text-blue-100 mb-8 max-w-2xl mx-auto">
-              Don't miss out on this exclusive opportunity. Grab your free pro
-              plan now and start leveraging the power of AI!
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-lg mx-auto">
-              <motion.div
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(168, 85, 247, 0.4)",
-                }}
-                whileTap={{ scale: 0.95 }}
-                animate={{
-                  boxShadow: [
-                    "0 0 20px rgba(168, 85, 247, 0.3)",
-                    "0 0 40px rgba(236, 72, 153, 0.3)",
-                    "0 0 20px rgba(168, 85, 247, 0.3)",
-                  ],
-                }}
-                transition={{
-                  boxShadow: {
-                    duration: 2,
+          <div className="relative bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-3xl p-8 md:p-12 border border-purple-500/30 max-w-6xl mx-auto overflow-hidden">
+            {/* Animated background elements */}
+            <div className="absolute inset-0 overflow-hidden">
+              {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-32 h-32 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-xl"
+                  animate={{
+                    x: [0, 100, 0],
+                    y: [0, -50, 0],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 8 + i * 2,
                     repeat: Infinity,
                     ease: "easeInOut",
-                  },
-                }}
-                className="rounded-xl"
-              >
-                <Button
-                  asChild
-                  size="lg"
-                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg shadow-2xl relative overflow-hidden group"
-                >
-                  <a
-                    href="https://plex.it/referrals/CZ8FRX5B"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-3 relative z-10"
-                  >
-                    <motion.div
-                      animate={{ rotate: [0, 15, -15, 0] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      <Gift className="h-6 w-6" />
-                    </motion.div>
-                    Claim Your Free Pro Plan!
-                    <motion.div
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      <ExternalLink className="h-5 w-5" />
-                    </motion.div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[300%] transition-transform duration-700"></div>
-                  </a>
-                </Button>
-              </motion.div>
-
-              <motion.div
-                whileHover={{
-                  scale: 1.05,
-                  borderColor: "rgb(96, 165, 250)",
-                  boxShadow: "0 0 30px rgba(96, 165, 250, 0.5)",
-                }}
-                whileTap={{ scale: 0.95 }}
-                className="rounded-xl"
-              >
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg relative overflow-hidden group"
-                >
-                  <div className="flex items-center justify-center gap-3">
-                    <Lock className="h-6 w-6 mr-3" />
-                    Download Comet Browser
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[300%] transition-transform duration-700"></div>
-                </Button>
-              </motion.div>
+                  }}
+                  style={{
+                    left: `${20 + i * 20}%`,
+                    top: `${30 + i * 15}%`,
+                  }}
+                />
+              ))}
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm text-muted-foreground dark:text-blue-200">
-              <motion.div
-                className="flex items-center gap-2"
-                whileHover={{ scale: 1.1, color: "rgb(34, 197, 94)" }}
-              >
-                <CheckCircle className="h-5 w-5 text-green-400" />
-                <span>Use your student email ID</span>
-              </motion.div>
-              <motion.div
-                className="flex items-center gap-2"
-                whileHover={{ scale: 1.1, color: "rgb(96, 165, 250)" }}
-              >
-                <Users className="h-5 w-5 text-blue-400" />
-                <span>Join the first cohort</span>
-              </motion.div>
-              <motion.div
-                className="flex items-center gap-2"
-                whileHover={{ scale: 1.1, color: "rgb(236, 72, 153)" }}
-              >
-                <Sparkles className="h-5 w-5 text-pink-400" />
-                <span>Interactive marketing</span>
-              </motion.div>
+            <div className="relative z-10">
+              <div className="text-center mb-8">
+                <motion.div 
+                  className="text-6xl md:text-8xl mb-6"
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  🎯
+                </motion.div>
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-foreground dark:text-white mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  Ready to Transform Your Learning?
+                </h2>
+                <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground dark:text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
+                  Don't miss out on this exclusive opportunity. Grab your free pro plan now and start leveraging the power of AI to accelerate your academic journey!
+                </p>
+              </div>
+
+              {/* Enhanced Button Section */}
+              <div className="flex flex-col lg:flex-row gap-6 justify-center items-center max-w-4xl mx-auto mb-8">
+                {/* Primary CTA Button */}
+                <motion.div
+                  whileHover={{
+                    scale: 1.05,
+                    rotateY: 5,
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full lg:w-auto"
+                >
+                  <motion.div
+                    animate={{
+                      boxShadow: [
+                        "0 0 30px rgba(168, 85, 247, 0.3)",
+                        "0 0 60px rgba(236, 72, 153, 0.4)",
+                        "0 0 30px rgba(168, 85, 247, 0.3)",
+                      ],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="rounded-2xl"
+                  >
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full lg:w-auto bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white px-8 md:px-12 py-4 md:py-6 text-lg md:text-xl font-bold shadow-2xl relative overflow-hidden group rounded-2xl border-2 border-white/20 transition-all duration-500"
+                    >
+                      <a
+                        href="https://plex.it/referrals/CZ8FRX5B"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-3 relative z-10"
+                      >
+                        <motion.div
+                          animate={{ rotate: [0, 15, -15, 0] }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                        >
+                          <Gift className="h-6 w-6 md:h-7 md:w-7" />
+                        </motion.div>
+                        <span className="hidden sm:inline">Claim Your Free Pro Plan!</span>
+                        <span className="sm:hidden">Get Free Pro!</span>
+                        <motion.div
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                        >
+                          <ExternalLink className="h-5 w-5 md:h-6 md:w-6" />
+                        </motion.div>
+                        
+                        {/* Multiple animated overlays */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[300%] transition-transform duration-700"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-white/20 transform skew-x-12 translate-x-[100%] group-hover:translate-x-[-300%] transition-transform duration-700 delay-75"></div>
+                      </a>
+                    </Button>
+                  </motion.div>
+                </motion.div>
+
+                {/* Secondary Button */}
+                <motion.div
+                  whileHover={{
+                    scale: 1.05,
+                    rotateY: -5,
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full lg:w-auto"
+                >
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full lg:w-auto border-2 border-blue-400 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 text-blue-400 hover:bg-blue-400 hover:text-white px-8 md:px-12 py-4 md:py-6 text-lg md:text-xl font-bold relative overflow-hidden group rounded-2xl backdrop-blur-sm transition-all duration-500"
+                    disabled
+                  >
+                    <div className="flex items-center justify-center gap-3 relative z-10">
+                      <Lock className="h-6 w-6 md:h-7 md:w-7" />
+                      <span className="hidden sm:inline">Download Comet Browser</span>
+                      <span className="sm:hidden">Get Comet</span>
+                      <Timer className="h-5 w-5 animate-pulse" />
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[300%] transition-transform duration-700"></div>
+                  </Button>
+                  <p className="text-xs md:text-sm text-center mt-2 text-muted-foreground">Coming Sept 2, 2025</p>
+                </motion.div>
+              </div>
+
+              {/* Enhanced Feature Highlights */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
+                {[
+                  {
+                    icon: <CheckCircle className="h-5 w-5 text-green-400" />,
+                    text: "Use your student email ID",
+                    color: "hover:text-green-400",
+                    bgColor: "bg-green-400/10"
+                  },
+                  {
+                    icon: <Users className="h-5 w-5 text-blue-400" />,
+                    text: "Join the first cohort",
+                    color: "hover:text-blue-400",
+                    bgColor: "bg-blue-400/10"
+                  },
+                  {
+                    icon: <Sparkles className="h-5 w-5 text-pink-400" />,
+                    text: "Interactive marketing",
+                    color: "hover:text-pink-400",
+                    bgColor: "bg-pink-400/10"
+                  }
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    className={`flex items-center gap-3 p-4 rounded-xl ${item.bgColor} backdrop-blur-sm border border-white/10 transition-all duration-300 ${item.color}`}
+                    whileHover={{ 
+                      scale: 1.05,
+                      y: -5,
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.1)"
+                    }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="flex-shrink-0">
+                      {item.icon}
+                    </div>
+                    <span className="text-sm md:text-base font-medium text-muted-foreground dark:text-blue-200">
+                      {item.text}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>

@@ -55,7 +55,8 @@ const Header = ({ isAdminAuthenticated }) => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 overflow-hidden"
+        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 overflow-hidden cursor-pointer hover:from-purple-700 hover:to-pink-700 transition-all duration-300"
+        onClick={() => window.location.href = '/perplexity-promo'}
       >
         <div className="relative">
           <motion.div
@@ -69,7 +70,7 @@ const Header = ({ isAdminAuthenticated }) => {
           >
             <div className="flex items-center gap-2 text-sm md:text-base">
               <Sparkles className="h-4 w-4 shrink-0" />
-              <span className="font-semibold">🎉 FREE Perplexity AI Pro!</span>
+              <span className="font-semibold">🎉 FREE Perplexity AI Pro! Click to learn more</span>
             </div>
             <div className="flex items-center gap-2 text-sm md:text-base">
               <span className="font-semibold">🚀 Free Comet Browser Access!</span>

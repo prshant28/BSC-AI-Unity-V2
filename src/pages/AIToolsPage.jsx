@@ -145,6 +145,56 @@ const AIToolsPage = () => {
     { id: 68, name: 'Codium AI', category: 'Programming', description: 'AI-powered code integrity and testing platform', rating: 4.3, popularity: 69, link: 'https://codium.ai', free: true, icon: '🔬', tags: ['testing', 'code quality', 'automation'] },
 
     // Continue adding more tools to eventually reach 1000+...
+    
+    // Communication & Social Tools
+    { id: 69, name: 'Zoom', category: 'Collaboration', description: 'Video conferencing platform for virtual classes and meetings', rating: 4.4, popularity: 89, link: 'https://zoom.us', free: true, icon: '📹', tags: ['video calls', 'meetings', 'webinars'] },
+    { id: 70, name: 'Microsoft Teams', category: 'Collaboration', description: 'Integrated communication and collaboration platform', rating: 4.3, popularity: 85, link: 'https://teams.microsoft.com', free: true, icon: '💼', tags: ['microsoft', 'teams', 'collaboration'] },
+    { id: 71, name: 'Google Meet', category: 'Collaboration', description: 'Simple video conferencing solution by Google', rating: 4.2, popularity: 82, link: 'https://meet.google.com', free: true, icon: '🎥', tags: ['google', 'video calls', 'simple'] },
+    
+    // Creative AI Tools
+    { id: 72, name: 'Adobe Firefly', category: 'Image', description: 'AI-powered creative tools for image generation and editing', rating: 4.6, popularity: 84, link: 'https://firefly.adobe.com', free: false, icon: '🔥', tags: ['adobe', 'creative', 'professional'] },
+    { id: 73, name: 'Canva Magic Studio', category: 'Design', description: 'AI-powered design suite with text-to-image generation', rating: 4.5, popularity: 88, link: 'https://canva.com/magic-studio', free: true, icon: '✨', tags: ['design', 'ai generation', 'templates'] },
+    { id: 74, name: 'Remove.bg', category: 'Image', description: 'AI-powered background removal tool for images', rating: 4.7, popularity: 86, link: 'https://remove.bg', free: true, icon: '🖼️', tags: ['background removal', 'editing', 'quick'] },
+    { id: 75, name: 'Upscayl', category: 'Image', description: 'Free and open-source AI image upscaler', rating: 4.4, popularity: 78, link: 'https://upscayl.github.io', free: true, icon: '📐', tags: ['upscaling', 'open source', 'enhancement'] },
+    { id: 76, name: 'Topaz AI', category: 'Image', description: 'Professional AI-powered photo and video enhancement', rating: 4.6, popularity: 76, link: 'https://topazlabs.com', free: false, icon: '💎', tags: ['professional', 'enhancement', 'photography'] },
+    
+    // Study & Learning Enhancement Tools
+    { id: 77, name: 'Forest', category: 'Productivity', description: 'Pomodoro timer app with gamification for focus', rating: 4.8, popularity: 91, link: 'https://forestapp.cc', free: false, icon: '🌳', tags: ['pomodoro', 'focus', 'gamification'] },
+    { id: 78, name: 'RescueTime', category: 'Productivity', description: 'Automatic time tracking and productivity analytics', rating: 4.5, popularity: 79, link: 'https://rescuetime.com', free: true, icon: '⏰', tags: ['time tracking', 'analytics', 'productivity'] },
+    { id: 79, name: 'Focus Keeper', category: 'Study', description: 'Simple Pomodoro timer for enhanced focus sessions', rating: 4.6, popularity: 83, link: 'https://focuskeeperapp.com', free: true, icon: '🎯', tags: ['pomodoro', 'focus', 'simple'] },
+    { id: 80, name: 'Cold Turkey Blocker', category: 'Productivity', description: 'Website and application blocker for distraction-free study', rating: 4.7, popularity: 81, link: 'https://getcoldturkey.com', free: true, icon: '🚫', tags: ['blocker', 'distraction free', 'focus'] },
+    
+    // Advanced AI Platforms
+    { id: 81, name: 'Anthropic Claude', category: 'AI/ML', description: 'Constitutional AI assistant for safe and helpful interactions', rating: 4.8, popularity: 87, link: 'https://claude.ai', free: true, icon: '🤖', tags: ['constitutional ai', 'safe', 'helpful'] },
+    { id: 82, name: 'Google Bard', category: 'AI/ML', description: 'Google\'s conversational AI powered by PaLM', rating: 4.5, popularity: 85, link: 'https://bard.google.com', free: true, icon: '📝', tags: ['google', 'conversational', 'palm'] },
+    { id: 83, name: 'Microsoft Copilot', category: 'AI/ML', description: 'AI assistant integrated across Microsoft products', rating: 4.6, popularity: 83, link: 'https://copilot.microsoft.com', free: true, icon: '🚁', tags: ['microsoft', 'integration', 'productivity'] },
+    { id: 84, name: 'Replicate', category: 'AI/ML', description: 'Run and fine-tune open-source machine learning models', rating: 4.4, popularity: 77, link: 'https://replicate.com', free: true, icon: '🔄', tags: ['open source', 'ml models', 'api'] },
+    
+    // Specialized Academic Tools
+    { id: 85, name: 'Overleaf', category: 'Writing', description: 'Collaborative LaTeX editor for academic writing', rating: 4.7, popularity: 82, link: 'https://overleaf.com', free: true, icon: '📄', tags: ['latex', 'collaborative', 'academic'] },
+    { id: 86, name: 'Zotero', category: 'Research', description: 'Reference management software for research', rating: 4.6, popularity: 84, link: 'https://zotero.org', free: true, icon: '📚', tags: ['references', 'research', 'bibliography'] },
+    { id: 87, name: 'Mendeley', category: 'Research', description: 'Academic reference manager and collaboration tool', rating: 4.4, popularity: 79, link: 'https://mendeley.com', free: true, icon: '🔬', tags: ['academic', 'collaboration', 'references'] },
+    { id: 88, name: 'EndNote', category: 'Research', description: 'Professional reference management software', rating: 4.3, popularity: 72, link: 'https://endnote.com', free: false, icon: '📖', tags: ['professional', 'references', 'research'] },
+    
+    // Mobile Learning Apps
+    { id: 89, name: 'Coursera Mobile', category: 'Learning', description: 'Mobile access to university courses and specializations', rating: 4.5, popularity: 88, link: 'https://coursera.org/mobile', free: true, icon: '📱', tags: ['mobile', 'university', 'courses'] },
+    { id: 90, name: 'Khan Academy Mobile', category: 'Learning', description: 'Free mobile learning app for all subjects', rating: 4.7, popularity: 92, link: 'https://khanacademy.org/mobile', free: true, icon: '📚', tags: ['mobile', 'free', 'comprehensive'] },
+    { id: 91, name: 'Udemy Mobile', category: 'Learning', description: 'Mobile access to practical skill courses', rating: 4.4, popularity: 86, link: 'https://udemy.com/mobile', free: false, icon: '🎓', tags: ['mobile', 'skills', 'practical'] },
+    
+    // Automation & Productivity
+    { id: 92, name: 'Zapier', category: 'Productivity', description: 'Automation platform connecting different apps and services', rating: 4.5, popularity: 81, link: 'https://zapier.com', free: true, icon: '⚡', tags: ['automation', 'integration', 'workflow'] },
+    { id: 93, name: 'IFTTT', category: 'Productivity', description: 'Simple automation for everyday tasks', rating: 4.3, popularity: 78, link: 'https://ifttt.com', free: true, icon: '🔗', tags: ['automation', 'simple', 'tasks'] },
+    { id: 94, name: 'Microsoft Power Automate', category: 'Productivity', description: 'Business process automation platform', rating: 4.4, popularity: 75, link: 'https://powerautomate.microsoft.com', free: true, icon: '🔄', tags: ['business', 'automation', 'microsoft'] },
+    
+    // AI Writing & Content Tools
+    { id: 95, name: 'Rytr', category: 'Writing', description: 'AI writing assistant for various content types', rating: 4.3, popularity: 74, link: 'https://rytr.me', free: true, icon: '✍️', tags: ['ai writing', 'content', 'versatile'] },
+    { id: 96, name: 'Sudowrite', category: 'Writing', description: 'AI writing partner for creative and academic writing', rating: 4.4, popularity: 71, link: 'https://sudowrite.com', free: false, icon: '📝', tags: ['creative writing', 'academic', 'ai partner'] },
+    { id: 97, name: 'Wordtune', category: 'Writing', description: 'AI-powered writing companion for rewriting and suggestions', rating: 4.5, popularity: 77, link: 'https://wordtune.com', free: true, icon: '🎼', tags: ['rewriting', 'suggestions', 'improvement'] },
+    
+    // Final Essential Tools
+    { id: 98, name: 'Calendly', category: 'Productivity', description: 'Automated scheduling tool for meetings and appointments', rating: 4.6, popularity: 84, link: 'https://calendly.com', free: true, icon: '📅', tags: ['scheduling', 'meetings', 'automation'] },
+    { id: 99, name: 'LastPass', category: 'Productivity', description: 'Password manager for secure account management', rating: 4.4, popularity: 82, link: 'https://lastpass.com', free: true, icon: '🔐', tags: ['password manager', 'security', 'accounts'] },
+    { id: 100, name: 'Pocket', category: 'Productivity', description: 'Save articles and content for later reading and research', rating: 4.5, popularity: 80, link: 'https://getpocket.com', free: true, icon: '👝', tags: ['save articles', 'reading', 'research'] },
   ];
 
   useEffect(() => {
