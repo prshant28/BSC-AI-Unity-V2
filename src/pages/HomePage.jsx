@@ -222,63 +222,62 @@ const HomePage = ({ concerns, loading }) => {
           >
             <Link to="/perplexity-promo" className="block">
               <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 p-1 rounded-3xl cursor-pointer hover:scale-105 transition-transform duration-300">
-                <div className="bg-white dark:bg-gray-900 rounded-3xl p-12"></div>
-              </div>
-            </Link>
-                <div className="text-center mb-12">
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 to-pink-600/10 px-4 py-2 rounded-full border border-purple-300/30 mb-6">
-                    <Flame className="h-5 w-5 text-orange-500" />
-                    <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                      Advanced Platform Features
-                    </span>
+                <div className="bg-white dark:bg-gray-900 rounded-3xl p-12">
+                  <div className="text-center mb-12">
+                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 to-pink-600/10 px-4 py-2 rounded-full border border-purple-300/30 mb-6">
+                      <Flame className="h-5 w-5 text-orange-500" />
+                      <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        Advanced Platform Features
+                      </span>
+                    </div>
+                    <h3 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
+                      Experience the Future of Education
+                    </h3>
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                      Revolutionary tools and features designed to accelerate your learning journey
+                    </p>
                   </div>
-                  <h3 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
-                    Experience the Future of Education
-                  </h3>
-                  <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                    Revolutionary tools and features designed to accelerate your learning journey
-                  </p>
-                </div>
 
-                <div className="grid md:grid-cols-3 gap-8">
-                  {[
-                    {
-                      icon: <Rocket className="h-12 w-12 text-blue-500" />,
-                      title: "AI-Powered Insights",
-                      description: "Get personalized learning recommendations powered by advanced AI algorithms",
-                      image: "🤖"
-                    },
-                    {
-                      icon: <Target className="h-12 w-12 text-green-500" />,
-                      title: "Smart Progress Tracking",
-                      description: "Track your academic progress with intelligent analytics and milestone tracking",
-                      image: "📈"
-                    },
-                    {
-                      icon: <Globe className="h-12 w-12 text-purple-500" />,
-                      title: "Global Community",
-                      description: "Connect with students worldwide and collaborate on cutting-edge AI projects",
-                      image: "🌍"
-                    }
-                  ].map((feature, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      className="text-center group"
-                    >
-                      <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">
-                        {feature.image}
-                      </div>
-                      <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
-                        {feature.icon}
-                      </div>
-                      <h4 className="text-xl font-bold mb-3">{feature.title}</h4>
-                      <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                    </motion.div>
-                  ))}
+                  <div className="grid md:grid-cols-3 gap-8">
+                    {[
+                      {
+                        icon: <Rocket className="h-12 w-12 text-blue-500" />,
+                        title: "AI-Powered Insights",
+                        description: "Get personalized learning recommendations powered by advanced AI algorithms",
+                        image: "🤖"
+                      },
+                      {
+                        icon: <Target className="h-12 w-12 text-green-500" />,
+                        title: "Smart Progress Tracking",
+                        description: "Track your academic progress with intelligent analytics and milestone tracking",
+                        image: "📈"
+                      },
+                      {
+                        icon: <Globe className="h-12 w-12 text-purple-500" />,
+                        title: "Global Community",
+                        description: "Connect with students worldwide and collaborate on cutting-edge AI projects",
+                        image: "🌍"
+                      }
+                    ].map((feature, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                        className="text-center group"
+                      >
+                        <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                          {feature.image}
+                        </div>
+                        <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
+                          {feature.icon}
+                        </div>
+                        <h4 className="text-xl font-bold mb-3">{feature.title}</h4>
+                        <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </Link>

@@ -53,10 +53,8 @@ import {
   VolumeX,
   Volume2,
   Settings,
-  Tools,
   Wrench,
   Hammer,
-  Screwdriver,
   Lightbulb,
   Cloud,
   Download,
@@ -288,7 +286,7 @@ const AIToolsPage = () => {
           </h1>
         </div>
         <p className="text-lg text-muted-foreground max-w-4xl mx-auto mb-6">
-          Discover the most comprehensive collection of AI tools designed to supercharge your academic journey. 
+          Discover the most comprehensive collection of AI tools designed to supercharge your academic journey.
           From advanced writing assistants to cutting-edge research tools, find everything you need to excel in your studies.
         </p>
         <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
@@ -477,7 +475,7 @@ const AIToolsPage = () => {
             <Sparkles className="h-12 w-12 mx-auto mb-4 text-primary" />
             <h3 className="text-2xl font-bold mb-4">Ready to Supercharge Your Learning?</h3>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Join thousands of students who are already using AI tools to accelerate their academic success. 
+              Join thousands of students who are already using AI tools to accelerate their academic success.
               Start exploring these powerful tools today!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
