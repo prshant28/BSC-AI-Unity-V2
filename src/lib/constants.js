@@ -1,15 +1,15 @@
 import React from "react";
 
 export const NAV_LINKS = [
-  { href: "/about-course", label: "About Course" },
-  { href: "/add-concern", label: "Add Concern" },
-  { href: "/admin-login", label: "Admin Login" },
-  { href: "/ai-tools", label: "AI Tools" },
-  { href: "/concerns", label: "Concerns" },
-  { href: "/contact", label: "Contact Us" },
   { href: "/", label: "Home" },
-  { href: "/perplexity-promo", label: "Promotions" },
+  { href: "/concerns", label: "Concerns" },
+  { href: "/add-concern", label: "Add Concern" },
   { href: "/status-board", label: "Status Board" },
+  { href: "/about-course", label: "About Course" },
+  { href: "/ai-tools", label: "AI Tools" },
+  { href: "/contact", label: "Contact Us" },
+  { href: "/perplexity-promo", label: "Promotions" },
+  { href: "/admin-login", label: "Admin Login" },
 ];
 
 export const TYPING_TEXTS_HERO = [
