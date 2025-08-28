@@ -222,7 +222,9 @@ const PerplexityPromoPage = () => {
               <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
                 50%
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">Time Saved</div>
+              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
+                Time Saved
+              </div>
             </div>
             <div className="text-center">
               <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
@@ -449,9 +451,9 @@ const PerplexityPromoPage = () => {
                     className="flex items-center justify-center gap-2 md:gap-4 relative z-10 w-full"
                   >
                     <motion.div
-                      animate={{ 
+                      animate={{
                         rotate: [0, 15, -15, 0],
-                        scale: [1, 1.1, 1]
+                        scale: [1, 1.1, 1],
                       }}
                       transition={{
                         duration: 2,
@@ -465,9 +467,9 @@ const PerplexityPromoPage = () => {
                       🎯 Claim Your Free Pro Plan!
                     </span>
                     <motion.div
-                      animate={{ 
+                      animate={{
                         x: [0, 8, 0],
-                        rotate: [0, 10, 0]
+                        rotate: [0, 10, 0],
                       }}
                       transition={{
                         duration: 1.5,
@@ -500,10 +502,14 @@ const PerplexityPromoPage = () => {
                 >
                   <div className="flex items-center justify-center gap-2 md:gap-4 relative z-10">
                     <motion.div
-                      animate={!isLaunched ? { 
-                        rotate: [0, 360],
-                        scale: [1, 1.2, 1]
-                      } : {}}
+                      animate={
+                        !isLaunched
+                          ? {
+                              rotate: [0, 360],
+                              scale: [1, 1.2, 1],
+                            }
+                          : {}
+                      }
                       transition={{
                         duration: 2,
                         repeat: Infinity,
@@ -517,7 +523,9 @@ const PerplexityPromoPage = () => {
                       )}
                     </motion.div>
                     <span className="text-sm md:text-xl font-semibold whitespace-nowrap">
-                      {isLaunched ? "🚀 Download Comet Browser" : "🔒 Coming September 2025"}
+                      {isLaunched
+                        ? "🚀 Download Comet Browser"
+                        : "🔒 Coming September 2025"}
                     </span>
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[400%] transition-transform duration-1000"></div>
