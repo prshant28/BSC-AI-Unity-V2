@@ -1,15 +1,15 @@
 import React from "react";
 
 export const NAV_LINKS = [
+  { href: "/", label: "Home" },
   { href: "/about-course", label: "About Course" },
   { href: "/add-concern", label: "Add Concern" },
-  { href: "/admin-login", label: "Admin Login" },
   { href: "/ai-tools", label: "AI Tools" },
   { href: "/concerns", label: "Concerns" },
   { href: "/contact", label: "Contact Us" },
-  { href: "/", label: "Home" },
   { href: "/perplexity-promo", label: "Promotions" },
   { href: "/status-board", label: "Status Board" },
+  { href: "/admin-login", label: "Admin Login" },
 ];
 
 export const TYPING_TEXTS_HERO = [
@@ -21,10 +21,9 @@ export const TYPING_TEXTS_HERO = [
 ];
 
 export const HERO_SUBHEADING =
-  "We are the trailblazing first batch of the B.Sc. (Applied AI & Data Science) program at IIT Jodhpur, in collaboration with Futurense. This is our united platform for progress and advocacy.";
+  "We are the trailblazing first batch of the B.Sc. (Applied AI & Data Science) program at IIT Jodhpur. This is our united platform for progress and advocacy.";
 
 export const HERO_ADDITIONAL_INFO = [
-  "Fully online, industry-focused degree.",
   "No JEE required for admission.",
   "Flexible 4-year stackable model: Certificate → Diploma → BSc → BS.",
   "Join a community of innovators and leaders.",

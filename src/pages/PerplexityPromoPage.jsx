@@ -166,15 +166,7 @@ const PerplexityPromoPage = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-12 md:mb-16"
         >
-          <div className="mb-6 md:mb-8 space-y-4 md:space-y-6">
-            <motion.img
-              src="https://media.discordapp.net/attachments/1403200172187586671/1407283917953830992/campus_strategists_linkedin-22.png?ex=68b016c8&is=68aec548&hm=4886b70dd19435c3c569f4276b1bc807ed9e9fad8633730b4c419be75057d12a&=&format=webp&quality=lossless&width=853&height=445"
-              alt="Campus Partner Promotion"
-              className="mx-auto max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl w-full h-auto rounded-xl md:rounded-3xl shadow-2xl"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-            />
-            
+          <div className="mb-6 md:mb-8 space-y-2 md:space-y-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -182,22 +174,16 @@ const PerplexityPromoPage = () => {
               className="flex justify-center items-center gap-8 flex-wrap"
             >
               <img
-                src="https://pplx-res.cloudinary.com/image/upload/t_limit/v1703182233/getty_uploads/1451244772.jpg"
-                alt="Perplexity AI"
-                className="h-16 md:h-20 w-auto rounded-lg shadow-lg"
-              />
-              <div className="text-2xl md:text-3xl font-bold text-purple-600 dark:text-purple-400">+</div>
-              <img
-                src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/Indian_Institute_of_Technology_Jodhpur_Logo.svg/1200px-Indian_Institute_of_Technology_Jodhpur_Logo.svg.png"
-                alt="IIT Jodhpur"
-                className="h-16 md:h-20 w-auto"
+                src="https://media.discordapp.net/attachments/1403200172187586671/1407283916423041044/campus_strategists_linkedin-16.png?ex=68b2b9c7&is=68b16847&hm=1400b88677e9094d27d5dcdc4ae8ce84ef42e3cfbf870f8a11c69ac985606ad9&=&format=webp&quality=lossless&width=853&height=445"
+                alt="Campus Partner Promotion"
+                className="h-720 md:h-400 w-auto rounded-lg shadow-lg"
               />
             </motion.div>
           </div>
 
           <Badge className="mb-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 text-lg">
             <Crown className="mr-2 h-5 w-5" />
-            Exclusive Early Access Program
+            Exclusive Early Access Program Of Perplexity AI
           </Badge>
 
           <motion.h1
@@ -208,7 +194,7 @@ const PerplexityPromoPage = () => {
           >
             Supercharge Your Learning with{" "}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Perplexity AI Pro
+              Perplexity AI Pro With Comet Browser 🚀
             </span>
           </motion.h1>
 
@@ -218,10 +204,10 @@ const PerplexityPromoPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-xs sm:max-w-md md:max-w-2xl mx-auto mb-6 md:mb-8 px-4">
             <div className="text-center">
               <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
-                1M+
+                500
               </div>
               <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
-                Active Users
+                Refferal Left for Free Pro Plan
               </div>
             </div>
             <div className="text-center">
@@ -229,21 +215,23 @@ const PerplexityPromoPage = () => {
                 4.9★
               </div>
               <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
-                User Rating
+                User Rating Of Perplexity AI
               </div>
             </div>
             <div className="text-center">
               <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
                 50%
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">Time Saved</div>
+              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
+                Time Saved And Automate Daily Task
+              </div>
             </div>
             <div className="text-center">
               <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
                 24/7
               </div>
               <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
-                Availability
+                Assistance Availability
               </div>
             </div>
           </div>
@@ -445,10 +433,14 @@ const PerplexityPromoPage = () => {
 
             <div className="relative z-10">
               <div className="text-center mb-8">
-                <motion.div 
+                <motion.div
                   className="text-6xl md:text-8xl mb-6"
                   animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                 >
                   🎯
                 </motion.div>
@@ -456,7 +448,9 @@ const PerplexityPromoPage = () => {
                   Ready to Transform Your Learning?
                 </h2>
                 <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground dark:text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
-                  Don't miss out on this exclusive opportunity. Grab your free pro plan now and start leveraging the power of AI to accelerate your academic journey!
+                  Don't miss out on this exclusive opportunity. Grab your free
+                  pro plan now and start leveraging the power of AI to
+                  accelerate your academic journey!
                 </p>
               </div>
 
@@ -507,7 +501,9 @@ const PerplexityPromoPage = () => {
                         >
                           <Gift className="h-6 w-6 md:h-7 md:w-7" />
                         </motion.div>
-                        <span className="hidden sm:inline">Claim Your Free Pro Plan!</span>
+                        <span className="hidden sm:inline">
+                          Claim Your Free Pro Plan!
+                        </span>
                         <span className="sm:hidden">Get Free Pro!</span>
                         <motion.div
                           animate={{ x: [0, 5, 0] }}
@@ -519,7 +515,7 @@ const PerplexityPromoPage = () => {
                         >
                           <ExternalLink className="h-5 w-5 md:h-6 md:w-6" />
                         </motion.div>
-                        
+
                         {/* Multiple animated overlays */}
                         <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[300%] transition-transform duration-700"></div>
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-white/20 transform skew-x-12 translate-x-[100%] group-hover:translate-x-[-300%] transition-transform duration-700 delay-75"></div>
@@ -545,13 +541,17 @@ const PerplexityPromoPage = () => {
                   >
                     <div className="flex items-center justify-center gap-3 relative z-10">
                       <Lock className="h-6 w-6 md:h-7 md:w-7" />
-                      <span className="hidden sm:inline">Download Comet Browser</span>
+                      <span className="hidden sm:inline">
+                        Download Comet Browser
+                      </span>
                       <span className="sm:hidden">Get Comet</span>
                       <Timer className="h-5 w-5 animate-pulse" />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[300%] transition-transform duration-700"></div>
                   </Button>
-                  <p className="text-xs md:text-sm text-center mt-2 text-muted-foreground">Coming Sept 2, 2025</p>
+                  <p className="text-xs md:text-sm text-center mt-2 text-muted-foreground">
+                    Coming Sept 2, 2025
+                  </p>
                 </motion.div>
               </div>
 
@@ -562,36 +562,34 @@ const PerplexityPromoPage = () => {
                     icon: <CheckCircle className="h-5 w-5 text-green-400" />,
                     text: "Use your student email ID",
                     color: "hover:text-green-400",
-                    bgColor: "bg-green-400/10"
+                    bgColor: "bg-green-400/10",
                   },
                   {
                     icon: <Users className="h-5 w-5 text-blue-400" />,
                     text: "Join the first cohort",
                     color: "hover:text-blue-400",
-                    bgColor: "bg-blue-400/10"
+                    bgColor: "bg-blue-400/10",
                   },
                   {
                     icon: <Sparkles className="h-5 w-5 text-pink-400" />,
                     text: "Interactive marketing",
                     color: "hover:text-pink-400",
-                    bgColor: "bg-pink-400/10"
-                  }
+                    bgColor: "bg-pink-400/10",
+                  },
                 ].map((item, index) => (
                   <motion.div
                     key={index}
                     className={`flex items-center gap-3 p-4 rounded-xl ${item.bgColor} backdrop-blur-sm border border-white/10 transition-all duration-300 ${item.color}`}
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.05,
                       y: -5,
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.1)"
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
                     }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <div className="flex-shrink-0">
-                      {item.icon}
-                    </div>
+                    <div className="flex-shrink-0">{item.icon}</div>
                     <span className="text-sm md:text-base font-medium text-muted-foreground dark:text-blue-200">
                       {item.text}
                     </span>

@@ -22,10 +22,6 @@ import {
   Heart,
   Sparkles,
   ExternalLink,
-  Shield,
-  Flame,
-  Rocket,
-  Globe,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -106,26 +102,6 @@ const HomePage = ({ concerns, loading }) => {
       {/* Hero Section */}
       <HeroSection />
 
-      {/* Welcome Section */}
-      <section className="py-16 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20">
-        <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-5xl font-extrabold mb-6 gradient-text">
-              Welcome to the Future of AI Education
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Join India's first fully online B.Sc. Applied AI & Data Science program from IIT Jodhpur. 
-              Connect with peers, access cutting-edge AI tools, and shape your future in artificial intelligence.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Stats Section */}
       <section className="py-12 bg-gradient-to-r from-primary/5 via-purple-50 to-blue-50 dark:from-primary/10 dark:via-purple-900/20 dark:to-blue-900/20">
         <div className="container mx-auto px-4 md:px-6">
@@ -166,7 +142,7 @@ const HomePage = ({ concerns, loading }) => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
-              Why Choose BScAI Unity?
+              BScAI Unity?
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               We provide a comprehensive platform to address your academic
