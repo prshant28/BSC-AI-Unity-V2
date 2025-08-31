@@ -1,0 +1,232 @@
+You are my code assistant. Upgrade my existing web app with THREE features:
+
+A) Embedded Discourse discussion forum (read + interactive),
+B) Notice Board (CRUD, pinning, tags, date range),
+C) Calendar/Events section (CRUD, class schedules, reminders-ready).
+
+Target forum: https://bscaiunity.discourse.group/
+
+--------------------------------
+ASSUMPTIONS & STYLE
+--------------------------------
+- Prefer React (Vite) if the project already uses it; otherwise add a simple HTML/JS fallback.
+- Use modern, responsive UI with Tailwind CSS (add and configure if missing).
+- Keep code production-ready: clean components, type-safe (TypeScript if available), accessible (aria labels), and mobile-first.
+- Don’t break existing pages; add new routes/links into the main nav safely.
+- Create seed/demo data so I can see it working immediately.
+
+--------------------------------
+ENV & CONFIG
+--------------------------------
+Create a `.env` (or `.env.local`) entry and read via import.meta.env:
+  VITE_FORUM_URL="https://bscaiunity.discourse.group"
+  VITE_STORAGE_BACKEND="local"   # "local" (default) or "supabase"
+If VITE_STORAGE_BACKEND="supabase" and the following exist, auto-enable Supabase:
+  VITE_SUPABASE_URL="..."
+  VITE_SUPABASE_ANON_KEY="..."
+
+--------------------------------
+DATA MODEL
+--------------------------------
+Notices (table/collection: notices)
+  - id (uuid)
+  - title (text)
+  - body (text/markdown)
+  - tags (string[])
+  - start_date (date)  # when notice becomes visible/active
+  - end_date (date|null)
+  - pinned (boolean, default false)
+  - created_at (timestamptz)
+  - created_by (string|uuid|null)
+
+Events (table/collection: events)
+  - id (uuid)
+  - title (text)
+  - description (text/markdown)
+  - start (timestamptz)
+  - end (timestamptz)
+  - location (text)
+  - category (e.g., "Class", "Exam", "Result", "Activity")
+  - is_online (boolean)
+  - url (text|null)
+  - created_at (timestamptz)
+  - created_by (string|uuid|null)
+
+Local backend: persist to localStorage with keys "notices:v1" and "events:v1".
+Supabase backend (if env present): create tables with the above schema. Include SQL migration and a minimal client in /lib/supabase.ts.
+
+--------------------------------
+ROUTING & PAGES (React)
+--------------------------------
+Add these routes and link them in the header nav:
+  /forum     => ForumEmbed
+  /notices   => NoticeBoard
+  /events    => EventsCalendar
+  /admin     => AdminPanel (for managing Notices & Events)
+
+If not React, create separate HTML pages with the same names (forum.html, notices.html, events.html, admin.html) and shared header.
+
+--------------------------------
+A) FORUM EMBED (Discourse)
+--------------------------------
+Goal: show the Discourse forum inside the app. Approach with graceful fallbacks:
+
+1) Try simple iframe first:
+   <iframe src={VITE_FORUM_URL} title="Community Forum" class="w-full h-[80vh] rounded-xl border"></iframe>
+
+2) Detect and handle X-Frame-Options/CSP block:
+   - If iframe fails to load (frame-ancestors/X-Frame-Options SAMEORIGIN), show a friendly card with:
+     - “Open Forum” button linking to VITE_FORUM_URL (target=_blank, rel=noopener)
+     - Read-only preview: fetch latest topics and categories via JSON endpoints.
+       Prefer direct fetch; if CORS blocks, add a tiny Node/Express proxy route /api/discourse/* that forwards requests to VITE_FORUM_URL with caching (5–10 min) and sets Access-Control-Allow-Origin:*.
+       Endpoints to support:
+         - /latest.json
+         - /c/categories.json (or /categories.json depending on host)
+     - Render a list: Topic title, author, replies, last activity. Clicking opens the topic on the forum in a new tab.
+   - Make the proxy optional: if the project already has a dev server, add an Express server in /server with start script and concurrently dev setup for Vite + server.
+
+3) Add a search input (client-side filter on fetched topics) and category filter dropdown.
+
+--------------------------------
+B) NOTICE BOARD
+--------------------------------
+- Public view (/notices):
+  - Sections: "Pinned" (always on top), then "All Notices" sorted by start_date desc, then created_at desc as tiebreaker.
+  - Card layout: title, tags, active date range ("Active: 12 Sep – 20 Sep 2025" or "One-day notice: 12 Sep 2025"), and body (render markdown; auto-truncate with “Read more” to expand).
+  - Filters: by tag, active/archived, date range picker, quick “This week/This month”.
+  - Search bar: searches title & body.
+
+- Admin operations (/admin):
+  - Create, Edit, Delete notice.
+  - Toggle “pinned”.
+  - Tag multiselect (create-on-type).
+  - Date validation (end_date >= start_date or null).
+  - Save to LocalStorage or Supabase based on VITE_STORAGE_BACKEND.
+  - Toasts for success/error.
+
+--------------------------------
+C) CALENDAR / EVENTS
+--------------------------------
+- Use a React calendar library (FullCalendar with dayGrid + timeGrid plugins) or react-big-calendar.
+- Views: Month (default), Week, Day, List.
+- Event categories with badges and quick filters (Class, Exam, Result, Activity).
+- CRUD:
+  - Create/Edit/Delete via modal.
+  - Drag to move; drag edges to resize.
+  - Validation: end >= start; prevent overlaps warning for “Class” category.
+- UX:
+  - Timezone-aware (use browser tz); store in ISO.
+  - Optional URL field for online classes/meet links (clickable from event).
+- Data source: LocalStorage or Supabase (same switch as notices).
+- Provide an “Add sample data” button to seed: class timetable (Mon–Fri), mock exam date, result date, workshop.
+
+--------------------------------
+ACCESS CONTROL (SIMPLE)
+--------------------------------
+- If there’s already an auth system, respect it.
+- If not, gate the /admin route with a simple temporary “admin code” (read from VITE_ADMIN_CODE or fallback to "admin123").
+- Do not expose secrets in client code beyond this temporary gating. Clearly mark it TEMPORARY.
+
+--------------------------------
+FILES TO ADD (React example)
+--------------------------------
+/src/lib/storage.ts         # abstraction: get/set for notices & events; backs onto localStorage or Supabase
+/src/lib/supabase.ts        # only if Supabase env exists
+/src/components/ForumEmbed.tsx
+/src/components/NoticeBoard.tsx
+/src/components/EventsCalendar.tsx
+/src/components/AdminPanel.tsx
+/src/components/ui/*        # small reusable UI bits if helpful
+/src/styles/tailwind.css    # configure if missing
+/src/routes.tsx or update App.tsx/Router setup
+
+If plain HTML:
+- /forum.html, /notices.html, /events.html, /admin.html
+- /assets/js/storage.js, notice-board.js, events-calendar.js, forum-embed.js
+- Shared header with nav links.
+
+--------------------------------
+NPM & SCRIPTS
+--------------------------------
+Install (React path):
+  - tailwindcss postcss autoprefixer
+  - fullcalendar core daygrid timegrid interaction @fullcalendar/react
+  - marked (or markdown-it) for markdown rendering
+  - clsx, uuid
+  - (optional) supabase-js
+  - (optional) express, cors, node-fetch (for /api/discourse proxy)
+Add Tailwind config and PostCSS if missing.
+
+Dev scripts:
+  - "dev": concurrently "vite" and "node server/index.js" if proxy exists
+  - "build": vite build (and ensure server builds if required)
+  - "preview": vite preview
+
+--------------------------------
+UX SPECIFICS
+--------------------------------
+- Header nav: Home | Forum | Notices | Events | Admin
+- Mobile: sticky bottom nav or hamburger.
+- Empty states with CTA (e.g., “No notices yet — create one in Admin”).
+- Loading skeletons; error boundaries.
+- Keyboard & a11y: focus traps in modals, Esc to close, Enter to submit.
+
+--------------------------------
+MIGRATIONS / SQL (ONLY if Supabase available)
+--------------------------------
+-- notices
+create table if not exists notices (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  body text not null,
+  tags text[] default '{}',
+  start_date date not null,
+  end_date date,
+  pinned boolean default false,
+  created_at timestamptz default now(),
+  created_by uuid
+);
+
+-- events
+create table if not exists events (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text,
+  start timestamptz not null,
+  "end" timestamptz not null,
+  location text,
+  category text check (category in ('Class','Exam','Result','Activity')) default 'Class',
+  is_online boolean default false,
+  url text,
+  created_at timestamptz default now(),
+  created_by uuid
+);
+
+Add RLS later if auth exists; for now, keep simple for demo.
+
+--------------------------------
+ACCEPTANCE TESTS
+--------------------------------
+1) Forum:
+   - If iframe loads, I can browse and log in to the forum normally.
+   - If iframe is blocked, I see latest topics + categories via proxy, and a button to open the forum in a new tab.
+
+2) Notices:
+   - I can create a pinned “Mid-Sem Exam Schedule” notice with tags ["Exam","Important"], start_date today, end_date next week.
+   - Pinned notices render on top, with readable date range and expandable content.
+
+3) Events:
+   - I can add recurring class blocks (at least 5 in a week), one exam event, one result day.
+   - I can drag-reschedule a class; it persists on refresh.
+   - Filters hide/show categories.
+
+4) Persistence:
+   - With VITE_STORAGE_BACKEND="local", data survives reload (localStorage).
+   - With Supabase env provided, data is saved in tables and fetched on load.
+
+5) Code quality:
+   - No TypeScript errors (if TS).
+   - No console errors.
+   - Mobile layout usable.
+
+Now implement everything above in my project with minimal disruption, add clear comments where I need to change env values, and include sample data so I can see it working immediately.
