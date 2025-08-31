@@ -29,7 +29,9 @@ import { useToast } from './ui/use-toast';
 const ADMIN_CODE = import.meta.env.VITE_ADMIN_CODE || 'admin123';
 
 const AdminPanel = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('admin_authenticated') === 'true';
+  });
   const [adminCode, setAdminCode] = useState('');
   const [activeTab, setActiveTab] = useState('notices');
   const [notices, setNotices] = useState([]);
@@ -60,6 +62,7 @@ const AdminPanel = () => {
     e.preventDefault();
     if (adminCode === ADMIN_CODE) {
       setIsAuthenticated(true);
+      localStorage.setItem('admin_authenticated', 'true');
       toast({
         title: "Success",
         description: "Admin access granted"
@@ -71,6 +74,15 @@ const AdminPanel = () => {
         variant: "destructive"
       });
     }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('admin_authenticated');
+    toast({
+      title: "Success",
+      description: "Logged out successfully"
+    });
   };
 
   const loadData = async () => {
@@ -234,9 +246,9 @@ const AdminPanel = () => {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-md mx-auto"
         >
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-center flex items-center justify-center gap-2">
+          <Card className="hover-card" style={{ background: 'var(--card-bg)', boxShadow: 'var(--card-shadow)' }}>
+            <CardHeader style={{ background: '#f35c7e', color: 'white', borderRadius: 'var(--border-radius) var(--border-radius) 0 0' }}>
+              <CardTitle className="text-center flex items-center justify-center gap-2 text-white">
                 <Settings className="h-6 w-6" />
                 Admin Access
               </CardTitle>
@@ -302,6 +314,7 @@ const AdminPanel = () => {
                   variant={activeTab === 'notices' ? 'default' : 'outline'}
                   onClick={() => setActiveTab('notices')}
                   size="sm"
+                  className={activeTab === 'notices' ? 'btn-primary' : 'border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)]/10'}
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   Notices ({notices.length})
@@ -310,6 +323,7 @@ const AdminPanel = () => {
                   variant={activeTab === 'events' ? 'default' : 'outline'}
                   onClick={() => setActiveTab('events')}
                   size="sm"
+                  className={activeTab === 'events' ? 'btn-primary' : 'border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)]/10'}
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   Events ({events.length})
@@ -324,9 +338,10 @@ const AdminPanel = () => {
                   </Button>
                 )}
                 <Button 
-                  onClick={() => setIsAuthenticated(false)} 
+                  onClick={handleLogout} 
                   variant="outline" 
                   size="sm"
+                  className="border-red-500 text-red-500 hover:bg-red-500/10"
                 >
                   Logout
                 </Button>

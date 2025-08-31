@@ -14,7 +14,10 @@ import {
   Clock,
   Users,
   Edit,
-  Trash2
+  Trash2,
+  Maximize2,
+  Minimize2,
+  Settings
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
@@ -28,10 +31,10 @@ import { eventsAPI } from '../lib/storage';
 import { useToast } from './ui/use-toast';
 
 const CATEGORY_COLORS = {
-  'Class': { bg: 'bg-blue-500', text: 'text-white', border: 'border-blue-500' },
-  'Exam': { bg: 'bg-red-500', text: 'text-white', border: 'border-red-500' },
-  'Result': { bg: 'bg-green-500', text: 'text-white', border: 'border-green-500' },
-  'Activity': { bg: 'bg-purple-500', text: 'text-white', border: 'border-purple-500' }
+  'Class': { bg: 'var(--data-science-color)', text: 'white', border: 'var(--data-science-color)', name: 'Class' },
+  'Exam': { bg: 'var(--exam-color)', text: 'white', border: 'var(--exam-color)', name: 'Exam' },
+  'Result': { bg: 'var(--ai-color)', text: 'white', border: 'var(--ai-color)', name: 'Result' },
+  'Activity': { bg: 'var(--workshop-color)', text: 'white', border: 'var(--workshop-color)', name: 'Activity' }
 };
 
 const EventsCalendar = () => {
@@ -41,6 +44,10 @@ const EventsCalendar = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [calendarView, setCalendarView] = useState('dayGridMonth');
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(() => {
+    return localStorage.getItem('admin_authenticated') === 'true';
+  });
   const calendarRef = useRef(null);
   const { toast } = useToast();
 
@@ -159,25 +166,38 @@ const EventsCalendar = () => {
 
   const openEditModal = (event) => {
     setSelectedEvent(event.extendedProps);
-    setEventForm({
-      title: event.title,
-      description: event.extendedProps.description || '',
-      start: event.start.toISOString().slice(0, 16),
-      end: event.end.toISOString().slice(0, 16),
-      location: event.extendedProps.location || '',
-      category: event.extendedProps.category || 'Class',
-      is_online: event.extendedProps.is_online || false,
-      url: event.extendedProps.url || ''
-    });
+    if (isAdmin) {
+      setEventForm({
+        title: event.title,
+        description: event.extendedProps.description || '',
+        start: event.start.toISOString().slice(0, 16),
+        end: event.end.toISOString().slice(0, 16),
+        location: event.extendedProps.location || '',
+        category: event.extendedProps.category || 'Class',
+        is_online: event.extendedProps.is_online || false,
+        url: event.extendedProps.url || ''
+      });
+    }
     setShowEventModal(true);
   };
 
   const handleDateSelect = (selectInfo) => {
-    openCreateModal(selectInfo);
+    if (isAdmin) {
+      openCreateModal(selectInfo);
+    }
   };
 
   const handleEventClick = (clickInfo) => {
-    openEditModal(clickInfo.event);
+    if (isAdmin) {
+      openEditModal(clickInfo.event);
+    } else {
+      // Show read-only event details for non-admin users
+      const event = clickInfo.event.extendedProps;
+      toast({
+        title: event.title,
+        description: `${event.description || 'No description'}\n📅 ${new Date(clickInfo.event.start).toLocaleString()}\n📍 ${event.location || 'No location'}${event.is_online ? ' (Online)' : ''}`
+      });
+    }
   };
 
   const filteredEvents = events.filter(event => 
@@ -189,8 +209,9 @@ const EventsCalendar = () => {
     title: event.title,
     start: event.start,
     end: event.end,
-    backgroundColor: CATEGORY_COLORS[event.category]?.bg.replace('bg-', '#') || '#3B82F6',
-    borderColor: CATEGORY_COLORS[event.category]?.bg.replace('bg-', '#') || '#3B82F6',
+    backgroundColor: CATEGORY_COLORS[event.category]?.bg || '#6c63ff',
+    borderColor: CATEGORY_COLORS[event.category]?.bg || '#6c63ff',
+    textColor: 'white',
     extendedProps: event
   }));
 
@@ -285,38 +306,73 @@ const EventsCalendar = () => {
         animate={{ opacity: 1, y: 0 }}
         className="mb-6"
       >
-        <Card>
+        <Card className="hover-card" style={{ background: '#f35c7e', color: 'white' }}>
           <CardContent className="p-4">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-4">
-                <Button onClick={() => openCreateModal()} size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Event
-                </Button>
+                {isAdmin && (
+                  <Button 
+                    onClick={() => openCreateModal()} 
+                    size="sm"
+                    className="bg-white text-[#f35c7e] hover:bg-white/90"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Event
+                  </Button>
+                )}
                 
-                <Button onClick={addSampleData} variant="outline" size="sm">
+                <Button 
+                  onClick={addSampleData} 
+                  variant="outline" 
+                  size="sm"
+                  className="border-white/30 text-white hover:bg-white/10"
+                >
                   <Calendar className="w-4 h-4 mr-2" />
                   Add Sample Data
+                </Button>
+
+                <Button 
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  variant="outline" 
+                  size="sm"
+                  className="border-white/30 text-white hover:bg-white/10"
+                >
+                  {isExpanded ? <Minimize2 className="w-4 h-4 mr-2" /> : <Maximize2 className="w-4 h-4 mr-2" />}
+                  {isExpanded ? 'Minimize' : 'Expand'}
                 </Button>
 
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="px-3 py-1 rounded-md border border-input bg-background text-sm"
+                  className="px-3 py-1 rounded-md border border-white/30 bg-white/10 text-white text-sm"
+                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
                 >
-                  <option value="all">All Categories</option>
-                  <option value="Class">Classes</option>
-                  <option value="Exam">Exams</option>
-                  <option value="Result">Results</option>
-                  <option value="Activity">Activities</option>
+                  <option value="all" style={{ color: 'black' }}>All Categories</option>
+                  <option value="Class" style={{ color: 'black' }}>Classes</option>
+                  <option value="Exam" style={{ color: 'black' }}>Exams</option>
+                  <option value="Result" style={{ color: 'black' }}>Results</option>
+                  <option value="Activity" style={{ color: 'black' }}>Activities</option>
                 </select>
+
+                {isAdmin && (
+                  <Button asChild variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10">
+                    <a href="/admin">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Admin Panel
+                    </a>
+                  </Button>
+                )}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="legend-items flex items-center gap-4">
                 {Object.entries(CATEGORY_COLORS).map(([category, colors]) => (
-                  <Badge key={category} variant="outline" className={colors.border}>
-                    {category}
-                  </Badge>
+                  <div key={category} className="legend-item flex items-center gap-2">
+                    <div 
+                      className="legend-color w-4 h-4 rounded" 
+                      style={{ backgroundColor: colors.bg }}
+                    ></div>
+                    <span className="text-white text-sm">{category}</span>
+                  </div>
                 ))}
               </div>
             </div>
@@ -329,8 +385,9 @@ const EventsCalendar = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
+        className={isExpanded ? 'fixed inset-0 z-50 p-4 bg-background/95 backdrop-blur' : ''}
       >
-        <Card>
+        <Card className="hover-card h-full overflow-auto">
           <CardContent className="p-6">
             <FullCalendar
               ref={calendarRef}
@@ -342,31 +399,90 @@ const EventsCalendar = () => {
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
               }}
               events={calendarEvents}
-              selectable={true}
+              selectable={isAdmin}
               selectMirror={true}
-              dayMaxEvents={true}
+              dayMaxEvents={isExpanded ? false : 3}
               weekends={true}
-              select={handleDateSelect}
+              select={isAdmin ? handleDateSelect : undefined}
               eventClick={handleEventClick}
-              height="auto"
+              height={isExpanded ? 'calc(100vh - 200px)' : 'auto'}
               eventDisplay="block"
               eventTextColor="white"
-              eventBackgroundColor="#3B82F6"
+              eventClassNames={(arg) => `event-${arg.event.extendedProps.category?.toLowerCase()}`}
             />
           </CardContent>
         </Card>
       </motion.div>
 
+      {/* Legend */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="mt-6"
+      >
+        <div className="legend" style={{ background: '#f35c7e', borderRadius: 'var(--border-radius)', padding: '15px', boxShadow: 'var(--card-shadow)' }}>
+          <h3 style={{ color: 'white', fontWeight: '600', marginBottom: '10px' }}>Event Categories</h3>
+          <div className="legend-items flex flex-wrap gap-4">
+            {Object.entries(CATEGORY_COLORS).map(([category, colors]) => (
+              <div key={category} className="legend-item flex items-center gap-2">
+                <div 
+                  className="legend-color w-4 h-4 rounded" 
+                  style={{ backgroundColor: colors.bg }}
+                ></div>
+                <span style={{ color: 'white', fontSize: '0.9rem' }}>{category}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
       {/* Event Modal */}
       <Dialog open={showEventModal} onOpenChange={setShowEventModal}>
-        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {selectedEvent ? 'Edit Event' : 'Create Event'}
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto hover-card">
+          <DialogHeader style={{ background: '#f35c7e', color: 'white', margin: '-24px -24px 20px -24px', padding: '20px 24px', borderRadius: 'var(--border-radius) var(--border-radius) 0 0' }}>
+            <DialogTitle className="text-white">
+              {!isAdmin ? 'Event Details' : selectedEvent ? 'Edit Event' : 'Create Event'}
             </DialogTitle>
           </DialogHeader>
 
-          <form onSubmit={handleEventSubmit} className="space-y-4">
+          {!isAdmin && selectedEvent ? (
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold mb-2">{selectedEvent.title}</h3>
+                <p className="text-muted-foreground">{selectedEvent.description}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-medium">Start:</span>
+                  <p>{new Date(selectedEvent.start).toLocaleString()}</p>
+                </div>
+                <div>
+                  <span className="font-medium">End:</span>
+                  <p>{new Date(selectedEvent.end).toLocaleString()}</p>
+                </div>
+                <div>
+                  <span className="font-medium">Location:</span>
+                  <p>{selectedEvent.location || 'TBA'}</p>
+                </div>
+                <div>
+                  <span className="font-medium">Category:</span>
+                  <Badge style={{ backgroundColor: CATEGORY_COLORS[selectedEvent.category]?.bg, color: 'white' }}>
+                    {selectedEvent.category}
+                  </Badge>
+                </div>
+              </div>
+              {selectedEvent.is_online && selectedEvent.url && (
+                <Button asChild className="w-full btn-primary">
+                  <a href={selectedEvent.url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Join Online
+                  </a>
+                </Button>
+              )}
+            </div>
+          ) : isAdmin ? (
+            <form onSubmit={handleEventSubmit} className="space-y-4">
             <div>
               <Label htmlFor="title">Title *</Label>
               <Input
@@ -481,6 +597,7 @@ const EventsCalendar = () => {
               </div>
             </div>
           </form>
+          ) : null}
         </DialogContent>
       </Dialog>
     </motion.div>
