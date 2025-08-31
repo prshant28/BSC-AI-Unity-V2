@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, MessageSquare, Users, Clock, Maximize2, Minimize2, Settings, Edit } from 'lucide-react';
+import { ExternalLink, MessageSquare, Users, Clock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -16,10 +16,6 @@ const ForumEmbed = () => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(() => {
-    return localStorage.getItem('admin_authenticated') === 'true';
-  });
 
   useEffect(() => {
     // Try to load iframe first, fallback to API if it fails
@@ -161,59 +157,36 @@ const ForumEmbed = () => {
           className="space-y-6"
         >
           {/* Forum access card */}
-          <Card className="hover-card" style={{ background: '#f35c7e', color: 'white' }}>
+          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <MessageSquare className="h-8 w-8 text-white" />
+                  <MessageSquare className="h-8 w-8 text-blue-600" />
                   <div>
-                    <h2 className="text-xl font-bold text-white">
+                    <h2 className="text-xl font-bold text-blue-800 dark:text-blue-200">
                       BSc AI Unity Forum
                     </h2>
-                    <p className="text-white/80">
+                    <p className="text-blue-600 dark:text-blue-300">
                       Join discussions with your fellow students
                     </p>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <Button 
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    variant="outline"
-                    className="border-white/30 text-white hover:bg-white/10"
-                  >
-                    {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-                  </Button>
-                  {isAdmin && (
-                    <Button asChild variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                      <a href="/admin">
-                        <Settings className="w-4 h-4 mr-2" />
-                        Admin
-                      </a>
-                    </Button>
-                  )}
-                  <Button asChild className="bg-white text-[#f35c7e] hover:bg-white/90">
-                    <a href={FORUM_URL} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Open Forum
-                    </a>
-                  </Button>
-                </div>
+                <Button asChild className="bg-blue-600 hover:bg-blue-700">
+                  <a href={FORUM_URL} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Open Forum
+                  </a>
+                </Button>
               </div>
             </CardContent>
           </Card>
 
           {/* Topics preview */}
-          <Card className="hover-card">
-            <CardHeader style={{ background: 'rgba(108, 99, 255, 0.1)' }}>
-              <CardTitle className="flex items-center gap-2" style={{ color: 'var(--primary-color)' }}>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
                 Latest Discussions
-                {isAdmin && (
-                  <Badge variant="outline" className="ml-auto border-[var(--primary-color)] text-[var(--primary-color)]">
-                    <Edit className="w-3 h-3 mr-1" />
-                    Admin View
-                  </Badge>
-                )}
               </CardTitle>
               
               {/* Search and filters */}
@@ -256,14 +229,8 @@ const ForumEmbed = () => {
                       key={topic.id}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="p-4 rounded-lg border border-border hover:bg-accent/50 transition-all cursor-pointer hover-card"
-                      style={{ 
-                        borderLeft: `4px solid var(--primary-color)`,
-                        background: 'var(--card-bg)',
-                        transition: 'var(--transition)'
-                      }}
+                      className="p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors cursor-pointer"
                       onClick={() => window.open(`${FORUM_URL}/t/${topic.id}`, '_blank', 'noopener,noreferrer')}
-                      whileHover={{ scale: 1.02, y: -2 }}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
