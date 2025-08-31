@@ -113,7 +113,7 @@ const HomePage = ({ concerns, loading }) => {
     },
     {
       title: "Discussion Forum",
-      href: "https://discourse.bscaiunity.space",
+      href: "https://bscaiunity.discourse.group/",
       icon: <Users2 className="h-8 w-8 mb-3 text-cyan-500" />,
       description: "Connect with fellow students in our community discussion forum",
       image: "💭",
