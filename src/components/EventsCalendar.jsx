@@ -547,17 +547,6 @@ const EventsCalendar = () => {
       </motion.div>
     </motion.div>
   );
-
-  function resetEventForm() {
-    setEventForm({
-      title: '',
-      description: '',
-      start: '',
-      end: '',
-      category: 'General',
-      location: ''
-    });
-  }
 };
 
 export default EventsCalendar;
