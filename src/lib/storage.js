@@ -1,3 +1,4 @@
+
 import { v4 as uuidv4 } from 'uuid';
 
 const STORAGE_BACKEND = import.meta.env.VITE_STORAGE_BACKEND || 'local';
@@ -11,122 +12,73 @@ const isSupabaseEnabled = STORAGE_BACKEND === 'supabase' && SUPABASE_URL && SUPA
 const NOTICES_KEY = 'notices:v1';
 const EVENTS_KEY = 'events:v1';
 
-// Initialize sample data if none exists
-const initializeSampleData = () => {
-  const existingNotices = getFromLocalStorage(NOTICES_KEY, []);
-  const existingEvents = getFromLocalStorage(EVENTS_KEY, []);
-
-  if (existingNotices.length === 0) {
-    const sampleNotices = [
-      {
-        id: uuidv4(),
-        title: 'Welcome to BSc AI Unity Platform',
-        body: '**Welcome** to our academic platform! Here you will find all important announcements, events, and community discussions.\n\nPlease bookmark this page and check regularly for updates.',
-        tags: ['Welcome', 'Important'],
-        start_date: new Date().toISOString().split('T')[0],
-        end_date: null,
-        pinned: true,
-        created_at: new Date().toISOString(),
-        created_by: 'admin'
-      },
-      {
-        id: uuidv4(),
-        title: 'Semester 1 Exam Schedule Released',
-        body: 'The examination schedule for Semester 1 has been released. Please check the Events calendar for detailed timings and venues.\n\n**Important:** All students must carry their ID cards during exams.',
-        tags: ['Exams', 'Schedule'],
-        start_date: new Date().toISOString().split('T')[0],
-        end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        pinned: false,
-        created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-        created_by: 'admin'
-      },
-      {
-        id: uuidv4(),
-        title: 'AI Ethics Workshop - Registration Open',
-        body: 'Join us for an interactive workshop on ethical considerations in AI development and deployment. **Limited seats available** - register now!\n\nTopics covered:\n- Bias in AI systems\n- Privacy and data protection\n- AI decision-making transparency',
-        tags: ['Workshop', 'AI Ethics', 'Registration'],
-        start_date: new Date().toISOString().split('T')[0],
-        end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        pinned: true,
-        created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-        created_by: 'admin'
-      }
-    ];
-    setToLocalStorage(NOTICES_KEY, sampleNotices);
+// Sample data
+const sampleNotices = [
+  {
+    id: uuidv4(),
+    title: 'Mid-Semester Examination Schedule',
+    body: '**Important Notice**: Mid-semester examinations will be conducted from **March 15-22, 2024**.\n\nAll students are required to check their individual timetables on the student portal.',
+    tags: ['Exam', 'Important'],
+    start_date: new Date().toISOString().split('T')[0],
+    end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    pinned: true,
+    created_at: new Date().toISOString(),
+    created_by: 'admin'
+  },
+  {
+    id: uuidv4(),
+    title: 'Workshop on Machine Learning Applications',
+    body: 'Join us for an interactive workshop on practical ML applications in industry. Industry experts will share insights and hands-on experience.',
+    tags: ['Workshop', 'ML', 'Industry'],
+    start_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    end_date: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    pinned: false,
+    created_at: new Date().toISOString(),
+    created_by: 'admin'
   }
+];
 
-  if (existingEvents.length === 0) {
-    const now = new Date();
-    const sampleEvents = [
-      {
-        id: uuidv4(),
-        title: 'Linear Algebra',
-        description: 'Introduction to vectors, matrices, and linear transformations. Please bring your textbook.',
-        start: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (1 - now.getDay() + 7) % 7, 10, 0).toISOString(),
-        end: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (1 - now.getDay() + 7) % 7, 11, 30).toISOString(),
-        location: 'Classroom 201',
-        category: 'Class',
-        is_online: false,
-        url: '',
-        created_at: new Date().toISOString(),
-        created_by: 'admin'
-      },
-      {
-        id: uuidv4(),
-        title: 'Python Programming',
-        description: 'Advanced Python concepts including decorators, generators, and context managers.',
-        start: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (2 - now.getDay() + 7) % 7, 14, 0).toISOString(),
-        end: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (2 - now.getDay() + 7) % 7, 15, 30).toISOString(),
-        location: 'Computer Lab 101',
-        category: 'Class',
-        is_online: false,
-        url: '',
-        created_at: new Date().toISOString(),
-        created_by: 'admin'
-      },
-      {
-        id: uuidv4(),
-        title: 'Neural Networks',
-        description: 'Understanding neural networks architecture and backpropagation. Assignment due next week.',
-        start: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (3 - now.getDay() + 7) % 7, 11, 0).toISOString(),
-        end: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (3 - now.getDay() + 7) % 7, 12, 30).toISOString(),
-        location: 'Online (Zoom)',
-        category: 'Class',
-        is_online: true,
-        url: 'https://zoom.us/j/example',
-        created_at: new Date().toISOString(),
-        created_by: 'admin'
-      },
-      {
-        id: uuidv4(),
-        title: 'Midterm Exam',
-        description: 'Comprehensive exam covering all topics discussed in the first half of the semester.',
-        start: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7, 10, 0).toISOString(),
-        end: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7, 12, 0).toISOString(),
-        location: 'Examination Hall',
-        category: 'Exam',
-        is_online: false,
-        url: '',
-        created_at: new Date().toISOString(),
-        created_by: 'admin'
-      },
-      {
-        id: uuidv4(),
-        title: 'AI Ethics Workshop',
-        description: 'Interactive workshop on ethical considerations in AI development and deployment.',
-        start: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 10, 14, 0).toISOString(),
-        end: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 10, 17, 0).toISOString(),
-        location: 'Conference Hall',
-        category: 'Activity',
-        is_online: false,
-        url: '',
-        created_at: new Date().toISOString(),
-        created_by: 'admin'
-      }
-    ];
-    setToLocalStorage(EVENTS_KEY, sampleEvents);
+const sampleEvents = [
+  {
+    id: uuidv4(),
+    title: 'Data Structures - Lecture',
+    description: 'Advanced Tree Algorithms',
+    start: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    end: new Date(Date.now() + 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(),
+    location: 'Virtual Classroom',
+    category: 'Class',
+    is_online: true,
+    url: 'https://meet.google.com/example',
+    created_at: new Date().toISOString(),
+    created_by: 'admin'
+  },
+  {
+    id: uuidv4(),
+    title: 'AI Ethics Exam',
+    description: 'Final examination for AI Ethics course',
+    start: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000).toISOString(),
+    location: 'Exam Hall A',
+    category: 'Exam',
+    is_online: false,
+    url: null,
+    created_at: new Date().toISOString(),
+    created_by: 'admin'
+  },
+  {
+    id: uuidv4(),
+    title: 'Semester Results Declaration',
+    description: 'Results for current semester will be published',
+    start: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+    end: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000 + 1 * 60 * 60 * 1000).toISOString(),
+    location: 'Student Portal',
+    category: 'Result',
+    is_online: true,
+    url: 'https://portal.example.com',
+    created_at: new Date().toISOString(),
+    created_by: 'admin'
   }
-};
+];
 
 // Local storage functions
 const getFromLocalStorage = (key, defaultValue = []) => {
@@ -147,6 +99,20 @@ const setToLocalStorage = (key, value) => {
   }
 };
 
+// Initialize sample data if none exists
+const initializeSampleData = () => {
+  const existingNotices = getFromLocalStorage(NOTICES_KEY);
+  const existingEvents = getFromLocalStorage(EVENTS_KEY);
+  
+  if (existingNotices.length === 0) {
+    setToLocalStorage(NOTICES_KEY, sampleNotices);
+  }
+  
+  if (existingEvents.length === 0) {
+    setToLocalStorage(EVENTS_KEY, sampleEvents);
+  }
+};
+
 // Notices API
 export const noticesAPI = {
   async getAll() {
@@ -154,7 +120,7 @@ export const noticesAPI = {
       // TODO: Implement Supabase integration
       throw new Error('Supabase integration not implemented');
     }
-
+    
     initializeSampleData();
     return getFromLocalStorage(NOTICES_KEY, []);
   },
@@ -213,7 +179,7 @@ export const eventsAPI = {
       // TODO: Implement Supabase integration
       throw new Error('Supabase integration not implemented');
     }
-
+    
     initializeSampleData();
     return getFromLocalStorage(EVENTS_KEY, []);
   },
