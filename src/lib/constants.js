@@ -80,7 +80,7 @@ export const FOOTER_LINKS = {
   ],
   CONNECT: [
     { href: "/contact", label: "Contact Us" },
-    { href: "https://discourse.bscaiunity.space", label: "Discussion Forum", external: true },
+    { href: "https://bscaiunity.discourse.group/", label: "Discussion Forum", external: true },
     { href: "/add-concern", label: "Voice Concerns" },
     { href: "/concerns", label: "Browse Concerns" },
   ],
