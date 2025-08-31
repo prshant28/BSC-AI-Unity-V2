@@ -9,11 +9,18 @@ import {
   BarChart2,
   Settings,
   ShieldCheck,
+  FileText,
+  Calendar,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const adminNavLinks = [
   { to: "/admin/dashboard/overview", label: "Overview", icon: LayoutDashboard },
+  {
+    to: "/admin/dashboard/content",
+    label: "Content Management",
+    icon: FileText,
+  },
   {
     to: "/admin/dashboard/subjects",
     label: "Subjects & Quizzes",

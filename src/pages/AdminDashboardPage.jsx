@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AdminSidebar from "@/components/AdminSidebar";
 import AdminOverviewPage from "@/pages/admin/AdminOverviewPage";
+import AdminContentManagementPage from "@/pages/admin/AdminContentManagementPage";
 import AdminSubjectManagementPage from "@/pages/admin/AdminSubjectManagementPage";
 import AdminQuestionManagementPage from "@/pages/admin/AdminQuestionManagementPage";
 import AdminResponseViewerPage from "@/pages/admin/AdminResponseViewerPage";
@@ -28,6 +29,7 @@ const AdminDashboardPage = ({
         <Routes>
           <Route index element={<Navigate to="/admin/dashboard/overview" replace />} />
           <Route path="overview" element={<AdminOverviewPage />} />
+          <Route path="content" element={<AdminContentManagementPage />} />
           <Route path="subjects" element={<AdminSubjectManagementPage />} />
           <Route path="questions" element={<AdminQuestionManagementPage />} />
           <Route path="responses" element={<AdminResponseViewerPage />} />

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import FullCalendar from "@fullcalendar/react";
@@ -8,13 +9,13 @@ import {
   Calendar,
   Plus,
   Filter,
-  Download,
-  Settings,
   Edit,
   Trash2,
   MapPin,
   Clock,
   Users,
+  Grid,
+  List,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
@@ -25,17 +26,16 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { eventsAPI } from "../lib/storage";
 import { useToast } from "./ui/use-toast";
-import { checkAdminAuth } from "./AdminPanel";
 
-const EventsCalendar = () => {
+const EventsCalendar = ({ isAdmin = false }) => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [viewMode, setViewMode] = useState("calendar");
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
   const { toast } = useToast();
 
   const [eventForm, setEventForm] = useState({
@@ -60,7 +60,6 @@ const EventsCalendar = () => {
 
   useEffect(() => {
     loadEvents();
-    setIsAdmin(checkAdminAuth());
   }, []);
 
   useEffect(() => {
@@ -235,80 +234,68 @@ const EventsCalendar = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="container mx-auto py-8 px-4"
+      className="space-y-6"
     >
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
-      >
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 gradient-text heading-font">
-          Events Calendar
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-3xl mx-auto body-font">
-          Stay updated with all academic events, workshops, and important dates
-        </p>
-      </motion.div>
-
       {/* Controls */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-6"
-      >
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-4 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <Filter className="w-4 h-4" />
-                  <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="border rounded-md px-3 py-1 text-sm"
-                  >
-                    {categories.map((cat) => (
-                      <option key={cat.value} value={cat.value}>
-                        {cat.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {categories.slice(1).map((cat) => (
-                    <Badge
-                      key={cat.value}
-                      variant="secondary"
-                      className="text-xs"
-                      style={{
-                        backgroundColor: cat.color + "20",
-                        color: cat.color,
-                      }}
-                    >
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Filter className="w-4 h-4" />
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="border rounded-md px-3 py-1 text-sm"
+                >
+                  {categories.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
                       {cat.label}
-                    </Badge>
+                    </option>
                   ))}
-                </div>
+                </select>
               </div>
 
-              {isAdmin && (
-                <Button onClick={() => setShowCreateModal(true)} size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Event
+              <div className="flex gap-2">
+                <Button
+                  variant={viewMode === "calendar" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewMode("calendar")}
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Calendar
                 </Button>
-              )}
+                <Button
+                  variant={viewMode === "grid" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                >
+                  <Grid className="w-4 h-4 mr-2" />
+                  Grid
+                </Button>
+                <Button
+                  variant={viewMode === "list" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewMode("list")}
+                >
+                  <List className="w-4 h-4 mr-2" />
+                  List
+                </Button>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      </motion.div>
 
-      {/* Calendar */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
+            {isAdmin && (
+              <Button onClick={() => setShowCreateModal(true)} size="sm">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Event
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Calendar View */}
+      {viewMode === "calendar" && (
         <Card>
           <CardContent className="p-6">
             <FullCalendar
@@ -336,7 +323,148 @@ const EventsCalendar = () => {
             />
           </CardContent>
         </Card>
-      </motion.div>
+      )}
+
+      {/* Grid View */}
+      {viewMode === "grid" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredEvents.map((event) => (
+            <Card key={event.id} className="cursor-pointer hover:shadow-lg">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <Badge
+                    style={{
+                      backgroundColor: getCategoryColor(event.category),
+                    }}
+                  >
+                    {event.category}
+                  </Badge>
+                  {isAdmin && (
+                    <div className="flex gap-1">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedEvent(event);
+                          setEventForm({
+                            title: event.title,
+                            description: event.description || "",
+                            start: event.start,
+                            end: event.end || "",
+                            category: event.category || "General",
+                            location: event.location || "",
+                          });
+                          setShowCreateModal(true);
+                        }}
+                      >
+                        <Edit className="w-3 h-3" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => {
+                          setSelectedEvent(event);
+                          handleEventDelete();
+                        }}
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                <h3 className="font-semibold mb-2">{event.title}</h3>
+                <div className="space-y-1 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-3 h-3" />
+                    <span>{new Date(event.start).toLocaleString()}</span>
+                  </div>
+                  {event.location && (
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3 h-3" />
+                      <span>{event.location}</span>
+                    </div>
+                  )}
+                </div>
+                {event.description && (
+                  <p className="text-sm mt-2 line-clamp-2">{event.description}</p>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* List View */}
+      {viewMode === "list" && (
+        <Card>
+          <CardContent className="p-0">
+            <div className="divide-y">
+              {filteredEvents.map((event) => (
+                <div key={event.id} className="p-4 hover:bg-muted/50">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold">{event.title}</h3>
+                        <Badge
+                          style={{
+                            backgroundColor: getCategoryColor(event.category),
+                          }}
+                        >
+                          {event.category}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          <span>{new Date(event.start).toLocaleString()}</span>
+                        </div>
+                        {event.location && (
+                          <div className="flex items-center gap-1">
+                            <MapPin className="w-3 h-3" />
+                            <span>{event.location}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {isAdmin && (
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            setSelectedEvent(event);
+                            setEventForm({
+                              title: event.title,
+                              description: event.description || "",
+                              start: event.start,
+                              end: event.end || "",
+                              category: event.category || "General",
+                              location: event.location || "",
+                            });
+                            setShowCreateModal(true);
+                          }}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => {
+                            setSelectedEvent(event);
+                            handleEventDelete();
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Event Details Modal */}
       <Dialog open={showEventModal} onOpenChange={setShowEventModal}>
@@ -533,6 +661,7 @@ const EventsCalendar = () => {
                 onClick={() => {
                   setShowCreateModal(false);
                   resetEventForm();
+                  setSelectedEvent(null);
                 }}
               >
                 Cancel
@@ -546,12 +675,7 @@ const EventsCalendar = () => {
       </Dialog>
 
       {/* Statistics */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6"
-      >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardContent className="p-6 text-center">
             <Calendar className="h-8 w-8 mx-auto mb-2 text-primary" />
@@ -579,7 +703,7 @@ const EventsCalendar = () => {
             <p className="text-sm text-muted-foreground">Categories</p>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
