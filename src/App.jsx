@@ -27,6 +27,7 @@ import FeaturesPage from "@/pages/FeaturesPage";
 import StudentAchievementsPage from "@/pages/StudentAchievementsPage";
 import AIToolsPage from "@/pages/AIToolsPage";
 import PerplexityPromoPage from "@/pages/PerplexityPromoPage";
+import PollsSurveysPage from "@/pages/PollsSurveysPage"; // Added PollsSurveysPage
 import ForumEmbed from './components/ForumEmbed';
 import NoticeBoard from './components/NoticeBoard';
 import EventsCalendar from './components/EventsCalendar';
@@ -278,6 +279,7 @@ function App() {
             <Route path="/notices" element={<NoticeBoard />} />
             <Route path="/events" element={<EventsCalendar />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/polls-surveys" element={<PollsSurveysPage />} /> {/* Added route for polls and surveys */}
 
 
             <Route

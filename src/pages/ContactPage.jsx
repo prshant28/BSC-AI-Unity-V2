@@ -1,38 +1,44 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, MessageSquare, Edit3, Users, ExternalLink, Info } from 'lucide-react';
+import { Mail, MessageSquare, Edit3, Users, ExternalLink, Info, Phone, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CONTACT_INFO } from '@/lib/constants';
 
 const ContactPage = () => {
   const contactPoints = [
     {
       icon: <Mail className="h-8 w-8 text-primary" />,
-      title: "Primary Email (Future)",
-      description: "Our dedicated email for official communication will be voice@bscaiunity.space. This will be activated soon for direct inquiries and important matters.",
-      actionText: null,
-      actionLink: null,
+      title: "Academic Related Queries",
+      description: "For course content, assignments, lectures, and academic support related questions.",
+      actionText: "Email: bscdelivery@futurense.com",
+      actionLink: "mailto:bscdelivery@futurense.com",
+      official: true,
+    },
+    {
+      icon: <MapPin className="h-8 w-8 text-primary" />,
+      title: "Program Related Queries",
+      description: "Office of Executive Education Programme IIT Jodhpur - For program policies, admissions, and institutional matters.",
+      actionText: "Email: office_eep@iitj.ac.in",
+      actionLink: "mailto:office_eep@iitj.ac.in",
+      official: true,
     },
     {
       icon: <MessageSquare className="h-8 w-8 text-primary" />,
-      title: "Contact Form (Future)",
-      description: "A secure contact form (potentially using Formspree or a similar service) will be available for direct messaging and structured feedback submission.",
-      actionText: null,
-      actionLink: null,
-    },
-    {
-      icon: <Edit3 className="h-8 w-8 text-primary" />,
-      title: "Suggestion Box (Future)",
-      description: "Anonymously or openly share your ideas and suggestions for improving this platform, the course, or our student community. Your insights are valuable.",
-      actionText: null,
-      actionLink: null,
+      title: "Student Platform Support",
+      description: "For BScAI Unity platform issues, feature requests, and community-related queries. Our dedicated email will be voice@bscaiunity.space (coming soon).",
+      actionText: "Email: info@bscaiunity.space",
+      actionLink: "mailto:info@bscaiunity.space",
+      official: false,
     },
     {
       icon: <Users className="h-8 w-8 text-primary" />,
-      title: "Community Channels",
-      description: "For immediate discussions and peer-to-peer support, please continue to use existing batch WhatsApp groups or other established communication channels.",
-      actionText: null,
-      actionLink: null,
+      title: "Discussion Forum",
+      description: "Join our community forum for peer-to-peer discussions, study groups, and collaborative learning.",
+      actionText: "Visit Forum",
+      actionLink: "https://discourse.bscaiunity.space",
+      official: false,
+      external: true,
     }
   ];
   
@@ -80,11 +86,23 @@ const ContactPage = () => {
               <CardContent>
                 <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{point.description}</p>
                 {point.actionText && point.actionLink && (
-                  <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
-                    <a href={point.actionLink} target="_blank" rel="noopener noreferrer">
-                      {point.actionText} <ExternalLink className="ml-1.5 h-3.5 w-3.5"/>
-                    </a>
-                  </Button>
+                  <div className="space-y-2">
+                    <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
+                      <a 
+                        href={point.actionLink} 
+                        target={point.external ? "_blank" : "_self"} 
+                        rel={point.external ? "noopener noreferrer" : ""}
+                      >
+                        {point.actionText} 
+                        {point.external && <ExternalLink className="ml-1.5 h-3.5 w-3.5"/>}
+                      </a>
+                    </Button>
+                    {point.official && (
+                      <div className="text-xs text-green-600 dark:text-green-400 font-medium">
+                        ✓ Official Contact
+                      </div>
+                    )}
+                  </div>
                 )}
               </CardContent>
             </Card>

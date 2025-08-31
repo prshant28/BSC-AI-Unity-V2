@@ -187,7 +187,7 @@ const PerplexityPromoPage = () => {
           </Badge>
 
           <motion.h1
-            className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold text-foreground dark:text-white mb-4 md:mb-6 px-2"
+            className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold text-gray-900 dark:text-white mb-4 md:mb-6 px-2"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
@@ -198,39 +198,39 @@ const PerplexityPromoPage = () => {
             </span>
           </motion.h1>
 
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground dark:text-blue-100 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto mb-6 md:mb-8 leading-relaxed px-4"></p>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-blue-100 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto mb-6 md:mb-8 leading-relaxed px-4"></p>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-xs sm:max-w-md md:max-w-2xl mx-auto mb-6 md:mb-8 px-4">
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
+              <div className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
                 500
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
+              <div className="text-gray-600 dark:text-blue-200 text-xs md:text-sm">
                 Refferal Left for Free Pro Plan
               </div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
+              <div className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
                 4.9★
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
+              <div className="text-gray-600 dark:text-blue-200 text-xs md:text-sm">
                 User Rating Of Perplexity AI
               </div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
+              <div className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
                 50%
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
+              <div className="text-gray-600 dark:text-blue-200 text-xs md:text-sm">
                 Time Saved And Automate Daily Task
               </div>
             </div>
             <div className="text-center">
-              <div className="text-lg md:text-2xl font-bold text-foreground dark:text-white">
+              <div className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
                 24/7
               </div>
-              <div className="text-muted-foreground dark:text-blue-200 text-xs md:text-sm">
+              <div className="text-gray-600 dark:text-blue-200 text-xs md:text-sm">
                 Assistance Availability
               </div>
             </div>

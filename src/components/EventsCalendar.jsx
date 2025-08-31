@@ -60,7 +60,70 @@ const EventsCalendar = ({ isAdmin = false }) => {
 
   useEffect(() => {
     loadEvents();
+    // Add sample weekly schedule if no events exist
+    addSampleSchedule();
   }, []);
+
+  const addSampleSchedule = async () => {
+    try {
+      const existingEvents = await eventsAPI.getAll();
+      if (existingEvents.length === 0) {
+        // Add sample weekly schedule - replace with actual schedule from PDF
+        const sampleEvents = [
+          {
+            id: 'schedule-ata-1',
+            title: 'ATA - Algorithmic Thinking and Applications',
+            start: '2025-01-27T10:00:00',
+            end: '2025-01-27T11:30:00',
+            category: 'AI',
+            location: 'Online',
+            description: 'Regular class session',
+            backgroundColor: '#00d9b5',
+            borderColor: '#00d9b5',
+          },
+          {
+            id: 'schedule-bda-1',
+            title: 'BDA - Basics of Data Analytics',
+            start: '2025-01-28T14:00:00',
+            end: '2025-01-28T15:30:00',
+            category: 'Data Science',
+            location: 'Online',
+            description: 'Regular class session',
+            backgroundColor: '#6c63ff',
+            borderColor: '#6c63ff',
+          },
+          {
+            id: 'schedule-fsp-1',
+            title: 'FSP - Foundations of Statistics and Probability',
+            start: '2025-01-29T10:00:00',
+            end: '2025-01-29T11:30:00',
+            category: 'Math',
+            location: 'Online',
+            description: 'Regular class session',
+            backgroundColor: '#ff6b9d',
+            borderColor: '#ff6b9d',
+          },
+          {
+            id: 'schedule-lana-1',
+            title: 'LANA - Linear Algebra and Numerical Analysis',
+            start: '2025-01-30T16:00:00',
+            end: '2025-01-30T17:30:00',
+            category: 'Math',
+            location: 'Online',
+            description: 'Regular class session',
+            backgroundColor: '#ff6b9d',
+            borderColor: '#ff6b9d',
+          },
+        ];
+
+        for (const event of sampleEvents) {
+          await eventsAPI.create(event);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to add sample schedule:', error);
+    }
+  };
 
   useEffect(() => {
     if (selectedCategory === "all") {
@@ -319,6 +382,29 @@ const EventsCalendar = ({ isAdmin = false }) => {
                 info.el.style.border = "none";
                 info.el.style.fontSize = "12px";
                 info.el.style.fontWeight = "500";
+              }}
+              dayCellDidMount={(info) => {
+                // Ensure proper theme colors for calendar cells
+                const isDark = document.documentElement.classList.contains('dark');
+                if (isDark) {
+                  info.el.style.backgroundColor = 'var(--background)';
+                  info.el.style.color = 'var(--foreground)';
+                }
+              }}
+              viewDidMount={(info) => {
+                // Apply theme-aware styles to calendar elements
+                const isDark = document.documentElement.classList.contains('dark');
+                const calendarEl = info.el;
+                
+                if (isDark) {
+                  calendarEl.style.setProperty('--fc-border-color', 'var(--border)');
+                  calendarEl.style.setProperty('--fc-button-bg-color', 'var(--secondary)');
+                  calendarEl.style.setProperty('--fc-button-border-color', 'var(--border)');
+                  calendarEl.style.setProperty('--fc-button-hover-bg-color', 'var(--secondary)');
+                  calendarEl.style.setProperty('--fc-button-active-bg-color', 'var(--primary)');
+                  calendarEl.style.setProperty('--fc-today-bg-color', 'var(--muted)');
+                  calendarEl.style.color = 'var(--foreground)';
+                }
               }}
             />
           </CardContent>

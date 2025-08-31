@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Sparkles, Linkedin, Twitter, Github, Send } from "lucide-react"; // Assuming Send for Telegram
+import { Sparkles, Linkedin, Twitter, Github, Send, ExternalLink } from "lucide-react"; // Assuming Send for Telegram
 import { FOOTER_LINKS, SOCIAL_LINKS } from "@/lib/constants";
 
 const Footer = () => {
@@ -17,7 +17,7 @@ const Footer = () => {
   return (
     <footer className="border-t bg-slate-50 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400">
       <div className="container mx-auto py-12 px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
           <div className="md:col-span-2 lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
               <Sparkles className="h-8 w-8 text-primary" />
@@ -49,9 +49,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <p className="font-semibold text-foreground mb-3">Connect</p>
+            <p className="font-semibold text-foreground mb-3">Academics</p>
             <ul className="space-y-2">
-              {FOOTER_LINKS.CONNECT.map((link) => (
+              {FOOTER_LINKS.ACADEMICS.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
@@ -59,6 +59,34 @@ const Footer = () => {
                   >
                     {link.label}
                   </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="font-semibold text-foreground mb-3">Connect</p>
+            <ul className="space-y-2">
+              {FOOTER_LINKS.CONNECT.map((link) => (
+                <li key={link.label}>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm hover:text-primary transition-colors hover:underline flex items-center gap-1"
+                    >
+                      {link.label}
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      className="text-sm hover:text-primary transition-colors hover:underline"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
