@@ -2,12 +2,12 @@ import React from "react";
 
 export const NAV_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/about-course", label: "About Course" },
   { href: "/add-concern", label: "Add Concern" },
   { href: "/ai-tools", label: "AI Tools" },
   { href: "/concerns", label: "Concerns" },
+  { href: "/events", label: "Event" },
+  { href: "/notices", label: "Notice Board" },
   { href: "/contact", label: "Contact Us" },
-  { href: "/perplexity-promo", label: "Promotions" },
   { href: "/status-board", label: "Status Board" },
   { href: "/admin-login", label: "Admin Login" },
 ];
