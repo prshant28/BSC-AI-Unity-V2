@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduConnect 247 Event Calendar - IIT Jodhpur</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6c63ff;
+            --primary-light: #8a84ff;
+            --primary-dark: #5046e5;
+            --secondary-color: #12122a;
+            --background-color: #0a0a1a;
+            --card-bg: #1a1a32;
+            --accent-color: #ff6b9d;
+            --accent-secondary: #00d9b5;
+            --text-color: #f5f5f7;
+            --light-text: #b8b8c0;
+            --muted-text: #8a8a9a;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+            
+            /* Event Category Colors */
+            --math-color: #ff6b9d;
+            --ai-color: #00d9b5;
+            --data-science-color: #6c63ff;
+            --programming-color: #ffb86c;
+            --workshop-color: #9d8cff;
+            --exam-color: #ff5757;
+        }
+
+        [data-theme="light"] {
+            --background-color: #f5f5f7;
+            --card-bg: #ffffff;
+            --secondary-color: #f0f0f5;
+            --text-color: #12122a;
+            --light-text: #333344;
+            --muted-text: #555566;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Alegreya SC', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        .calendar-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calendar-container::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(var(--primary-light), transparent 70%);
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        .calendar-container::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(var(--accent-color), transparent 70%);
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 0 10px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .title {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: var(--light-text);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 15px;
+            background: var(--card-bg);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            border-radius: 20px;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-color: transparent;
+        }
+
+        .view-toggle {
+            display: flex;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(108, 99, 255, 0.3);
+        }
+
+        .view-btn {
+            padding: 8px 15px;
+            background: var(--card-bg);
+            border: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .view-btn.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .month-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: #f35c7e;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .month-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--light-text);
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: rgba(108, 99, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .calendar {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            padding: 15px 0;
+            background: rgba(108, 99, 255, 0.1);
+            font-weight: 600;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: rgba(108, 99, 255, 0.05);
+        }
+
+        .day {
+            min-height: 120px;
+            padding: 10px;
+            background: var(--card-bg);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .day:hover {
+            background: rgba(108, 99, 255, 0.05);
+        }
+
+        .day-number {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            font-size: 0.9rem;
+            color: var(--muted-text);
+            font-weight: 600;
+        }
+
+        .current-day .day-number {
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .events-list {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .event {
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            border-left: 3px solid;
+        }
+
+        .event:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .event::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            transition: var(--transition);
+        }
+
+        .event-time {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 3px;
+        }
+
+        /* Event Category Styling */
+        .event.math {
+            background: rgba(255, 107, 157, 0.1);
+            border-left-color: var(--math-color);
+        }
+
+        .event.ai {
+            background: rgba(0, 217, 181, 0.1);
+            border-left-color: var(--ai-color);
+        }
+
+        .event.data-science {
+            background: rgba(108, 99, 255, 0.1);
+            border-left-color: var(--data-science-color);
+        }
+
+        .event.programming {
+            background: rgba(255, 184, 108, 0.1);
+            border-left-color: var(--programming-color);
+        }
+
+        .event.workshop {
+            background: rgba(157, 140, 255, 0.1);
+            border-left-color: var(--workshop-color);
+        }
+
+        .event.exam {
+            background: rgba(255, 87, 87, 0.1);
+            border-left-color: var(--exam-color);
+        }
+
+        /* Event Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            transform: translateY(20px);
+            transition: var(--transition);
+            box-shadow: var(--card-shadow);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--light-text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--accent-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .event-category {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .event-category.math {
+            background: var(--math-color);
+        }
+
+        .event-category.ai {
+            background: var(--ai-color);
+        }
+
+        .event-category.data-science {
+            background: var(--data-science-color);
+        }
+
+        .event-category.programming {
+            background: var(--programming-color);
+        }
+
+        .event-category.workshop {
+            background: var(--workshop-color);
+        }
+
+        .event-category.exam {
+            background: var(--exam-color);
+        }
+
+        .modal-info {
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: flex-start;
+        }
+
+        .info-icon {
+            width: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        .info-label {
+            font-weight: 600;
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .countdown {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            background: linear-gradient(45deg, rgba(108, 99, 255, 0.1), rgba(255, 107, 157, 0.1));
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .join-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .calendar-btn {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .calendar-btn:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* List View Styles */
+        .list-view {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .list-view.active {
+            display: flex;
+        }
+
+        .calendar.grid-view {
+            display: block;
+        }
+
+        .calendar.grid-view.hidden {
+            display: none;
+        }
+
+        .list-day {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .list-day-header {
+            padding: 15px;
+            background: rgba(108, 99, 255, 0.1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .day-name {
+            color: var(--primary-color);
+        }
+
+        .list-events {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .list-event {
+            display: flex;
+            gap: 15px;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border-left: 3px solid;
+        }
+
+        .list-event:hover {
+            background: rgba(108, 99, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .list-event-time {
+            width: 80px;
+            flex-shrink: 0;
+            font-weight: 600;
+        }
+
+        .list-event-details {
+            flex: 1;
+        }
+
+        .list-event-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .list-event-info {
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+
+        .list-event.math {
+            border-left-color: var(--math-color);
+        }
+
+        .list-event.ai {
+            border-left-color: var(--ai-color);
+        }
+
+        .list-event.data-science {
+            border-left-color: var(--data-science-color);
+        }
+
+        .list-event.programming {
+            border-left-color: var(--programming-color);
+        }
+
+        .list-event.workshop {
+            border-left-color: var(--workshop-color);
+        }
+
+        .list-event.exam {
+            border-left-color: var(--exam-color);
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background:#f35c7e;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .legend-title {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        .legend-color.math {
+            background: var(--math-color);
+        }
+
+        .legend-color.ai {
+            background: var(--ai-color);
+        }
+
+        .legend-color.data-science {
+            background: var(--data-science-color);
+        }
+
+        .legend-color.programming {
+            background: var(--programming-color);
+        }
+
+        .legend-color.workshop {
+            background: var(--workshop-color);
+        }
+
+        .legend-color.exam {
+            background: var(--exam-color);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 1024px) {
+            .calendar-days {
+                font-size: 0.9rem;
+            }
+
+            .day {
+                min-height: 100px;
+            }
+
+            .event {
+                padding: 4px 6px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .calendar-header, .calendar-days {
+                grid-template-columns: repeat(7, 1fr);
+            }
+
+            .day {
+                min-height: 80px;
+                padding: 5px;
+            }
+
+            .events-list {
+                margin-top: 15px;
+            }
+
+            .event {
+                padding: 3px 5px;
+                font-size: 0.7rem;
+            }
+
+            .countdown {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .filter-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .view-toggle {
+                width: 100%;
+            }
+
+            .view-btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            .calendar-header, .calendar-days {
+                font-size: 0.8rem;
+            }
+
+            .calendar-header span {
+                font-size: 0.7rem;
+            }
+
+            .day-number {
+                font-size: 0.8rem;
+            }
+
+            .event {
+                font-size: 0.65rem;
+            }
+
+            .info-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .info-label {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar-container">
+        <header class="header">
+            <div class="logo-title">
+                <i class="logo fas fa-graduation-cap"></i>
+                <h1 class="title">EduConnect 247 Calendar</h1>
+            </div>
+            <div class="controls">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="filter-container">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="math">Mathematics</button>
+                <button class="filter-btn" data-filter="ai">AI</button>
+                <button class="filter-btn" data-filter="data-science">Data Science</button>
+                <button class="filter-btn" data-filter="programming">Programming</button>
+                <button class="filter-btn" data-filter="urgent">Urgent</button>
+            </div>
+            <div class="view-toggle">
+                <button class="view-btn active" data-view="grid">
+                    <i class="fas fa-th"></i> Grid
+                </button>
+                <button class="view-btn" data-view="list">
+                    <i class="fas fa-list"></i> List
+                </button>
+            </div>
+        </div>
+
+        <div class="month-navigation">
+            <button class="nav-btn prev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <h2 class="month-title">March 2025</h2>
+            <button class="nav-btn next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="calendar grid-view">
+            <div class="calendar-header">
+                <span>Sun</span>
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+            </div>
+            <div class="calendar-days">
+                <!-- Week 1 -->
+                <div class="day">
+                    <span class="day-number">1</span>
+                </div>
+                <div class="day">
+                    <span class="day-number">2</span>
+                    <div class="events-list">
+                        <div class="event math" data-category="math" data-id="1">
+                            <div class="event-title">Linear Algebra</div>
+                            <div class="event-time">10:00 - 11:30 AM</div>
+                        </div>
+                        <div class="event programming" data-category="programming" data-id="2">
+                            <div class="event-title">Python Basics</div>
+                            <div class="event-time">2:00 - 3:30 PM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day">
+                    <span class="day-number">3</span>
+                    <div class="events-list">
+                        <div class="event ai" data-category="ai" data-id="3">
+                            <div class="event-title">Neural Networks</div>
+                            <div class="event-time">11:00 AM - 12:30 PM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day">
+                    <span class="day-number">4</span>
+                    <div class="events-list">
+                        <div class="event data-science" data-category="data-science" data-id="4">
+                            <div class="event-title">Data Cleaning</div>
+                            <div class="event-time">9:00 - 10:30 AM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day">
+                    <span class="day-number">5</span>
+                </div>
+                <div class="day">
+                    <span class="day-number">6</span>
+                    <div class="events-list">
+                        <div class="event workshop" data-category="workshop" data-id="5">
+                            <div class="event-title">AI Ethics Workshop</div>
+                            <div class="event-time">2:00 - 5:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day">
+                    <span class="day-number">7</span>
+                    <div class="events-list">
+                        <div class="event current-day">
+                            <div class="event-title">Today</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 2 -->
+                <div class="day">
+                    <span class="day-number">8</span>
+                </div>
+                <div class="day">
+                    <span class="day-number">9</span>
+                    <div class="events-list">
+                        <div class="event math" data-category="math" data-id="6">
+                            <div class="event-title">Calculus</div>
+                            <div class="event-time">10:00 - 11:30 AM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day">
+                    <span class="day-number">10</span>
+                    <div class="events-list">
+                        <div class="event programming" data-category="programming" data-id="7">
+                            <div class="event-title">Advanced Python</div>
+                            <div class="event-time">2:00 - 3:30 PM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day">
+                    <span class="day-number">11</span>
+                </div>
+                <div class="day">
+                    <span class="day-number">12</span>
+                    <div class="events-list">
+                        <div class="event data-science" data-category="data-science" data-id="8">
+                            <div class="event-title">Data Visualization</div>
+                            <div class="event-time">11:00 AM - 12:30 PM</div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="day">
+                    <span class="day-number">13</span>
+                </div>
+                <div class="day">
+                    <span class="day-number">14</span>
+                </div>
+
+                <!-- Week 3 -->
+                <div class="day">
+                    <span class="day-number">15</span>
+                    <div class="events-list">
+                        <div class="event ai" data-category="ai" data-id="9">
+                            <div class="event-title">CNN & RNN</div>
+                            <div class="event-time">9:00 - 11:00 AM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day">
+                    <span class="day-number">16</span>
+                    <div class="events-list">
+                        <div class="event math" data-category="math" data-id="10">
+                            <div class="event-title">Statistics</div>
+                            <div class="event-time">10:00 - 11:30 AM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="day">
+                    <span class="day-number">17</span>
+                </div>
+               <div class="day">
+    <span class="day-number">18</span>
+    <div class="events-list">
+        <div class="event workshop" data-category="workshop" data-id="11">
+            <div class="event-title">ML Deployment Workshop</div>
+            <div class="event-time">2:00 - 5:00 PM</div>
+        </div>
+    </div>
+</div>
+<div class="day">
+    <span class="day-number">19</span>
+</div>
+<div class="day">
+    <span class="day-number">20</span>
+    <div class="events-list">
+        <div class="event exam" data-category="exam" data-id="12">
+            <div class="event-title">Midterm Exam</div>
+            <div class="event-time">10:00 AM - 12:00 PM</div>
+           
+        </div>
+    </div>
+</div>
+<div class="day">
+    <span class="day-number">21</span>
+</div>
+
+<!-- Week 4 -->
+<div class="day">
+    <span class="day-number">22</span>
+</div>
+<div class="day">
+    <span class="day-number">23</span>
+    <div class="events-list">
+        <div class="event programming" data-category="programming" data-id="13">
+            <div class="event-title">JavaScript Fundamentals</div>
+            <div class="event-time">2:00 - 3:30 PM</div>
+        </div>
+    </div>
+</div>
+<div class="day">
+    <span class="day-number">24</span>
+    <div class="events-list">
+        <div class="event data-science" data-category="data-science" data-id="14">
+            <div class="event-title">Machine Learning</div>
+            <div class="event-time">11:00 AM - 12:30 PM</div>
+        </div>
+    </div>
+</div>
+<div class="day">
+    <span class="day-number">25</span>
+</div>
+<div class="day">
+    <span class="day-number">26</span>
+    <div class="events-list">
+        <div class="event ai" data-category="ai" data-id="15">
+            <div class="event-title">Reinforcement Learning</div>
+            <div class="event-time">10:00 - 11:30 AM</div>
+        </div>
+    </div>
+</div>
+<div class="day">
+    <span class="day-number">27</span>
+</div>
+<div class="day">
+    <span class="day-number">28</span>
+    <div class="events-list">
+        <div class="event workshop" data-category="workshop" data-id="16">
+            <div class="event-title">Research Methodology</div>
+            <div class="event-time">2:00 - 4:00 PM</div>
+        </div>
+    </div>
+</div>
+
+<!-- Week 5 -->
+<div class="day">
+    <span class="day-number">29</span>
+</div>
+<div class="day">
+    <span class="day-number">30</span>
+    <div class="events-list">
+        <div class="event math" data-category="math" data-id="17">
+            <div class="event-title">Probability Theory</div>
+            <div class="event-time">10:00 - 11:30 AM</div>
+        </div>
+    </div>
+</div>
+<div class="day">
+    <span class="day-number">31</span>
+    <div class="events-list">
+        <div class="event exam" data-category="exam" data-id="18">
+            <div class="event-title">Final Project Submission</div>
+            <div class="event-time">11:59 PM</div>
+        </div>
+    </div>
+</div>
+<div class="day other-month">
+    <span class="day-number">1</span>
+</div>
+<div class="day other-month">
+    <span class="day-number">2</span>
+</div>
+<div class="day other-month">
+    <span class="day-number">3</span>
+</div>
+<div class="day other-month">
+    <span class="day-number">4</span>
+</div>
+            </div>
+        </div>
+
+        <div class="list-view">
+            <!-- List view content will be generated by JavaScript -->
+        </div>
+
+        <div class="legend">
+            <h3 class="legend-title">Event Categories</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color math"></div>
+                    <span>Mathematics</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color ai"></div>
+                    <span>AI</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color data-science"></div>
+                    <span>Data Science</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color programming"></div>
+                    <span>Programming</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color workshop"></div>
+                    <span>Workshop</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color exam"></div>
+                    <span>Exam</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal">
+            <button class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <span class="event-category" id="modalCategory">Category</span>
+                <h2 class="modal-title" id="modalTitle">Event Title</h2>
+            </div>
+            <div class="modal-info">
+                <div class="info-row">
+                    <div class="info-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="info-label">Date:</div>
+                    <div class="info-value" id="modalDate">March 15, 2025</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="info-label">Time:</div>
+                    <div class="info-value" id="modalTime">10:00 AM - 11:30 AM</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="info-label">Location:</div>
+                    <div class="info-value" id="modalLocation">Virtual / Classroom 303</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="info-label">Instructor:</div>
+                    <div class="info-value" id="modalInstructor">Dr. Rajiv Kumar</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="info-label">Details:</div>
+                    <div class="info-value" id="modalDetails">
+                        Join this session to learn about fundamental concepts and applications.
+                    </div>
+                </div>
+            </div>
+            <div class="countdown" id="modalCountdown">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="countDays">0</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="countHours">0</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="countMinutes">0</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="countSeconds">0</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+            <div class="event-actions">
+                <button class="action-btn join-btn" id="joinBtn">
+                    <i class="fas fa-video"></i> Join Meeting
+                </button>
+                <button class="action-btn calendar-btn" id="calendarBtn">
+                    <i class="fas fa-calendar-plus"></i> Add to Calendar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Event data
+        const eventData = [
+            {
+                id: 1,
+                title: "Linear Algebra",
+                date: "March 2, 2025",
+                time: "10:00 - 11:30 AM",
+                location: "Classroom 201",
+                instructor: "Dr. Sanjeev Mehta",
+                category: "math",
+                details: "Introduction to vectors, matrices, and linear transformations. Please bring your textbook.",
+                urgent: false
+            },
+            {
+                id: 2,
+                title: "Python Basics",
+                date: "March 2, 2025",
+                time: "2:00 - 3:30 PM",
+                location: "Computer Lab 101",
+                instructor: "Prof. Ananya Sharma",
+                category: "programming",
+                details: "Learn the fundamentals of Python programming. No prior experience required.",
+                urgent: false
+            },
+            {
+                id: 3,
+                title: "Neural Networks",
+                date: "March 3, 2025",
+                time: "11:00 AM - 12:30 PM",
+                location: "Online (Zoom)",
+                instructor: "Dr. Rohit Verma",
+                category: "ai",
+                details: "Understanding neural networks architecture and backpropagation. Assignment due next week.",
+                urgent: false
+            },
+            {
+                id: 4,
+                title: "Data Cleaning",
+                date: "March 4, 2025",
+                time: "9:00 - 10:30 AM",
+                location: "Computer Lab 102",
+                instructor: "Dr. Priya Singh",
+                category: "data-science",
+                details: "Techniques for data preprocessing and cleaning. Bring your own dataset examples.",
+                urgent: false
+            },
+            {
+                id: 5,
+                title: "AI Ethics Workshop",
+                date: "March 6, 2025",
+                time: "2:00 - 5:00 PM",
+                location: "Conference Hall",
+                instructor: "Dr. Neha Gupta & Industry Experts",
+                category: "workshop",
+                details: "Interactive workshop on ethical considerations in AI development and deployment.",
+                urgent: false
+            },
+            {
+                id: 6,
+                title: "Calculus",
+                date: "March 9, 2025",
+                time: "10:00 - 11:30 AM",
+                location: "Classroom 201",
+                instructor: "Dr. Sanjeev Mehta",
+                category: "math",
+                details: "Dive into differential and integral calculus concepts. Prior algebra knowledge required.",
+                urgent: false
+            },
+            {
+                id: 7,
+                title: "Advanced Python",
+                date: "March 10, 2025",
+                time: "2:00 - 3:30 PM",
+                location: "Computer Lab 101",
+                instructor: "Prof. Ananya Sharma",
+                category: "programming",
+                details: "Advanced concepts including decorators, generators, and context managers.",
+                urgent: false
+            },
+            {
+                id: 8,
+                title: "Data Visualization",
+                date: "March 12, 2025",
+                time: "11:00 AM - 12:30 PM",
+                location: "Computer Lab 102",
+                instructor: "Dr. Priya Singh",
+                category: "data-science",
+                details: "Learn to create effective visualizations using matplotlib, seaborn, and plotly.",
+                urgent: false
+            },
+            {
+                id: 9,
+                title: "CNN & RNN",
+                date: "March 15, 2025",
+                time: "9:00 - 11:00 AM",
+                location: "Online (Zoom)",
+                instructor: "Dr. Rohit Verma",
+                category: "ai",
+                details: "Deep dive into Convolutional and Recurrent Neural Networks for image and sequence data.",
+                urgent: false
+            },
+            {
+                id: 10,
+                title: "Statistics",
+                date: "March 16, 2025",
+                time: "10:00 - 11:30 AM",
+                location: "Classroom 202",
+                instructor: "Dr. Vikram Agarwal",
+                category: "math",
+                details: "Fundamentals of probability and statistics for data science applications.",
+                urgent: false
+            },
+            {
+                id: 11,
+                title: "ML Deployment Workshop",
+                date: "March 18, 2025",
+                time: "2:00 - 5:00 PM",
+                location: "Conference Hall",
+                instructor: "Industry Partners",
+                category: "workshop",
+                details: "Hands-on workshop for deploying machine learning models to production.",
+                urgent: false
+            },
+            {
+                id: 12,
+                title: "Midterm Exam",
+                date: "March 20, 2025",
+                time: "10:00 AM - 12:00 PM",
+                location: "Examination Hall",
+                instructor: "All Faculty",
+                category: "exam",
+                details: "Comprehensive exam covering all topics discussed in the first half of the semester.",
+                urgent: true
+            },
+            {
+                id: 13,
+                title: "JavaScript Fundamentals",
+                date: "March 23, 2025",
+                time: "2:00 - 3:30 PM",
+                location: "Computer Lab 101",
+                instructor: "Prof. Ananya Sharma",
+                category: "programming",
+                details: "Introduction to JavaScript for web development and interactive applications.",
+                urgent: false
+            },
+            {
+                id: 14,
+                title: "Machine Learning",
+                date: "March 24, 2025",
+                time: "11:00 AM - 12:30 PM",
+                location: "Classroom 203",
+                instructor: "Dr. Arjun Rao",
+                category: "data-science",
+                details: "Overview of supervised and unsupervised learning algorithms.",
+                urgent: false
+            },
+            {
+                id: 15,
+                title: "Reinforcement Learning",
+                date: "March 26, 2025",
+                time: "10:00 - 11:30 AM",
+                location: "Online (Zoom)",
+                instructor: "Dr. Rohit Verma",
+                category: "ai",
+                details: "Introduction to reinforcement learning concepts and algorithms. Assignment due in two weeks.",
+                urgent: false
+            },
+            {
+                id: 16,
+                title: "Research Methodology",
+                date: "March 28, 2025",
+                time: "2:00 - 4:00 PM",
+                location: "Conference Hall",
+                instructor: "Dr. Suresh Patel",
+                category: "workshop",
+                details: "Learn how to conduct research, write papers, and present findings effectively.",
+                urgent: false
+            },
+            {
+                id: 17,
+                title: "Probability Theory",
+                date: "March 30, 2025",
+                time: "10:00 - 11:30 AM",
+                location: "Classroom 202",
+                instructor: "Dr. Vikram Agarwal",
+                category: "math",
+                details: "Advanced concepts in probability theory with applications in machine learning.",
+                urgent: false
+            },
+            {
+                id: 18,
+                title: "Final Project Submission",
+                date: "March 31, 2025",
+                time: "11:59 PM",
+                location: "Online Submission",
+                instructor: "All Faculty",
+                category: "exam",
+                details: "Deadline for submitting your final project and documentation. No extensions will be provided.",
+                urgent: true
+            }
+        ];
+
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const viewBtns = document.querySelectorAll('.view-btn');
+        const gridView = document.querySelector('.calendar.grid-view');
+        const listView = document.querySelector('.list-view');
+        const eventModal = document.getElementById('eventModal');
+        const modalClose = document.querySelector('.modal-close');
+        const joinBtn = document.getElementById('joinBtn');
+        const calendarBtn = document.getElementById('calendarBtn');
+        const events = document.querySelectorAll('.event');
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const monthTitle = document.querySelector('.month-title');
+
+        // Initialize list view
+        function initializeListView() {
+            listView.innerHTML = '';
+            
+            // Group events by date
+            const eventsByDate = {};
+            eventData.forEach(event => {
+                if (!eventsByDate[event.date]) {
+                    eventsByDate[event.date] = [];
+                }
+                eventsByDate[event.date].push(event);
+            });
+            
+            // Sort dates
+            const sortedDates = Object.keys(eventsByDate).sort((a, b) => {
+                return new Date(a) - new Date(b);
+            });
+            
+            // Create list days
+            sortedDates.forEach(date => {
+                const dateObj = new Date(date);
+                const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const dayName = dayNames[dateObj.getDay()];
+                
+                const listDayEl = document.createElement('div');
+                listDayEl.className = 'list-day';
+                
+                const listDayHeader = document.createElement('div');
+                listDayHeader.className = 'list-day-header';
+                listDayHeader.innerHTML = `
+                    <span class="day-name">${dayName}</span>
+                    <span>${date}</span>
+                `;
+                
+                const listEvents = document.createElement('div');
+                listEvents.className = 'list-events';
+                
+                eventsByDate[date].forEach(event => {
+                    const listEventEl = document.createElement('div');
+                    listEventEl.className = `list-event ${event.category}`;
+                    listEventEl.setAttribute('data-id', event.id);
+                    listEventEl.setAttribute('data-category', event.category);
+                    if (event.urgent) {
+                        listEventEl.setAttribute('data-urgent', 'true');
+                    }
+                    
+                    listEventEl.innerHTML = `
+                        <div class="list-event-time">${event.time}</div>
+                        <div class="list-event-details">
+                            <div class="list-event-title">${event.title}</div>
+                            <div class="list-event-info">${event.location} • ${event.instructor}</div>
+                        </div>
+                    `;
+                    
+                    listEvents.appendChild(listEventEl);
+                    
+                    // Add click event to open modal
+                    listEventEl.addEventListener('click', () => {
+                        openEventModal(event);
+                    });
+                });
+                
+                listDayEl.appendChild(listDayHeader);
+                listDayEl.appendChild(listEvents);
+                listView.appendChild(listDayEl);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeListView();
+            
+            // Add click event to grid view events
+            events.forEach(event => {
+                event.addEventListener('click', () => {
+                    const eventId = event.getAttribute('data-id');
+                    if (eventId) {
+                        const eventInfo = eventData.find(e => e.id == eventId);
+                        if (eventInfo) {
+                            openEventModal(eventInfo);
+                        }
+                    }
+                });
+            });
+        });
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            const body = document.body;
+            const isDark = !body.hasAttribute('data-theme') || body.getAttribute('data-theme') === 'dark';
+            
+            if (isDark) {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+
+        // Filter Events
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Toggle active class
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.getAttribute('data-filter');
+                
+                // Filter grid view events
+                const gridEvents = document.querySelectorAll('.calendar .event');
+                gridEvents.forEach(event => {
+                    if (filter === 'all') {
+                        event.style.display = 'block';
+                    } else if (filter === 'urgent') {
+                        const eventId = event.getAttribute('data-id');
+                        const eventInfo = eventData.find(e => e.id == eventId);
+                        event.style.display = eventInfo && eventInfo.urgent ? 'block' : 'none';
+                    } else {
+                        const category = event.getAttribute('data-category');
+                        event.style.display = category === filter ? 'block' : 'none';
+                    }
+                });
+                
+                // Filter list view events
+                const listEvents = document.querySelectorAll('.list-view .list-event');
+                listEvents.forEach(event => {
+                    if (filter === 'all') {
+                        event.style.display = 'flex';
+                    } else if (filter === 'urgent') {
+                        const eventId = event.getAttribute('data-id');
+                        const eventInfo = eventData.find(e => e.id == eventId);
+                        event.style.display = eventInfo && eventInfo.urgent ? 'flex' : 'none';
+                    } else {
+                        const category = event.getAttribute('data-category');
+                        event.style.display = category === filter ? 'flex' : 'none';
+                    }
+                });
+            });
+        });
+
+        // Toggle View
+        viewBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Toggle active class
+                viewBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const view = btn.getAttribute('data-view');
+                
+                if (view === 'grid') {
+                    gridView.classList.remove('hidden');
+                    listView.classList.remove('active');
+                } else {
+                    gridView.classList.add('hidden');
+                    listView.classList.add('active');
+                }
+            });
+        });
+
+        // Modal Functions
+        function openEventModal(event) {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDate = document.getElementById('modalDate');
+            const modalTime = document.getElementById('modalTime');
+            const modalLocation = document.getElementById('modalLocation');
+            const modalInstructor = document.getElementById('modalInstructor');
+            const modalDetails = document.getElementById('modalDetails');
+            const modalCategory = document.getElementById('modalCategory');
+            
+            modalTitle.textContent = event.title;
+            modalDate.textContent = event.date;
+            modalTime.textContent = event.time;
+            modalLocation.textContent = event.location;
+            modalInstructor.textContent = event.instructor;
+            modalDetails.textContent = event.details;
+            
+            // Set category
+            modalCategory.textContent = event.category.charAt(0).toUpperCase() + event.category.slice(1);
+            modalCategory.className = `event-category ${event.category}`;
+            
+            // Update countdown
+            updateCountdown(event.date, event.time);
+            
+            // Show modal
+            eventModal.classList.add('active');
+        }
+
+        function closeEventModal() {
+            eventModal.classList.remove('active');
+        }
+
+        modalClose.addEventListener('click', closeEventModal);
+        
+        // Close modal when clicking outside
+        eventModal.addEventListener('click', (e) => {
+            if (e.target === eventModal) {
+                closeEventModal();
+            }
+        });
+
+        // Button actions
+        joinBtn.addEventListener('click', () => {
+            alert('Joining virtual meeting...');
+            // Implement actual join functionality
+        });
+
+        calendarBtn.addEventListener('click', () => {
+            alert('Event added to your calendar');
+            // Implement actual calendar add functionality
+        });
+
+        // Countdown function
+        function updateCountdown(dateStr, timeStr) {
+            const countdownEl = document.getElementById('modalCountdown');
+            const daysEl = document.getElementById('countDays');
+            const hoursEl = document.getElementById('countHours');
+            const minutesEl = document.getElementById('countMinutes');
+            const secondsEl = document.getElementById('countSeconds');
+            
+            // Parse date and time
+            const [time, period] = timeStr.split(' ')[0].split('-')[0].trim().split(' ');
+            let [hours, minutes] = time.split(':');
+            
+            // Convert to 24-hour format if needed
+            if (period && period.toUpperCase() === 'PM' && hours < 12) {
+                hours = parseInt(hours) + 12;
+            }
+            
+            const eventDate = new Date(dateStr);
+            eventDate.setHours(hours, minutes, 0);
+            
+            // Update countdown every second
+            const countdownInterval = setInterval(() => {
+                const now = new Date();
+                const diff = eventDate - now;
+                
+                if (diff <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownEl.innerHTML = '<div class="event-status">Event has started or ended</div>';
+                    return;
+                }
+                
+                // Calculate time units
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                // Update DOM
+                daysEl.textContent = days;
+                hoursEl.textContent = hours;
+                minutesEl.textContent = minutes;
+                secondsEl.textContent = seconds;
+            }, 1000);
+            
+            // Store interval ID to clear when modal closes
+            eventModal.setAttribute('data-interval', countdownInterval);
+        }
+
+        // Clear countdown when modal closes
+        eventModal.addEventListener('transitionend', () => {
+            if (!eventModal.classList.contains('active')) {
+                const intervalId = eventModal.getAttribute('data-interval');
+                if (intervalId) {
+                    clearInterval(intervalId);
+                }
+            }
+        });
+
+        // Month navigation
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const isNext = btn.classList.contains('next');
+                const currentMonth = monthTitle.textContent;
+                const [month, year] = currentMonth.split(' ');
+                
+                // Get month index
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                let monthIndex = months.indexOf(month);
+                let newYear = parseInt(year);
+                
+                if (isNext) {
+                    monthIndex = (monthIndex + 1) % 12;
+                    if (monthIndex === 0) newYear++;
+                } else {
+                    monthIndex = (monthIndex - 1 + 12) % 12;
+                    if (monthIndex === 11) newYear--;
+                }
+                
+                monthTitle.textContent = `${months[monthIndex]} ${newYear}`;
+                
+                // Here you would update the calendar data
+                // This is placeholder behavior - actual implementation would load new month's data
+                alert(`Loading calendar for ${months[monthIndex]} ${newYear}...`);
+            });
+        });
+    </script>
+</body>
+</html>
