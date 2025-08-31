@@ -27,6 +27,10 @@ import FeaturesPage from "@/pages/FeaturesPage";
 import StudentAchievementsPage from "@/pages/StudentAchievementsPage";
 import AIToolsPage from "@/pages/AIToolsPage";
 import PerplexityPromoPage from "@/pages/PerplexityPromoPage";
+import ForumEmbed from './components/ForumEmbed';
+import NoticeBoard from './components/NoticeBoard';
+import EventsCalendar from './components/EventsCalendar';
+import AdminPanel from './components/AdminPanel';
 
 
 const PrivacyPolicyPage = () => (
@@ -270,6 +274,11 @@ function App() {
             <Route path="terms-of-service" element={<TermsOfServicePage />} />
             <Route path="/ai-tools" element={<AIToolsPage />} />
             <Route path="/perplexity-promo" element={<PerplexityPromoPage />} />
+            <Route path="/forum" element={<ForumEmbed />} />
+            <Route path="/notices" element={<NoticeBoard />} />
+            <Route path="/events" element={<EventsCalendar />} />
+            <Route path="/admin" element={<AdminPanel />} />
+
 
             <Route
               path="admin-login"
