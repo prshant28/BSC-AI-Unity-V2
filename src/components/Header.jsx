@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { NAV_LINKS } from "@/lib/constants";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles, LogIn } from "lucide-react";
+import { Menu, X, Sparkles, LogIn, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -132,6 +132,18 @@ const Header = ({ isAdminAuthenticated }) => {
               </NavLink>
             </motion.div>
           ))}
+          {/* Admin Link */}
+          <Link 
+            to="/admin" 
+            className="transition-colors hover:text-primary font-medium flex items-center gap-1"
+            style={{ color: localStorage.getItem('admin_authenticated') === 'true' ? 'var(--accent-color)' : undefined }}
+          >
+            <Settings className="w-4 h-4" />
+            Admin
+            {localStorage.getItem('admin_authenticated') === 'true' && (
+              <span className="text-xs bg-green-500 text-white px-1 rounded">●</span>
+            )}
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -195,6 +207,19 @@ const Header = ({ isAdminAuthenticated }) => {
                   </NavLink>
                 </motion.div>
               ))}
+              {/* Admin Link Mobile */}
+              <Link 
+                to="/admin" 
+                onClick={() => setTimeout(() => setMobileMenuOpen(false), 150)}
+                className="flex items-center py-3 px-4 rounded-lg text-base font-medium transition-all duration-200"
+                style={{ color: localStorage.getItem('admin_authenticated') === 'true' ? 'var(--accent-color)' : undefined }}
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Admin
+                {localStorage.getItem('admin_authenticated') === 'true' && (
+                  <span className="text-xs bg-green-500 text-white px-1 rounded ml-1">●</span>
+                )}
+              </Link>
             </nav>
           </motion.div>
         )}

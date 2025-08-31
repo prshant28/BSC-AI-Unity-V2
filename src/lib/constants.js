@@ -9,9 +9,6 @@ export const NAV_LINKS = [
   { href: "/contact", label: "Contact Us" },
   { href: "/perplexity-promo", label: "Promotions" },
   { href: "/status-board", label: "Status Board" },
-  { href: "/events", label: "Events" },
-  { href: "/forum", label: "Forum" },
-  { href: "/notices", label: "Notices" },
   { href: "/admin-login", label: "Admin Login" },
 ];
 

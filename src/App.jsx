@@ -277,7 +277,7 @@ function App() {
             <Route path="/forum" element={<ForumEmbed />} />
             <Route path="/notices" element={<NoticeBoard />} />
             <Route path="/events" element={<EventsCalendar />} />
-            <Route path="/admin-panel" element={<AdminPanel />} />
+            <Route path="/admin" element={<AdminPanel />} />
 
 
             <Route

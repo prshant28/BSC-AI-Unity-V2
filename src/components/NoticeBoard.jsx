@@ -28,6 +28,9 @@ const NoticeBoard = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [dateFilter, setDateFilter] = useState('all');
   const [expandedNotices, setExpandedNotices] = useState(new Set());
+  const [isAdmin, setIsAdmin] = useState(() => {
+    return localStorage.getItem('admin_authenticated') === 'true';
+  });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -204,17 +207,17 @@ const NoticeBoard = () => {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8 space-y-4"
       >
-        <Card>
+        <Card className="hover-card" style={{ background: '#f35c7e', color: 'white' }}>
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
                 <Input
                   placeholder="Search notices..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 bg-white/10 border-white/30 text-white placeholder:text-white/70"
                 />
               </div>
 
@@ -222,22 +225,32 @@ const NoticeBoard = () => {
               <select
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="px-3 py-2 rounded-md border border-input bg-background"
+                className="px-3 py-2 rounded-md border border-white/30 bg-white/10 text-white"
+                style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
               >
-                <option value="all">All Notices</option>
-                <option value="active">Active</option>
-                <option value="archived">Archived</option>
-                <option value="thisWeek">This Week</option>
-                <option value="thisMonth">This Month</option>
+                <option value="all" style={{ color: 'black' }}>All Notices</option>
+                <option value="active" style={{ color: 'black' }}>Active</option>
+                <option value="archived" style={{ color: 'black' }}>Archived</option>
+                <option value="thisWeek" style={{ color: 'black' }}>This Week</option>
+                <option value="thisMonth" style={{ color: 'black' }}>This Month</option>
               </select>
 
               {/* Admin Link */}
-              <Button asChild variant="outline">
-                <a href="/admin">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Manage Notices
-                </a>
-              </Button>
+              {isAdmin ? (
+                <Button asChild className="bg-white text-[#f35c7e] hover:bg-white/90">
+                  <a href="/admin">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Manage Notices
+                  </a>
+                </Button>
+              ) : (
+                <Button asChild variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                  <a href="/admin">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Admin Login
+                  </a>
+                </Button>
+              )}
             </div>
 
             {/* Tag Filters */}
@@ -286,8 +299,8 @@ const NoticeBoard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className={`${notice.pinned ? 'ring-2 ring-yellow-400 shadow-lg' : ''} ${
-                isNoticeActive(notice) ? 'border-green-500/30 bg-green-50/30 dark:bg-green-950/10' : ''
+              <Card className={`hover-card ${notice.pinned ? 'notice-pinned' : ''} ${
+                isNoticeActive(notice) ? 'notice-active' : ''
               }`}>
                 <CardHeader>
                   <div className="flex items-start justify-between">

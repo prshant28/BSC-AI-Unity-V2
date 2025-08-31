@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -9,13 +9,15 @@ import {
   Calendar, 
   Plus, 
   Filter, 
-  Download,
-  Settings,
-  Edit,
-  Trash2,
+  ExternalLink,
   MapPin,
   Clock,
-  Users
+  Users,
+  Edit,
+  Trash2,
+  Maximize2,
+  Minimize2,
+  Settings
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
@@ -24,19 +26,29 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
+import { Switch } from './ui/switch';
 import { eventsAPI } from '../lib/storage';
 import { useToast } from './ui/use-toast';
-import { checkAdminAuth } from './AdminPanel';
+
+const CATEGORY_COLORS = {
+  'Class': { bg: 'var(--data-science-color)', text: 'white', border: 'var(--data-science-color)', name: 'Class' },
+  'Exam': { bg: 'var(--exam-color)', text: 'white', border: 'var(--exam-color)', name: 'Exam' },
+  'Result': { bg: 'var(--ai-color)', text: 'white', border: 'var(--ai-color)', name: 'Result' },
+  'Activity': { bg: 'var(--workshop-color)', text: 'white', border: 'var(--workshop-color)', name: 'Activity' }
+};
 
 const EventsCalendar = () => {
   const [events, setEvents] = useState([]);
-  const [filteredEvents, setFilteredEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [showEventModal, setShowEventModal] = useState(false);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [calendarView, setCalendarView] = useState('dayGridMonth');
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(() => {
+    return localStorage.getItem('admin_authenticated') === 'true';
+  });
+  const calendarRef = useRef(null);
   const { toast } = useToast();
 
   const [eventForm, setEventForm] = useState({
@@ -44,39 +56,21 @@ const EventsCalendar = () => {
     description: '',
     start: '',
     end: '',
-    category: 'General',
-    location: ''
+    location: '',
+    category: 'Class',
+    is_online: false,
+    url: ''
   });
-
-  const categories = [
-    { value: 'all', label: 'All Events', color: '#6c63ff' },
-    { value: 'Math', label: 'Mathematics', color: '#ff6b9d' },
-    { value: 'AI', label: 'Artificial Intelligence', color: '#00d9b5' },
-    { value: 'Data Science', label: 'Data Science', color: '#6c63ff' },
-    { value: 'Programming', label: 'Programming', color: '#ffb86c' },
-    { value: 'Workshop', label: 'Workshop', color: '#9d8cff' },
-    { value: 'Exam', label: 'Examination', color: '#ff5757' },
-    { value: 'General', label: 'General', color: '#8a8a9a' }
-  ];
 
   useEffect(() => {
     loadEvents();
-    setIsAdmin(checkAdminAuth());
   }, []);
-
-  useEffect(() => {
-    if (selectedCategory === 'all') {
-      setFilteredEvents(events);
-    } else {
-      setFilteredEvents(events.filter(event => event.category === selectedCategory));
-    }
-  }, [events, selectedCategory]);
 
   const loadEvents = async () => {
     try {
       setLoading(true);
-      const eventsData = await eventsAPI.getAll();
-      setEvents(eventsData);
+      const data = await eventsAPI.getAll();
+      setEvents(data);
     } catch (error) {
       console.error('Failed to load events:', error);
       toast({
@@ -89,93 +83,44 @@ const EventsCalendar = () => {
     }
   };
 
-  const handleEventClick = (info) => {
-    const event = events.find(e => e.id === info.event.id);
-    setSelectedEvent(event);
-    setShowEventModal(true);
-  };
-
-  const handleDateSelect = (selectInfo) => {
-    if (!isAdmin) {
-      toast({
-        title: "Access Denied",
-        description: "Only admins can create events",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setEventForm({
-      title: '',
-      description: '',
-      start: selectInfo.startStr,
-      end: selectInfo.endStr || selectInfo.startStr,
-      category: 'General',
-      location: ''
-    });
-    setShowCreateModal(true);
-  };
-
   const handleEventSubmit = async (e) => {
     e.preventDefault();
     
     try {
-      const eventData = {
-        ...eventForm,
-        id: `event-${Date.now()}`,
-        backgroundColor: getCategoryColor(eventForm.category),
-        borderColor: getCategoryColor(eventForm.category)
-      };
-
-      await eventsAPI.create(eventData);
-      await loadEvents();
-      setShowCreateModal(false);
-      resetEventForm();
+      if (selectedEvent) {
+        await eventsAPI.update(selectedEvent.id, eventForm);
+        toast({
+          title: "Success",
+          description: "Event updated successfully"
+        });
+      } else {
+        await eventsAPI.create(eventForm);
+        toast({
+          title: "Success",
+          description: "Event created successfully"
+        });
+      }
       
-      toast({
-        title: "Success",
-        description: "Event created successfully"
-      });
-    } catch (error) {
-      console.error('Failed to create event:', error);
-      toast({
-        title: "Error",
-        description: "Failed to create event",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleEventUpdate = async (e) => {
-    e.preventDefault();
-    
-    try {
-      await eventsAPI.update(selectedEvent.id, eventForm);
       await loadEvents();
       setShowEventModal(false);
-      
-      toast({
-        title: "Success",
-        description: "Event updated successfully"
-      });
+      resetForm();
     } catch (error) {
-      console.error('Failed to update event:', error);
+      console.error('Failed to save event:', error);
       toast({
         title: "Error",
-        description: "Failed to update event",
+        description: "Failed to save event",
         variant: "destructive"
       });
     }
   };
 
-  const handleEventDelete = async () => {
+  const handleEventDelete = async (eventId) => {
     if (!confirm('Are you sure you want to delete this event?')) return;
     
     try {
-      await eventsAPI.delete(selectedEvent.id);
+      await eventsAPI.delete(eventId);
       await loadEvents();
       setShowEventModal(false);
-      
       toast({
         title: "Success",
         description: "Event deleted successfully"
@@ -190,44 +135,150 @@ const EventsCalendar = () => {
     }
   };
 
-  const resetEventForm = () => {
+  const resetForm = () => {
     setEventForm({
       title: '',
       description: '',
       start: '',
       end: '',
-      category: 'General',
-      location: ''
+      location: '',
+      category: 'Class',
+      is_online: false,
+      url: ''
     });
+    setSelectedEvent(null);
   };
 
-  const getCategoryColor = (category) => {
-    const categoryMap = {
-      'Math': '#ff6b9d',
-      'AI': '#00d9b5',
-      'Data Science': '#6c63ff',
-      'Programming': '#ffb86c',
-      'Workshop': '#9d8cff',
-      'Exam': '#ff5757',
-      'General': '#8a8a9a'
-    };
-    return categoryMap[category] || categoryMap['General'];
+  const openCreateModal = (selectInfo = null) => {
+    resetForm();
+    if (selectInfo) {
+      const startDate = selectInfo.start;
+      const endDate = selectInfo.end || new Date(startDate.getTime() + 60 * 60 * 1000);
+      
+      setEventForm(prev => ({
+        ...prev,
+        start: startDate.toISOString().slice(0, 16),
+        end: endDate.toISOString().slice(0, 16)
+      }));
+    }
+    setShowEventModal(true);
   };
+
+  const openEditModal = (event) => {
+    setSelectedEvent(event.extendedProps);
+    if (isAdmin) {
+      setEventForm({
+        title: event.title,
+        description: event.extendedProps.description || '',
+        start: event.start.toISOString().slice(0, 16),
+        end: event.end.toISOString().slice(0, 16),
+        location: event.extendedProps.location || '',
+        category: event.extendedProps.category || 'Class',
+        is_online: event.extendedProps.is_online || false,
+        url: event.extendedProps.url || ''
+      });
+    }
+    setShowEventModal(true);
+  };
+
+  const handleDateSelect = (selectInfo) => {
+    if (isAdmin) {
+      openCreateModal(selectInfo);
+    }
+  };
+
+  const handleEventClick = (clickInfo) => {
+    if (isAdmin) {
+      openEditModal(clickInfo.event);
+    } else {
+      // Show read-only event details for non-admin users
+      const event = clickInfo.event.extendedProps;
+      toast({
+        title: event.title,
+        description: `${event.description || 'No description'}\n📅 ${new Date(clickInfo.event.start).toLocaleString()}\n📍 ${event.location || 'No location'}${event.is_online ? ' (Online)' : ''}`
+      });
+    }
+  };
+
+  const filteredEvents = events.filter(event => 
+    categoryFilter === 'all' || event.category === categoryFilter
+  );
 
   const calendarEvents = filteredEvents.map(event => ({
     id: event.id,
     title: event.title,
     start: event.start,
     end: event.end,
-    backgroundColor: getCategoryColor(event.category),
-    borderColor: getCategoryColor(event.category),
-    textColor: '#ffffff',
-    extendedProps: {
-      description: event.description,
-      category: event.category,
-      location: event.location
-    }
+    backgroundColor: CATEGORY_COLORS[event.category]?.bg || '#6c63ff',
+    borderColor: CATEGORY_COLORS[event.category]?.bg || '#6c63ff',
+    textColor: 'white',
+    extendedProps: event
   }));
+
+  const addSampleData = async () => {
+    const now = new Date();
+    const sampleEvents = [
+      {
+        title: 'Data Structures - Mon',
+        description: 'Weekly Data Structures class',
+        start: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (1 - now.getDay() + 7) % 7, 9, 0).toISOString(),
+        end: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (1 - now.getDay() + 7) % 7, 11, 0).toISOString(),
+        location: 'Virtual Classroom',
+        category: 'Class',
+        is_online: true,
+        url: 'https://meet.google.com/example'
+      },
+      {
+        title: 'AI Ethics - Wed',
+        description: 'AI Ethics and Philosophy',
+        start: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (3 - now.getDay() + 7) % 7, 14, 0).toISOString(),
+        end: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (3 - now.getDay() + 7) % 7, 16, 0).toISOString(),
+        location: 'Room 101',
+        category: 'Class',
+        is_online: false,
+        url: ''
+      },
+      {
+        title: 'Machine Learning - Fri',
+        description: 'Practical ML applications',
+        start: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (5 - now.getDay() + 7) % 7, 10, 0).toISOString(),
+        end: new Date(now.getFullYear(), now.getMonth(), now.getDate() + (5 - now.getDay() + 7) % 7, 12, 0).toISOString(),
+        location: 'Lab 2',
+        category: 'Class',
+        is_online: false,
+        url: ''
+      }
+    ];
+
+    try {
+      for (const event of sampleEvents) {
+        await eventsAPI.create(event);
+      }
+      await loadEvents();
+      toast({
+        title: "Success",
+        description: "Sample events added successfully"
+      });
+    } catch (error) {
+      console.error('Failed to add sample data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add sample data",
+        variant: "destructive"
+      });
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-8 px-4">
+        <div className="animate-pulse">
+          <div className="h-8 bg-muted rounded w-1/3 mb-8"></div>
+          <div className="h-96 bg-muted rounded"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -241,11 +292,11 @@ const EventsCalendar = () => {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 gradient-text heading-font">
-          Events Calendar
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 gradient-text">
+          Calendar & Events
         </h1>
-        <p className="text-lg text-muted-foreground max-w-3xl mx-auto body-font">
-          Stay updated with all academic events, workshops, and important dates
+        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          Keep track of your classes, exams, and important academic events
         </p>
       </motion.div>
 
@@ -255,45 +306,75 @@ const EventsCalendar = () => {
         animate={{ opacity: 1, y: 0 }}
         className="mb-6"
       >
-        <Card>
+        <Card className="hover-card" style={{ background: '#f35c7e', color: 'white' }}>
           <CardContent className="p-4">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-4 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <Filter className="w-4 h-4" />
-                  <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="border rounded-md px-3 py-1 text-sm"
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-4">
+                {isAdmin && (
+                  <Button 
+                    onClick={() => openCreateModal()} 
+                    size="sm"
+                    className="bg-white text-[#f35c7e] hover:bg-white/90"
                   >
-                    {categories.map(cat => (
-                      <option key={cat.value} value={cat.value}>
-                        {cat.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Event
+                  </Button>
+                )}
+                
+                <Button 
+                  onClick={addSampleData} 
+                  variant="outline" 
+                  size="sm"
+                  className="border-white/30 text-white hover:bg-white/10"
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Add Sample Data
+                </Button>
 
-                <div className="flex flex-wrap gap-2">
-                  {categories.slice(1).map(cat => (
-                    <Badge
-                      key={cat.value}
-                      variant="secondary"
-                      className="text-xs"
-                      style={{ backgroundColor: cat.color + '20', color: cat.color }}
-                    >
-                      {cat.label}
-                    </Badge>
-                  ))}
-                </div>
+                <Button 
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  variant="outline" 
+                  size="sm"
+                  className="border-white/30 text-white hover:bg-white/10"
+                >
+                  {isExpanded ? <Minimize2 className="w-4 h-4 mr-2" /> : <Maximize2 className="w-4 h-4 mr-2" />}
+                  {isExpanded ? 'Minimize' : 'Expand'}
+                </Button>
+
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  className="px-3 py-1 rounded-md border border-white/30 bg-white/10 text-white text-sm"
+                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+                >
+                  <option value="all" style={{ color: 'black' }}>All Categories</option>
+                  <option value="Class" style={{ color: 'black' }}>Classes</option>
+                  <option value="Exam" style={{ color: 'black' }}>Exams</option>
+                  <option value="Result" style={{ color: 'black' }}>Results</option>
+                  <option value="Activity" style={{ color: 'black' }}>Activities</option>
+                </select>
+
+                {isAdmin && (
+                  <Button asChild variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10">
+                    <a href="/admin">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Admin Panel
+                    </a>
+                  </Button>
+                )}
               </div>
 
-              {isAdmin && (
-                <Button onClick={() => setShowCreateModal(true)} size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Event
-                </Button>
-              )}
+              <div className="legend-items flex items-center gap-4">
+                {Object.entries(CATEGORY_COLORS).map(([category, colors]) => (
+                  <div key={category} className="legend-item flex items-center gap-2">
+                    <div 
+                      className="legend-color w-4 h-4 rounded" 
+                      style={{ backgroundColor: colors.bg }}
+                    ></div>
+                    <span className="text-white text-sm">{category}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -304,10 +385,12 @@ const EventsCalendar = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
+        className={isExpanded ? 'fixed inset-0 z-50 p-4 bg-background/95 backdrop-blur' : ''}
       >
-        <Card>
+        <Card className="hover-card h-full overflow-auto">
           <CardContent className="p-6">
             <FullCalendar
+              ref={calendarRef}
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
               headerToolbar={{
@@ -316,111 +399,94 @@ const EventsCalendar = () => {
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
               }}
               events={calendarEvents}
-              eventClick={handleEventClick}
               selectable={isAdmin}
+              selectMirror={true}
+              dayMaxEvents={isExpanded ? false : 3}
+              weekends={true}
               select={isAdmin ? handleDateSelect : undefined}
-              height="auto"
+              eventClick={handleEventClick}
+              height={isExpanded ? 'calc(100vh - 200px)' : 'auto'}
               eventDisplay="block"
-              dayMaxEvents={3}
-              moreLinkClick="popover"
-              eventDidMount={(info) => {
-                info.el.style.borderRadius = '6px';
-                info.el.style.border = 'none';
-                info.el.style.fontSize = '12px';
-                info.el.style.fontWeight = '500';
-              }}
+              eventTextColor="white"
+              eventClassNames={(arg) => `event-${arg.event.extendedProps.category?.toLowerCase()}`}
             />
           </CardContent>
         </Card>
       </motion.div>
 
-      {/* Event Details Modal */}
+      {/* Legend */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="mt-6"
+      >
+        <div className="legend" style={{ background: '#f35c7e', borderRadius: 'var(--border-radius)', padding: '15px', boxShadow: 'var(--card-shadow)' }}>
+          <h3 style={{ color: 'white', fontWeight: '600', marginBottom: '10px' }}>Event Categories</h3>
+          <div className="legend-items flex flex-wrap gap-4">
+            {Object.entries(CATEGORY_COLORS).map(([category, colors]) => (
+              <div key={category} className="legend-item flex items-center gap-2">
+                <div 
+                  className="legend-color w-4 h-4 rounded" 
+                  style={{ backgroundColor: colors.bg }}
+                ></div>
+                <span style={{ color: 'white', fontSize: '0.9rem' }}>{category}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Event Modal */}
       <Dialog open={showEventModal} onOpenChange={setShowEventModal}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="heading-font flex items-center gap-2">
-              <Calendar className="w-5 h-5" />
-              {selectedEvent?.title}
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto hover-card">
+          <DialogHeader style={{ background: '#f35c7e', color: 'white', margin: '-24px -24px 20px -24px', padding: '20px 24px', borderRadius: 'var(--border-radius) var(--border-radius) 0 0' }}>
+            <DialogTitle className="text-white">
+              {!isAdmin ? 'Event Details' : selectedEvent ? 'Edit Event' : 'Create Event'}
             </DialogTitle>
           </DialogHeader>
 
-          {selectedEvent && (
+          {!isAdmin && selectedEvent ? (
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Badge style={{ backgroundColor: getCategoryColor(selectedEvent.category) }}>
-                  {selectedEvent.category}
-                </Badge>
+              <div>
+                <h3 className="text-lg font-semibold mb-2">{selectedEvent.title}</h3>
+                <p className="text-muted-foreground">{selectedEvent.description}</p>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center gap-2 text-sm">
-                  <Clock className="w-4 h-4" />
-                  <span>
-                    {new Date(selectedEvent.start).toLocaleString()}
-                    {selectedEvent.end && ` - ${new Date(selectedEvent.end).toLocaleString()}`}
-                  </span>
-                </div>
-
-                {selectedEvent.location && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="w-4 h-4" />
-                    <span>{selectedEvent.location}</span>
-                  </div>
-                )}
-              </div>
-
-              {selectedEvent.description && (
+              <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <h4 className="font-semibold mb-2">Description</h4>
-                  <p className="text-muted-foreground">{selectedEvent.description}</p>
+                  <span className="font-medium">Start:</span>
+                  <p>{new Date(selectedEvent.start).toLocaleString()}</p>
                 </div>
-              )}
-
-              {isAdmin && (
-                <div className="flex justify-end gap-2 pt-4 border-t">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setEventForm({
-                        title: selectedEvent.title,
-                        description: selectedEvent.description || '',
-                        start: selectedEvent.start,
-                        end: selectedEvent.end || '',
-                        category: selectedEvent.category || 'General',
-                        location: selectedEvent.location || ''
-                      });
-                      setShowEventModal(false);
-                      setShowCreateModal(true);
-                    }}
-                  >
-                    <Edit className="w-4 h-4 mr-2" />
-                    Edit
-                  </Button>
-                  <Button variant="destructive" onClick={handleEventDelete}>
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Delete
-                  </Button>
+                <div>
+                  <span className="font-medium">End:</span>
+                  <p>{new Date(selectedEvent.end).toLocaleString()}</p>
                 </div>
+                <div>
+                  <span className="font-medium">Location:</span>
+                  <p>{selectedEvent.location || 'TBA'}</p>
+                </div>
+                <div>
+                  <span className="font-medium">Category:</span>
+                  <Badge style={{ backgroundColor: CATEGORY_COLORS[selectedEvent.category]?.bg, color: 'white' }}>
+                    {selectedEvent.category}
+                  </Badge>
+                </div>
+              </div>
+              {selectedEvent.is_online && selectedEvent.url && (
+                <Button asChild className="w-full btn-primary">
+                  <a href={selectedEvent.url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Join Online
+                  </a>
+                </Button>
               )}
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Create/Edit Event Modal */}
-      <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="heading-font">
-              {selectedEvent ? 'Edit Event' : 'Create New Event'}
-            </DialogTitle>
-          </DialogHeader>
-
-          <form onSubmit={selectedEvent ? handleEventUpdate : handleEventSubmit} className="space-y-4">
+          ) : isAdmin ? (
+            <form onSubmit={handleEventSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="event-title">Title *</Label>
+              <Label htmlFor="title">Title *</Label>
               <Input
-                id="event-title"
+                id="title"
                 value={eventForm.title}
                 onChange={(e) => setEventForm(prev => ({ ...prev, title: e.target.value }))}
                 required
@@ -428,21 +494,20 @@ const EventsCalendar = () => {
             </div>
 
             <div>
-              <Label htmlFor="event-description">Description</Label>
+              <Label htmlFor="description">Description</Label>
               <Textarea
-                id="event-description"
+                id="description"
                 value={eventForm.description}
                 onChange={(e) => setEventForm(prev => ({ ...prev, description: e.target.value }))}
-                rows={4}
-                placeholder="Event description..."
+                rows={3}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="event-start">Start Date & Time *</Label>
+                <Label htmlFor="start">Start *</Label>
                 <Input
-                  id="event-start"
+                  id="start"
                   type="datetime-local"
                   value={eventForm.start}
                   onChange={(e) => setEventForm(prev => ({ ...prev, start: e.target.value }))}
@@ -451,100 +516,90 @@ const EventsCalendar = () => {
               </div>
 
               <div>
-                <Label htmlFor="event-end">End Date & Time</Label>
+                <Label htmlFor="end">End *</Label>
                 <Input
-                  id="event-end"
+                  id="end"
                   type="datetime-local"
                   value={eventForm.end}
                   onChange={(e) => setEventForm(prev => ({ ...prev, end: e.target.value }))}
+                  required
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="event-category">Category</Label>
-                <select
-                  id="event-category"
-                  value={eventForm.category}
-                  onChange={(e) => setEventForm(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full border rounded p-2"
-                >
-                  <option value="General">General</option>
-                  <option value="Math">Mathematics</option>
-                  <option value="AI">Artificial Intelligence</option>
-                  <option value="Data Science">Data Science</option>
-                  <option value="Programming">Programming</option>
-                  <option value="Workshop">Workshop</option>
-                  <option value="Exam">Examination</option>
-                </select>
-              </div>
-
-              <div>
-                <Label htmlFor="event-location">Location</Label>
-                <Input
-                  id="event-location"
-                  value={eventForm.location}
-                  onChange={(e) => setEventForm(prev => ({ ...prev, location: e.target.value }))}
-                  placeholder="Event location or online link"
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 pt-4">
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={() => {
-                  setShowCreateModal(false);
-                  resetEventForm();
-                }}
+            <div>
+              <Label htmlFor="category">Category</Label>
+              <select
+                id="category"
+                value={eventForm.category}
+                onChange={(e) => setEventForm(prev => ({ ...prev, category: e.target.value }))}
+                className="w-full px-3 py-2 rounded-md border border-input bg-background"
               >
-                Cancel
-              </Button>
-              <Button type="submit">
-                {selectedEvent ? 'Update Event' : 'Create Event'}
-              </Button>
+                <option value="Class">Class</option>
+                <option value="Exam">Exam</option>
+                <option value="Result">Result</option>
+                <option value="Activity">Activity</option>
+              </select>
+            </div>
+
+            <div>
+              <Label htmlFor="location">Location</Label>
+              <Input
+                id="location"
+                value={eventForm.location}
+                onChange={(e) => setEventForm(prev => ({ ...prev, location: e.target.value }))}
+              />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="is_online"
+                checked={eventForm.is_online}
+                onCheckedChange={(checked) => setEventForm(prev => ({ ...prev, is_online: checked }))}
+              />
+              <Label htmlFor="is_online">Online Event</Label>
+            </div>
+
+            {eventForm.is_online && (
+              <div>
+                <Label htmlFor="url">Meeting URL</Label>
+                <Input
+                  id="url"
+                  type="url"
+                  value={eventForm.url}
+                  onChange={(e) => setEventForm(prev => ({ ...prev, url: e.target.value }))}
+                  placeholder="https://meet.google.com/..."
+                />
+              </div>
+            )}
+
+            <div className="flex justify-between pt-4">
+              <div>
+                {selectedEvent && (
+                  <Button 
+                    type="button" 
+                    variant="destructive" 
+                    onClick={() => handleEventDelete(selectedEvent.id)}
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete
+                  </Button>
+                )}
+              </div>
+
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={() => setShowEventModal(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">
+                  {selectedEvent ? 'Update' : 'Create'}
+                </Button>
+              </div>
             </div>
           </form>
+          ) : null}
         </DialogContent>
       </Dialog>
-
-      {/* Statistics */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6"
-      >
-        <Card>
-          <CardContent className="p-6 text-center">
-            <Calendar className="h-8 w-8 mx-auto mb-2 text-primary" />
-            <p className="text-2xl font-bold">{events.length}</p>
-            <p className="text-sm text-muted-foreground">Total Events</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6 text-center">
-            <Clock className="h-8 w-8 mx-auto mb-2 text-primary" />
-            <p className="text-2xl font-bold">
-              {events.filter(e => new Date(e.start) > new Date()).length}
-            </p>
-            <p className="text-sm text-muted-foreground">Upcoming Events</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6 text-center">
-            <Users className="h-8 w-8 mx-auto mb-2 text-primary" />
-            <p className="text-2xl font-bold">
-              {new Set(events.map(e => e.category)).size}
-            </p>
-            <p className="text-sm text-muted-foreground">Categories</p>
-          </CardContent>
-        </Card>
-      </motion.div>
     </motion.div>
   );
 };
