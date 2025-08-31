@@ -83,6 +83,50 @@ export const CONTACT_INFO = {
   forumLink: "https://discourse.bscaiunity.space",
 };
 
+export const FOOTER_LINKS = {
+  EXPLORE: [
+    { href: "/ai-tools", label: "AI Tools" },
+    { href: "/events", label: "Events" },
+    { href: "/notices", label: "Notice Board" },
+    { href: "/status-board", label: "Status Board" },
+    { href: "/about-course", label: "About Course" },
+  ],
+  ACADEMICS: [
+    { href: "/semester-quizzes", label: "Semester Quizzes" },
+    { href: "/polls-surveys", label: "Polls & Surveys" },
+    { href: "/student-achievements", label: "Achievements" },
+    { href: "/know-your-rights", label: "Know Your Rights" },
+  ],
+  CONNECT: [
+    { href: "/contact", label: "Contact Us" },
+    { href: "https://discourse.bscaiunity.space", label: "Discussion Forum", external: true },
+    { href: "/add-concern", label: "Voice Concerns" },
+    { href: "/concerns", label: "Browse Concerns" },
+  ],
+  LEGAL: [
+    { href: "/privacy-policy", label: "Privacy Policy" },
+    { href: "/terms-of-service", label: "Terms of Service" },
+  ],
+};
+
+export const SOCIAL_LINKS = [
+  {
+    name: "GitHub",
+    href: "https://github.com/bscaiunity",
+    icon: "Github",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com/company/bscaiunity",
+    icon: "Linkedin",
+  },
+  {
+    name: "Twitter",
+    href: "https://twitter.com/bscaiunity",
+    icon: "Twitter",
+  },
+];
+
 export const SEMESTER_1_SUBJECTS = [
   {
     id: "ATA",
