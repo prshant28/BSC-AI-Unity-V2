@@ -77,6 +77,12 @@ export const FOOTER_LINKS = {
 
 export const SOCIAL_LINKS = [];
 
+export const CONTACT_INFO = {
+  emailAcademic: "bscdelivery@futurense.com",
+  emailProgram: "office_eep@iitj.ac.in",
+  forumLink: "https://discourse.bscaiunity.space",
+};
+
 export const SEMESTER_1_SUBJECTS = [
   {
     id: "ATA",
