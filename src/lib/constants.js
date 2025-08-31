@@ -58,25 +58,6 @@ export const CONCERN_STATUSES = {
   IGNORED: "Ignored",
 };
 
-export const FOOTER_LINKS = {
-  EXPLORE: [
-    { href: "/about-course", label: "About The Course" },
-    { href: "/concerns", label: "View Concerns" },
-    { href: "/status-board", label: "Status Dashboard" },
-    { href: "/know-your-rights", label: "Student Rights" },
-  ],
-  CONNECT: [
-    { href: "/contact", label: "Contact Us" },
-    { href: "/add-concern", label: "Submit a Concern" },
-  ],
-  LEGAL: [
-    { href: "/privacy-policy", label: "Privacy Policy (Placeholder)" },
-    { href: "/terms-of-service", label: "Terms of Service (Placeholder)" },
-  ],
-};
-
-export const SOCIAL_LINKS = [];
-
 export const CONTACT_INFO = {
   emailAcademic: "bscdelivery@futurense.com",
   emailProgram: "office_eep@iitj.ac.in",
