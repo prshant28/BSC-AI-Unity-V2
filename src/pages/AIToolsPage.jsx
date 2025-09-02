@@ -1459,9 +1459,10 @@ const AIToolsPage = () => {
         className="text-center mb-8"
       >
         <div className="flex items-center justify-center gap-2 mb-4">
-          <Flame className="h-8 w-8 text-orange-500" />
+          <Flame className="h-16 w-16 text-orange-500" />
           <h1 className="text-4xl md:text-6xl font-extrabold gradient-text">
-            100+ AI Tools for Students
+            Discover 100+ AI tools for coding, research, writing, and academic
+            success!
           </h1>
         </div>
         <p className="text-lg text-muted-foreground max-w-4xl mx-auto mb-6">
