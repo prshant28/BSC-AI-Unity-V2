@@ -194,28 +194,28 @@ const HomePage = ({ concerns, loading }) => {
       href: "/add-concern",
       icon: <PlusCircle className="h-5 w-5" />,
       variant: "default",
-      color: "bg-red-500 hover:bg-red-600",
+      color: "bg-red-500 hover:bg-red-600 text-white",
     },
     {
       title: "Browse AI Tools",
       href: "/ai-tools",
       icon: <Brain className="h-5 w-5" />,
       variant: "secondary",
-      color: "bg-blue-500 hover:bg-blue-600",
+      color: "bg-blue-500 hover:bg-blue-600 text-white",
     },
     {
       title: "Check Events",
       href: "/events",
       icon: <Calendar className="h-5 w-5" />,
       variant: "outline",
-      color: "border-green-500 text-green-500 hover:bg-green-50",
+      color: "border-green-500 text-green-500 hover:bg-green-50 dark:hover:bg-green-900/30",
     },
     {
       title: "Take Quiz",
       href: "/semester-quizzes",
       icon: <Trophy className="h-5 w-5" />,
       variant: "ghost",
-      color: "text-purple-500 hover:bg-purple-50",
+      color: "text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/30",
     },
   ];
 

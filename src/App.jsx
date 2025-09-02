@@ -32,20 +32,39 @@ import ForumEmbed from './components/ForumEmbed';
 import NoticeBoard from './components/NoticeBoard';
 import EventsCalendar from './components/EventsCalendar';
 import AdminPanel from './components/AdminPanel';
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsOfServicePage from "./pages/TermsOfServicePage";
 
 
-const PrivacyPolicyPage = () => (
+const PrivacyPolicyPageContent = () => (
   <div className="container mx-auto py-12 px-4 md:px-6 text-center">
-    <h1>Privacy Policy</h1>
-    <p>Content coming soon...</p>
+    <h1 className="text-3xl font-bold mb-4">Official IIT Privacy Policy</h1>
+    <p className="mb-4">This is the official IIT Privacy Policy. Please refer to the official IIT website for the most accurate and up-to-date information.</p>
+    <p className="mb-4">All details on this platform are collected from available data and published here for educational purposes only. BSC AI Unity is not affiliated with or endorsed by IIT.</p>
+    <p className="text-sm text-gray-500 dark:text-gray-400">
+      © BSC AI Unity | All Rights Reserved 2025
+    </p>
   </div>
 );
-const TermsOfServicePage = () => (
+
+const TermsOfServicePageContent = () => (
   <div className="container mx-auto py-12 px-4 md:px-6 text-center">
-    <h1>Terms of Service</h1>
-    <p>Content coming soon...</p>
+    <h1 className="text-3xl font-bold mb-4">Official IIT Terms and Conditions</h1>
+    <p className="mb-4">These are the official IIT Terms and Conditions. Please refer to the official IIT website for the most accurate and up-to-date information.</p>
+    <p className="mb-4">All details on this platform are collected from available data and published here for educational purposes only. BSC AI Unity is not affiliated with or endorsed by IIT. We do not claim anything about this program.</p>
+    <p className="text-sm text-gray-500 dark:text-gray-400">
+      © BSC AI Unity | All Rights Reserved 2025
+    </p>
   </div>
 );
+
+const ComingSoonPage = ({ title }) => (
+  <div className="container mx-auto py-12 px-4 md:px-6 text-center">
+    <h1 className="text-3xl font-bold mb-4">{title}</h1>
+    <p className="text-lg text-gray-600 dark:text-gray-300">Coming Soon!</p>
+  </div>
+);
+
 
 function App() {
   const [concerns, setConcerns] = useState([]);
@@ -267,12 +286,12 @@ function App() {
             <Route path="about-course" element={<AboutCoursePage />} />
             <Route path="know-your-rights" element={<KnowYourRightsPage />} />
             <Route path="features" element={<FeaturesPage />} />
-            <Route path="student-achievements" element={<StudentAchievementsPage />} />
+            <Route path="student-achievements" element={<ComingSoonPage title="Student Achievements" />} />
             <Route path="semester-1-quizzes" element={<Semester1QuizzesPage />} />
             <Route path="semester-1-quizzes/:subjectId/take" element={<QuizInterfacePage />} />
             <Route path="contact" element={<ContactPage />} />
-            <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
-            <Route path="terms-of-service" element={<TermsOfServicePage />} />
+            <Route path="privacy-policy" element={<PrivacyPolicyPageContent />} />
+            <Route path="terms-of-service" element={<TermsOfServicePageContent />} />
             <Route path="/ai-tools" element={<AIToolsPage />} />
             <Route path="/perplexity-promo" element={<PerplexityPromoPage />} />
             <Route path="/forum" element={<ForumEmbed />} />

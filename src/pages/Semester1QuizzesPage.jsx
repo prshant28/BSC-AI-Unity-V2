@@ -74,7 +74,7 @@ const Semester1QuizzesPage = () => {
           const IconComponent = iconMap[subject.icon] || BookOpen;
           return (
             <motion.div key={subject.id} variants={itemVariants}>
-              <Link to={`/semester-1-quizzes/${subject.id}/take`}>
+              <Link to={`/quiz/${subject.id}`}>
                 <Card
                   className={`h-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group ${subject.color} text-white overflow-hidden`}
                 >

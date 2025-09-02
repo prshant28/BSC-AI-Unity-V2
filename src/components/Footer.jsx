@@ -105,27 +105,33 @@ const Footer = () => {
                   </Link>
                 </li>
               ))}
+              <li>
+                <a
+                  href="https://www.iitj.ac.in/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm hover:text-primary transition-colors hover:underline flex items-center gap-1"
+                >
+                  IIT Privacy Policy
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-slate-200 dark:border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col md:flex-row items-center gap-4">
-            <p className="text-xs text-center md:text-left">
-              &copy; {currentYear} BScAI Unity. All rights reserved.
-              Student-managed platform.
-              <br />
-              Hosted at{" "}
-              <a
-                href="http://bscaiunity.space"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-primary underline"
-              >
-                bscaiunity.space
-              </a>
-              . Not officially affiliated with IIT Jodhpur or Futurense.
-            </p>
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">
+                © {currentYear} BSc AI Unity. All rights reserved.
+              </p>
+              <p className="text-xs text-muted-foreground">
+                <strong>Disclaimer:</strong> This content is provided by BSc AI Unity. We are not affiliated with or endorsed by IIT.
+                This is an unofficial platform created by our team. All content is original work of BSc AI Unity and cannot be
+                claimed for copyright by any other entity. All Content is provided for educational purposes only.
+              </p>
+            </div>
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 md:mt-0">
               <a
                 href="https://www.buymeacoffee.com/prshant.dev"
