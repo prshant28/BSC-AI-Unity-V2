@@ -1,6 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Sparkles, Linkedin, Twitter, Github, Send, ExternalLink } from "lucide-react"; // Assuming Send for Telegram
+import {
+  Sparkles,
+  Linkedin,
+  Twitter,
+  Github,
+  Send,
+  ExternalLink,
+} from "lucide-react"; // Assuming Send for Telegram
 import { FOOTER_LINKS, SOCIAL_LINKS } from "@/lib/constants";
 
 const Footer = () => {
@@ -123,13 +130,20 @@ const Footer = () => {
         <div className="border-t border-slate-200 dark:border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">
-                © {currentYear} BSc AI Unity. All rights reserved.
-              </p>
-              <p className="text-xs text-muted-foreground">
-                <strong>Disclaimer:</strong> This content is provided by BSc AI Unity. We are not affiliated with or endorsed by IIT.
-                This is an unofficial platform created by our team. All content is original work of BSc AI Unity and cannot be
-                claimed for copyright by any other entity. All Content is provided for educational purposes only.
+              <p className="text-xs text-center md:text-left">
+                &copy; {currentYear} BScAI Unity. All rights reserved.
+                Student-managed platform.
+                <br />
+                Hosted at{" "}
+                <a
+                  href="https://bscaiunity.netlify.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary underline"
+                >
+                  bscaiunity.netlify.app
+                </a>
+                . Not officially affiliated with IIT Jodhpur or Futurense.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 md:mt-0">
