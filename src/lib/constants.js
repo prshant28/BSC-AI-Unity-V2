@@ -77,7 +77,7 @@ export const FOOTER_LINKS = {
     { href: "/polls-surveys", label: "Polls & Surveys" },
     { href: "/student-achievements", label: "Achievements" },
     { href: "/know-your-rights", label: "Know Your Rights" },
-    { href: "//perplexity-promo", label: "Promotions" },
+    { href: "/perplexity-promo", label: "Promotions" },
   ],
   CONNECT: [
     { href: "/contact", label: "Contact Us" },
